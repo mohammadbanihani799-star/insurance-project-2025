@@ -1,0 +1,350 @@
+{
+  "style_files/frontend/fonts/ArbFONTS-HacenSaudiArabia.woff": {
+    "file": "assets/ArbFONTS-HacenSaudiArabia.b860819b.woff",
+    "src": "style_files/frontend/fonts/ArbFONTS-HacenSaudiArabia.woff"
+  },
+  "style_files/frontend/fonts/ArbFONTS-Hacen Saudi Arabia.ttf": {
+    "file": "assets/ArbFONTS-Hacen Saudi Arabia.935e8268.ttf",
+    "src": "style_files/frontend/fonts/ArbFONTS-Hacen Saudi Arabia.ttf"
+  },
+  "style_files/frontend/fonts/CoconNextArabic-Light.woff2": {
+    "file": "assets/CoconNextArabic-Light.725a1e24.woff2",
+    "src": "style_files/frontend/fonts/CoconNextArabic-Light.woff2"
+  },
+  "style_files/frontend/fonts/GE _SS.woff2": {
+    "file": "assets/GE _SS.e7f83777.woff2",
+    "src": "style_files/frontend/fonts/GE _SS.woff2"
+  },
+  "style_files/frontend/fonts/GEDinarOne-Light.woff": {
+    "file": "assets/GEDinarOne-Light.83f35b7c.woff",
+    "src": "style_files/frontend/fonts/GEDinarOne-Light.woff"
+  },
+  "style_files/frontend/fonts/CoconNextArabic-Light.woff": {
+    "file": "assets/CoconNextArabic-Light.d2416789.woff",
+    "src": "style_files/frontend/fonts/CoconNextArabic-Light.woff"
+  },
+  "style_files/frontend/fonts/GEDinarOne-Medium.woff": {
+    "file": "assets/GEDinarOne-Medium.4a46b1c5.woff",
+    "src": "style_files/frontend/fonts/GEDinarOne-Medium.woff"
+  },
+  "style_files/frontend/fonts/GEDinarOne-Light.woff2": {
+    "file": "assets/GEDinarOne-Light.1713e06f.woff2",
+    "src": "style_files/frontend/fonts/GEDinarOne-Light.woff2"
+  },
+  "style_files/frontend/fonts/GEDinarOne-Medium.woff2": {
+    "file": "assets/GEDinarOne-Medium.2e4c4e96.woff2",
+    "src": "style_files/frontend/fonts/GEDinarOne-Medium.woff2"
+  },
+  "style_files/frontend/fonts/GE_SS_Two.woff": {
+    "file": "assets/GE_SS_Two.aef99f0c.woff",
+    "src": "style_files/frontend/fonts/GE_SS_Two.woff"
+  },
+  "style_files/frontend/fonts/Gordita-Bold.woff": {
+    "file": "assets/Gordita-Bold.8b548559.woff",
+    "src": "style_files/frontend/fonts/Gordita-Bold.woff"
+  },
+  "style_files/frontend/fonts/Gordita-Bold.woff2": {
+    "file": "assets/Gordita-Bold.9ea0324d.woff2",
+    "src": "style_files/frontend/fonts/Gordita-Bold.woff2"
+  },
+  "style_files/frontend/fonts/Gordita-Regular.woff": {
+    "file": "assets/Gordita-Regular.3564facc.woff",
+    "src": "style_files/frontend/fonts/Gordita-Regular.woff"
+  },
+  "style_files/frontend/fonts/Gordita-Light.woff2": {
+    "file": "assets/Gordita-Light.bd4760b6.woff2",
+    "src": "style_files/frontend/fonts/Gordita-Light.woff2"
+  },
+  "style_files/frontend/fonts/Gordita-Medium.woff": {
+    "file": "assets/Gordita-Medium.70c9b755.woff",
+    "src": "style_files/frontend/fonts/Gordita-Medium.woff"
+  },
+  "style_files/frontend/fonts/Poppins-Bold.woff": {
+    "file": "assets/Poppins-Bold.63997071.woff",
+    "src": "style_files/frontend/fonts/Poppins-Bold.woff"
+  },
+  "style_files/frontend/fonts/Poppins-Light.woff": {
+    "file": "assets/Poppins-Light.2af1a0fd.woff",
+    "src": "style_files/frontend/fonts/Poppins-Light.woff"
+  },
+  "style_files/frontend/fonts/Poppins-Medium.woff": {
+    "file": "assets/Poppins-Medium.bcc839b2.woff",
+    "src": "style_files/frontend/fonts/Poppins-Medium.woff"
+  },
+  "style_files/frontend/fonts/Poppins-Regular.woff": {
+    "file": "assets/Poppins-Regular.f61d2d72.woff",
+    "src": "style_files/frontend/fonts/Poppins-Regular.woff"
+  },
+  "style_files/frontend/fonts/Saudi_Arabia.woff": {
+    "file": "assets/Saudi_Arabia.824d66fd.woff",
+    "src": "style_files/frontend/fonts/Saudi_Arabia.woff"
+  },
+  "style_files/frontend/img/Logo.png": {
+    "file": "assets/Logo.b642dd12.png",
+    "src": "style_files/frontend/img/Logo.png"
+  },
+  "style_files/frontend/img/NIC-logo.png": {
+    "file": "assets/NIC-logo.6dcfa22d.png",
+    "src": "style_files/frontend/img/NIC-logo.png"
+  },
+  "style_files/frontend/img/capthca.png": {
+    "file": "assets/capthca.7e4b66a4.png",
+    "src": "style_files/frontend/img/capthca.png"
+  },
+  "style_files/frontend/img/card.png": {
+    "file": "assets/card.6b002ad6.png",
+    "src": "style_files/frontend/img/card.png"
+  },
+  "style_files/frontend/img/haia.jpeg": {
+    "file": "assets/haia.efb05758.jpeg",
+    "src": "style_files/frontend/img/haia.jpeg"
+  },
+  "style_files/frontend/img/icon/appgallary.png": {
+    "file": "assets/appgallary.9886967b.png",
+    "src": "style_files/frontend/img/icon/appgallary.png"
+  },
+  "style_files/frontend/img/icon/appstore.png": {
+    "file": "assets/appstore.69c81586.png",
+    "src": "style_files/frontend/img/icon/appstore.png"
+  },
+  "style_files/frontend/img/icon/car-insurance.png": {
+    "file": "assets/car-insurance.f3611981.png",
+    "src": "style_files/frontend/img/icon/car-insurance.png"
+  },
+  "style_files/frontend/img/icon/close.png": {
+    "file": "assets/close.40429fab.png",
+    "src": "style_files/frontend/img/icon/close.png"
+  },
+  "style_files/frontend/img/icon/facebook.png": {
+    "file": "assets/facebook.937e5e3a.png",
+    "src": "style_files/frontend/img/icon/facebook.png"
+  },
+  "style_files/frontend/img/icon/fender-bender.png": {
+    "file": "assets/fender-bender.51d47385.png",
+    "src": "style_files/frontend/img/icon/fender-bender.png"
+  },
+  "style_files/frontend/img/icon/glob.png": {
+    "file": "assets/glob.a3d5d389.png",
+    "src": "style_files/frontend/img/icon/glob.png"
+  },
+  "style_files/frontend/img/icon/googleplay.png": {
+    "file": "assets/googleplay.c2089c9d.png",
+    "src": "style_files/frontend/img/icon/googleplay.png"
+  },
+  "style_files/frontend/img/icon/grill.png": {
+    "file": "assets/grill.d537d154.png",
+    "src": "style_files/frontend/img/icon/grill.png"
+  },
+  "style_files/frontend/img/icon/line.png": {
+    "file": "assets/line.58246e92.png",
+    "src": "style_files/frontend/img/icon/line.png"
+  },
+  "style_files/frontend/img/icon/location_lg.png": {
+    "file": "assets/location_lg.fc0f1e0f.png",
+    "src": "style_files/frontend/img/icon/location_lg.png"
+  },
+  "style_files/frontend/img/icon/location_sm.png": {
+    "file": "assets/location_sm.15d6eee0.png",
+    "src": "style_files/frontend/img/icon/location_sm.png"
+  },
+  "style_files/frontend/img/icon/mail_lg.png": {
+    "file": "assets/mail_lg.ab4d6b4e.png",
+    "src": "style_files/frontend/img/icon/mail_lg.png"
+  },
+  "style_files/frontend/img/icon/mail_sm.png": {
+    "file": "assets/mail_sm.5d63371d.png",
+    "src": "style_files/frontend/img/icon/mail_sm.png"
+  },
+  "style_files/frontend/img/icon/menu.png": {
+    "file": "assets/menu.ec5e5cd1.png",
+    "src": "style_files/frontend/img/icon/menu.png"
+  },
+  "style_files/frontend/img/icon/menuClose.png": {
+    "file": "assets/menuClose.1c5fd339.png",
+    "src": "style_files/frontend/img/icon/menuClose.png"
+  },
+  "style_files/frontend/img/icon/phone_sm.png": {
+    "file": "assets/phone_sm.95d8396a.png",
+    "src": "style_files/frontend/img/icon/phone_sm.png"
+  },
+  "style_files/frontend/img/icon/phone_lg.png": {
+    "file": "assets/phone_lg.4bee3dff.png",
+    "src": "style_files/frontend/img/icon/phone_lg.png"
+  },
+  "style_files/frontend/img/icon/search.png": {
+    "file": "assets/search.de41e064.png",
+    "src": "style_files/frontend/img/icon/search.png"
+  },
+  "style_files/frontend/img/icon/twitter1.png": {
+    "file": "assets/twitter1.1d4e5eb0.png",
+    "src": "style_files/frontend/img/icon/twitter1.png"
+  },
+  "style_files/frontend/img/icon/play-button.png": {
+    "file": "assets/play-button.652536f5.png",
+    "src": "style_files/frontend/img/icon/play-button.png"
+  },
+  "style_files/frontend/img/icon/twitter.png": {
+    "file": "assets/twitter.1e8194b4.png",
+    "src": "style_files/frontend/img/icon/twitter.png"
+  },
+  "style_files/frontend/img/icon/youtube.png": {
+    "file": "assets/youtube.850bde60.png",
+    "src": "style_files/frontend/img/icon/youtube.png"
+  },
+  "style_files/frontend/img/item/1.png": {
+    "file": "assets/1.862c3cc5.png",
+    "src": "style_files/frontend/img/item/1.png"
+  },
+  "style_files/frontend/img/item/2.png": {
+    "file": "assets/2.3bd33ec8.png",
+    "src": "style_files/frontend/img/item/2.png"
+  },
+  "style_files/frontend/img/item/3.png": {
+    "file": "assets/3.bd06d5c9.png",
+    "src": "style_files/frontend/img/item/3.png"
+  },
+  "style_files/frontend/img/item/4.png": {
+    "file": "assets/4.b8703230.png",
+    "src": "style_files/frontend/img/item/4.png"
+  },
+  "style_files/frontend/img/item/5.png": {
+    "file": "assets/5.eb96f575.png",
+    "src": "style_files/frontend/img/item/5.png"
+  },
+  "style_files/frontend/img/item/6.png": {
+    "file": "assets/6.3fbf1b5f.png",
+    "src": "style_files/frontend/img/item/6.png"
+  },
+  "style_files/frontend/img/loading.png": {
+    "file": "assets/loading.a1e9719c.png",
+    "src": "style_files/frontend/img/loading.png"
+  },
+  "style_files/frontend/img/location.png": {
+    "file": "assets/location.7cc3c34b.png",
+    "src": "style_files/frontend/img/location.png"
+  },
+  "style_files/frontend/img/logoInsurance.jpeg": {
+    "file": "assets/logoInsurance.b034196e.jpeg",
+    "src": "style_files/frontend/img/logoInsurance.jpeg"
+  },
+  "style_files/frontend/img/logonafath.png": {
+    "file": "assets/logonafath.2bcaa2a3.png",
+    "src": "style_files/frontend/img/logonafath.png"
+  },
+  "style_files/frontend/img/mada.png": {
+    "file": "assets/mada.25977466.png",
+    "src": "style_files/frontend/img/mada.png"
+  },
+  "style_files/frontend/img/menu.png": {
+    "file": "assets/menu.373420f2.png",
+    "src": "style_files/frontend/img/menu.png"
+  },
+  "style_files/frontend/img/partner/1.png": {
+    "file": "assets/1.894abe24.png",
+    "src": "style_files/frontend/img/partner/1.png"
+  },
+  "style_files/frontend/img/phone-call.png": {
+    "file": "assets/phone-call.4e179d24.png",
+    "src": "style_files/frontend/img/phone-call.png"
+  },
+  "style_files/frontend/img/phone1.gif": {
+    "file": "assets/phone1.db94adbf.gif",
+    "src": "style_files/frontend/img/phone1.gif"
+  },
+  "style_files/frontend/img/phone2.gif": {
+    "file": "assets/phone2.e83050f1.gif",
+    "src": "style_files/frontend/img/phone2.gif"
+  },
+  "style_files/frontend/img/rajhe.png": {
+    "file": "assets/rajhe.0213944b.png",
+    "src": "style_files/frontend/img/rajhe.png"
+  },
+  "style_files/frontend/img/secure.svg": {
+    "file": "assets/secure.87ae9acd.svg",
+    "src": "style_files/frontend/img/secure.svg"
+  },
+  "style_files/frontend/img/tabs/1.png": {
+    "file": "assets/1.521d9018.png",
+    "src": "style_files/frontend/img/tabs/1.png"
+  },
+  "style_files/frontend/img/spinner.gif": {
+    "file": "assets/spinner.692b8391.gif",
+    "src": "style_files/frontend/img/spinner.gif"
+  },
+  "style_files/frontend/img/tabs/2.png": {
+    "file": "assets/2.570b9d7a.png",
+    "src": "style_files/frontend/img/tabs/2.png"
+  },
+  "style_files/frontend/img/tabs/3.png": {
+    "file": "assets/3.cd428bc0.png",
+    "src": "style_files/frontend/img/tabs/3.png"
+  },
+  "style_files/frontend/img/slider/slider_end.png": {
+    "file": "assets/slider_end.a338e38a.png",
+    "src": "style_files/frontend/img/slider/slider_end.png"
+  },
+  "style_files/frontend/img/tabs/4.png": {
+    "file": "assets/4.18623530.png",
+    "src": "style_files/frontend/img/tabs/4.png"
+  },
+  "style_files/frontend/img/visa.png": {
+    "file": "assets/visa.5d4b1851.png",
+    "src": "style_files/frontend/img/visa.png"
+  },
+  "style_files/frontend/img/vision2030-grey.svg": {
+    "file": "assets/vision2030-grey.21e4824d.svg",
+    "src": "style_files/frontend/img/vision2030-grey.svg"
+  },
+  "style_files/frontend/img/website.png": {
+    "file": "assets/website.88bd884e.png",
+    "src": "style_files/frontend/img/website.png"
+  },
+  "node_modules/slick-carousel/slick/ajax-loader.gif": {
+    "file": "assets/ajax-loader.e7b44c86.gif",
+    "src": "node_modules/slick-carousel/slick/ajax-loader.gif"
+  },
+  "node_modules/slick-carousel/slick/fonts/slick.eot": {
+    "file": "assets/slick.06d80cf0.eot",
+    "src": "node_modules/slick-carousel/slick/fonts/slick.eot"
+  },
+  "node_modules/slick-carousel/slick/fonts/slick.woff": {
+    "file": "assets/slick.26726bac.woff",
+    "src": "node_modules/slick-carousel/slick/fonts/slick.woff"
+  },
+  "node_modules/slick-carousel/slick/fonts/slick.ttf": {
+    "file": "assets/slick.37bc99cf.ttf",
+    "src": "node_modules/slick-carousel/slick/fonts/slick.ttf"
+  },
+  "node_modules/slick-carousel/slick/fonts/slick.svg": {
+    "file": "assets/slick.12459f22.svg",
+    "src": "node_modules/slick-carousel/slick/fonts/slick.svg"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app.4ebdf269.js",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "css": [
+      "assets/app.ffd4049d.css"
+    ],
+    "assets": [
+      "assets/ajax-loader.e7b44c86.gif",
+      "assets/slick.06d80cf0.eot",
+      "assets/slick.26726bac.woff",
+      "assets/slick.37bc99cf.ttf",
+      "assets/slick.12459f22.svg"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app.d8caad3d.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.css": {
+    "file": "assets/app.ffd4049d.css",
+    "src": "resources/js/app.css"
+  },
+  "style_files/frontend/fonts/Hacen Saudi Arabia.woff": {
+    "file": "assets/ArbFONTS-HacenSaudiArabia.b860819b.woff",
+    "src": "style_files/frontend/fonts/Hacen Saudi Arabia.woff"
+  }
+}
