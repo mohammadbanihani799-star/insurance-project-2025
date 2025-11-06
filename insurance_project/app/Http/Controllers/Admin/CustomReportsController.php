@@ -107,22 +107,22 @@ class CustomReportsController extends Controller
             $query = InsuranceRequest::with(['insurance']);
 
             // تصفية حسب التاريخ
-            if ($request->has('date_from')) {
-                $query->whereDate('created_at', '>=', $request->date_from);
+            if ($request->filled('date_from')) {
+                $query->whereDate('created_at', '>=', $request->input('date_from'));
             }
 
-            if ($request->has('date_to')) {
-                $query->whereDate('created_at', '<=', $request->date_to);
+            if ($request->filled('date_to')) {
+                $query->whereDate('created_at', '<=', $request->input('date_to'));
             }
 
             // تصفية حسب الحالة
-            if ($request->has('status') && $request->status != 'all') {
-                $query->where('status', $request->status);
+            if ($request->filled('status') && $request->input('status') !== 'all') {
+                $query->where('status', $request->input('status'));
             }
 
             // تصفية حسب نوع التأمين
-            if ($request->has('insurance_id') && $request->insurance_id != 'all') {
-                $query->where('insurance_id', $request->insurance_id);
+            if ($request->filled('insurance_id') && $request->input('insurance_id') !== 'all') {
+                $query->where('insurance_id', $request->input('insurance_id'));
             }
 
             $reports = $query->orderBy('created_at', 'desc')->get();
