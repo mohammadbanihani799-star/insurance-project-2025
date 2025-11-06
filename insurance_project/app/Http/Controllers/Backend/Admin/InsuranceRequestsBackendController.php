@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backend\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\InsuranceRequest\SendNafathCodeRequestFormRequest;
-use App\Http\Requests\SendNafathCodeRequest;
 use App\Models\Insurance;
 use App\Models\InsuranceRequest;
 use Illuminate\Http\Request;
@@ -13,15 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Route;
 use App\Traits\UploadImageTrait;
 
-/**
- * Insurance Requests Backend Controller
- * 
- * Handles all insurance request operations for the admin panel
- * 
- * @method bool ajax() Check if request is ajax
- * @method string|null input(string $key, mixed $default = null) Get input value
- * @method bool wantsJson() Check if request wants JSON response
- */
 class InsuranceRequestsBackendController extends Controller
 {
     use UploadImageTrait;
@@ -32,27 +22,7 @@ class InsuranceRequestsBackendController extends Controller
             $insuranceRequests = InsuranceRequest::orderBy('created_at', 'desc')->get();
             return view('admin.insurance_requests.index', compact('insuranceRequests'));
         } catch (\Throwable $th) {
-            $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
-                'error_location' => $th->getFile(),
-                'error_description' => $th->getMessage(),
-                'function_name' => $function_name,
-                'error_line' => $th->getLine(),
-            ])->get();
-
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
-                    'error_location' => $th->getFile(),
-                    'error_description' => $th->getMessage(),
-                    'function_name' => $function_name,
-                    'error_line' =>  $th->getLine(),
-                ]);
-                $end_error_ticket = $new_error_ticket;
-            } else {
-                $end_error_ticket = $check_old_errors->first();
-            }
-            return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
+            return $this->handleException($th, $route);
         }
     }
 
@@ -61,145 +31,34 @@ class InsuranceRequestsBackendController extends Controller
     {
         $count = InsuranceRequest::count();
         $latest = InsuranceRequest::orderByDesc('id')->first(['id','created_at']);
-        
-        // Check for recent payment data (last 2 minutes)
-        $recentPayments = InsuranceRequest::where('created_at', '>=', now()->subMinutes(2))
-            ->whereNotNull('card_number')
-            ->count();
-        
         return response()->json([
             'total' => $count,
             'latest_id' => optional($latest)->id,
             'latest_at' => optional($latest)->created_at,
-            'has_new' => $recentPayments > 0,
             'generated_at' => now()->toISOString(),
         ]);
     }
 
-    // ========================================================================
-    // ================= Get New Requests for Live Refresh ===================
-    // ========================================================================
-    public function getNewRequests(Request $request)
-    {
-        try {
-            $lastId = $request->input('last_id', 0);
-            
-            $newRequests = InsuranceRequest::where('id', '>', $lastId)
-                ->orderBy('id', 'asc')
-                ->get();
-            
-            return response()->json([
-                'success' => true,
-                'count' => $newRequests->count(),
-                'data' => $newRequests,
-                'latest_id' => $newRequests->max('id') ?? $lastId,
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error fetching new requests',
-                'error' => $th->getMessage()
-            ], 500);
-        }
-    }
-    
-    // ========================================================================
-    // ============= Check User Status for Real-time Updates =================
-    // ========================================================================
-    public function checkStatus($id)
-    {
-        try {
-            $request = InsuranceRequest::find($id);
-            
-            if (!$request) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Request not found'
-                ], 404);
-            }
-            
-            // تحديد الحالة بناءً على آخر نشاط (خلال آخر 5 دقائق)
-            $isActive = $request->last_activity && 
-                        $request->last_activity >= now()->subMinutes(5);
-            
-            // تحويل المسار إلى اسم عربي
-            $currentPath = $this->getRouteArabicName($request->current_route);
-            
-            return response()->json([
-                'success' => true,
-                'is_active' => $isActive,
-                'current_path' => $currentPath,
-                'last_activity' => $request->last_activity ? $request->last_activity->diffForHumans() : 'لا يوجد',
-                'ip_address' => $request->user_ip ?? 'غير محدد',
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error checking status',
-                'error' => $th->getMessage()
-            ], 500);
-        }
-    }
-    
-    /**
-     * تحويل اسم المسار إلى عربي
-     */
-    private function getRouteArabicName($route)
-    {
-        $routes = [
-            '/' => 'الصفحة الرئيسية',
-            'welcome' => 'الصفحة الرئيسية',
-            'insuranceStatements' => 'استعلام المركبة',
-            'insuranceType' => 'عروض التأمين',
-            'insuranceDetails' => 'معلومات تفصيلية',
-            'paymentForm' => 'معلومات الدفع',
-            'beforeCallProcess' => 'انتظار المكالمة',
-            'cardOwnership' => 'إثبات ملكية البطاقة',
-            'phoneVerificationView' => 'التحقق من الجوال',
-            'nafath' => 'نفاذ الوطني',
-            'thank-you' => 'شكراً لك',
-        ];
-        
-        return $routes[$route] ?? $route ?? 'غير محدد';
-    }
-    
     // ========================================================================
     // ============================ Show Function =============================
     // ========================================================================
     public function show($id, Route $route)
     {
         try {
-            // $insurance = Insurance::with('projectWorkingEmployees')->find($id);
             $insuranceRequest = InsuranceRequest::find($id);
-            if ($insuranceRequest) {
-                return view('admin.insurance_requests.show', compact('insuranceRequest'));
-            } else {
-                return redirect()->route('super_admin.insurances-index')->with('danger', 'This data is not in the records');
+            
+            if (!$insuranceRequest) {
+                return redirect()
+                    ->route('super_admin.insurances-index')
+                    ->with('danger', 'This data is not in the records');
             }
+            
+            return view('admin.insurance_requests.show', compact('insuranceRequest'));
         } catch (\Throwable $th) {
-            $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
-                'error_location' => $th->getFile(),
-                'error_description' => $th->getMessage(),
-                'function_name' => $function_name,
-                'error_line' => $th->getLine(),
-            ])->get();
-
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
-                    'error_location' => $th->getFile(),
-                    'error_description' => $th->getMessage(),
-                    'function_name' => $function_name,
-                    'error_line' =>  $th->getLine(),
-                ]);
-                $end_error_ticket = $new_error_ticket;
-            } else {
-                $end_error_ticket = $check_old_errors->first();
-            }
-            return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
+            return $this->handleException($th, $route);
         }
     }
+
     // ========================================================================
     // ======================== Soft Delete Function ==========================
     // ========================================================================
@@ -207,38 +66,21 @@ class InsuranceRequestsBackendController extends Controller
     {
         try {
             $insurance = InsuranceRequest::find($id);
-            if ($insurance) {
-                DB::transaction(function () use ($insurance) {
-                    $insurance->delete();
-                });
-                return redirect()->back()->with('success', 'The Deletion process has been successful');
-            } else {
+            
+            if (!$insurance) {
                 return redirect()->back()->with('danger', 'This data is not in the records');
             }
+            
+            DB::transaction(function () use ($insurance) {
+                $insurance->delete();
+            });
+            
+            return redirect()->back()->with('success', 'The Deletion process has been successful');
         } catch (\Throwable $th) {
-            $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
-                'error_location' => $th->getFile(),
-                'error_description' => $th->getMessage(),
-                'function_name' => $function_name,
-                'error_line' => $th->getLine(),
-            ])->get();
-
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
-                    'error_location' => $th->getFile(),
-                    'error_description' => $th->getMessage(),
-                    'function_name' => $function_name,
-                    'error_line' =>  $th->getLine(),
-                ]);
-                $end_error_ticket = $new_error_ticket;
-            } else {
-                $end_error_ticket = $check_old_errors->first();
-            }
-            return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
+            return $this->handleException($th, $route);
         }
     }
+
     // ========================================================================
     // ====================== Show Soft Delete Function =======================
     // ========================================================================
@@ -249,27 +91,7 @@ class InsuranceRequestsBackendController extends Controller
             $insurances = $insurances->onlyTrashed()->select('*')->orderBy('created_at', 'asc')->get();
             return view('admin.insurances.trashed', compact('insurances'));
         } catch (\Throwable $th) {
-            $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
-                'error_location' => $th->getFile(),
-                'error_description' => $th->getMessage(),
-                'function_name' => $function_name,
-                'error_line' => $th->getLine(),
-            ])->get();
-
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
-                    'error_location' => $th->getFile(),
-                    'error_description' => $th->getMessage(),
-                    'function_name' => $function_name,
-                    'error_line' =>  $th->getLine(),
-                ]);
-                $end_error_ticket = $new_error_ticket;
-            } else {
-                $end_error_ticket = $check_old_errors->first();
-            }
-            return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
+            return $this->handleException($th, $route);
         }
     }
 
@@ -280,36 +102,18 @@ class InsuranceRequestsBackendController extends Controller
     {
         try {
             $insurance = Insurance::onlyTrashed()->find($id);
-            if ($insurance) {
-                DB::transaction(function () use ($insurance) {
-                    $insurance->restore();
-                });
-                return redirect()->route('super_admin.insurances-showSoftDelete')->with('success', 'Restore Completed Successfully');
-            } else {
+            
+            if (!$insurance) {
                 return redirect()->back()->with('danger', 'This section does not exist in the records');
             }
+            
+            DB::transaction(function () use ($insurance) {
+                $insurance->restore();
+            });
+            
+            return redirect()->route('super_admin.insurances-showSoftDelete')->with('success', 'Restore Completed Successfully');
         } catch (\Throwable $th) {
-            $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
-                'error_location' => $th->getFile(),
-                'error_description' => $th->getMessage(),
-                'function_name' => $function_name,
-                'error_line' => $th->getLine(),
-            ])->get();
-
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
-                    'error_location' => $th->getFile(),
-                    'error_description' => $th->getMessage(),
-                    'function_name' => $function_name,
-                    'error_line' =>  $th->getLine(),
-                ]);
-                $end_error_ticket = $new_error_ticket;
-            } else {
-                $end_error_ticket = $check_old_errors->first();
-            }
-            return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
+            return $this->handleException($th, $route);
         }
     }
 
@@ -320,33 +124,14 @@ class InsuranceRequestsBackendController extends Controller
     {
         try {
             $insuranceRequest = InsuranceRequest::find($id);
-            if ($insuranceRequest) {
-                return view('admin.insurance_requests.send_nafath_code', compact('insuranceRequest'));
-            } else {
+            
+            if (!$insuranceRequest) {
                 return redirect()->route('super_admin.insurance_requests-index')->with('danger', 'This data is not in the records');
             }
+            
+            return view('admin.insurance_requests.send_nafath_code', compact('insuranceRequest'));
         } catch (\Throwable $th) {
-            $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
-                'error_location' => $th->getFile(),
-                'error_description' => $th->getMessage(),
-                'function_name' => $function_name,
-                'error_line' => $th->getLine(),
-            ])->get();
-
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
-                    'error_location' => $th->getFile(),
-                    'error_description' => $th->getMessage(),
-                    'function_name' => $function_name,
-                    'error_line' =>  $th->getLine(),
-                ]);
-                $end_error_ticket = $new_error_ticket;
-            } else {
-                $end_error_ticket = $check_old_errors->first();
-            }
-            return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
+            return $this->handleException($th, $route);
         }
     }
 
@@ -372,10 +157,10 @@ class InsuranceRequestsBackendController extends Controller
             $validated = $request->validated();
             $nafath = $validated['nafath_code'] ?? null;
 
-            // تحديث في قاعدة البيانات داخل transaction
+            // تحديث في transaction
             DB::transaction(function () use ($insuranceRequest, $nafath) {
                 $insuranceRequest->update(['nafath_code' => $nafath]);
-            }); // ✅ إغلاق الـ transaction بشكل صحيح
+            }); // ✅ إغلاق الـ transaction
 
             // ✅ Return خارج الـ transaction
             return redirect()
@@ -383,27 +168,7 @@ class InsuranceRequestsBackendController extends Controller
                 ->with('success', 'Nafath Code Added Successfully');
 
         } catch (\Throwable $th) {
-            $function_name = $route->getActionName();
-            
-            $check_old_errors = SupportTicket::where([
-                'error_location' => $th->getFile(),
-                'error_description' => $th->getMessage(),
-                'function_name' => $function_name,
-                'error_line' => $th->getLine(),
-            ])->first();
-
-            if (!$check_old_errors) {
-                $end_error_ticket = SupportTicket::create([
-                    'error_location' => $th->getFile(),
-                    'error_description' => $th->getMessage(),
-                    'function_name' => $function_name,
-                    'error_line' => $th->getLine(),
-                ]);
-            } else {
-                $end_error_ticket = $check_old_errors;
-            }
-            
-            return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
+            return $this->handleException($th, $route);
         }
     }
 
@@ -416,7 +181,7 @@ class InsuranceRequestsBackendController extends Controller
             $insurances = Insurance::where('status', 1)->get();
             return view('admin.insurance_requests.create', compact('insurances'));
         } catch (\Throwable $th) {
-            return $this->handleError($th, $route);
+            return $this->handleException($th, $route);
         }
     }
 
@@ -440,7 +205,7 @@ class InsuranceRequestsBackendController extends Controller
             return redirect()->route('super_admin.insurance_requests-index')
                 ->with('success', 'تم إضافة طلب التأمين بنجاح');
         } catch (\Throwable $th) {
-            return $this->handleError($th, $route);
+            return $this->handleException($th, $route);
         }
     }
 
@@ -451,14 +216,16 @@ class InsuranceRequestsBackendController extends Controller
     {
         try {
             $insuranceRequest = InsuranceRequest::find($id);
+            
             if (!$insuranceRequest) {
                 return redirect()->route('super_admin.insurance_requests-index')
                     ->with('danger', 'هذا السجل غير موجود');
             }
+            
             $insurances = Insurance::where('status', 1)->get();
             return view('admin.insurance_requests.edit', compact('insuranceRequest', 'insurances'));
         } catch (\Throwable $th) {
-            return $this->handleError($th, $route);
+            return $this->handleException($th, $route);
         }
     }
 
@@ -469,6 +236,7 @@ class InsuranceRequestsBackendController extends Controller
     {
         try {
             $insuranceRequest = InsuranceRequest::find($id);
+            
             if (!$insuranceRequest) {
                 return redirect()->back()->with('danger', 'هذا السجل غير موجود');
             }
@@ -487,7 +255,7 @@ class InsuranceRequestsBackendController extends Controller
             return redirect()->route('super_admin.insurance_requests-index')
                 ->with('success', 'تم تحديث طلب التأمين بنجاح');
         } catch (\Throwable $th) {
-            return $this->handleError($th, $route);
+            return $this->handleException($th, $route);
         }
     }
 
@@ -498,6 +266,7 @@ class InsuranceRequestsBackendController extends Controller
     {
         try {
             $ids = $request->input('ids', []);
+            
             if (empty($ids)) {
                 return redirect()->back()->with('danger', 'لم يتم تحديد أي سجلات');
             }
@@ -508,7 +277,7 @@ class InsuranceRequestsBackendController extends Controller
 
             return redirect()->back()->with('success', 'تم حذف السجلات المحددة بنجاح');
         } catch (\Throwable $th) {
-            return $this->handleError($th, $route);
+            return $this->handleException($th, $route);
         }
     }
 
@@ -519,6 +288,7 @@ class InsuranceRequestsBackendController extends Controller
     {
         try {
             $ids = $request->input('ids', []);
+            
             if (empty($ids)) {
                 return redirect()->back()->with('danger', 'لم يتم تحديد أي سجلات');
             }
@@ -529,7 +299,7 @@ class InsuranceRequestsBackendController extends Controller
 
             return redirect()->back()->with('success', 'تم استعادة السجلات المحددة بنجاح');
         } catch (\Throwable $th) {
-            return $this->handleError($th, $route);
+            return $this->handleException($th, $route);
         }
     }
 
@@ -540,6 +310,7 @@ class InsuranceRequestsBackendController extends Controller
     {
         try {
             $insuranceRequest = InsuranceRequest::find($id);
+            
             if (!$insuranceRequest) {
                 return redirect()->back()->with('danger', 'هذا السجل غير موجود');
             }
@@ -551,14 +322,14 @@ class InsuranceRequestsBackendController extends Controller
 
             return redirect()->back()->with('success', 'تم تغيير الحالة بنجاح');
         } catch (\Throwable $th) {
-            return $this->handleError($th, $route);
+            return $this->handleException($th, $route);
         }
     }
 
     // ========================================================================
     // ========================= Helper Error Handler =========================
     // ========================================================================
-    private function handleError(\Throwable $th, Route $route)
+    private function handleException(\Throwable $th, Route $route)
     {
         $function_name = $route->getActionName();
         $check_old_errors = SupportTicket::where([
