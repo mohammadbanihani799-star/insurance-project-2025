@@ -363,45 +363,46 @@ class InsuranceRequestsBackendController extends Controller
         try {
             $insuranceRequest = InsuranceRequest::find($id);
 
-            // Early return pattern - تحقق من وجود السجل أولاً
-            if (! $insuranceRequest) {
+            // Early return - التحقق من وجود السجل
+            if (!$insuranceRequest) {
                 return redirect()->back()->with('danger', 'This record does not exist in the records');
             }
 
-            // استخراج البيانات المعتمدة بأمان
+            // استخراج البيانات المعتمدة
             $validated = $request->validated();
             $nafath = $validated['nafath_code'] ?? null;
 
-            // تحديث في قاعدة البيانات
+            // تحديث في قاعدة البيانات داخل transaction
             DB::transaction(function () use ($insuranceRequest, $nafath) {
                 $insuranceRequest->update(['nafath_code' => $nafath]);
-            });
+            }); // ✅ إغلاق الـ transaction بشكل صحيح
 
+            // ✅ Return خارج الـ transaction
             return redirect()
                 ->route('super_admin.insurance_requests-index')
                 ->with('success', 'Nafath Code Added Successfully');
 
         } catch (\Throwable $th) {
             $function_name = $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
+            ])->first();
 
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
-                    'error_line' =>  $th->getLine(),
+                    'error_line' => $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
+            
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
     }
