@@ -136,6 +136,8 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
+    // ❌ DISABLED: Partners Slick Carousel (Using CSS Grid instead)
+    /*
     $('.componies_wrapper').slick({
         infinite: true,
         slidesToShow: 4,
@@ -146,8 +148,6 @@ $(document).ready(function () {
         autoplay: true,
         autoplaySpeed: 2000,
         responsive: [
-
-
             {
                 breakpoint: 1024,
                 settings: {
@@ -157,8 +157,6 @@ $(document).ready(function () {
                     dots: true
                 }
             },
-
-
             {
                 breakpoint: 768,
                 settings: {
@@ -179,8 +177,10 @@ $(document).ready(function () {
             }
             return '';
         },
-
     });
+    */
+
+    console.log('Partners: CSS Grid enabled, Slick disabled');
 });
 
 
@@ -241,7 +241,7 @@ $(document).ready(function() {
     $('.listBtn').click(function() {
         // Remove the 'active' class from all buttons
         $('.listBtn').removeClass('active');
-        
+
         // Add the 'active' class only to the clicked button
         $(this).addClass('active');
     });

@@ -9,6 +9,8 @@
 <script src="{{ asset('style_files/backend/dist/js/app.init.horizontal.js') }}"></script>
 <script src="{{ asset('style_files/backend/dist/js/app-style-switcher.horizontal.js') }}"></script>
 <!-- slimscrollbar scrollbar JavaScript -->
+<!-- Fix passive event listener warning for perfect-scrollbar -->
+<script src="{{ asset('style_files/backend/dist/js/perfect-scrollbar-passive-fix.js') }}"></script>
 <script src="{{ asset('style_files/backend/src/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js') }}">
 </script>
 <script src="{{ asset('style_files/backend/src/assets/libs/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
@@ -33,6 +35,8 @@
 <script src="{{ asset('style_files/backend/dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>

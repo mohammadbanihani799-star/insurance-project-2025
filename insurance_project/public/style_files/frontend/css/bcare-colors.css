@@ -1,0 +1,340 @@
+/* ═══════════════════════════════════════════════════════
+   🎨 BCare Official Theme Colors - الألوان الرسمية لبي كير
+   ═══════════════════════════════════════════════════════ */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   1️⃣ PRIMARY COLORS - الألوان الأساسية
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+    /* اللون الأزرق الرئيسي لبي كير */
+    --bcare-primary: #0066a1;
+    --bcare-primary-dark: #004d7a;
+    --bcare-primary-light: #0080c9;
+    --bcare-primary-lighter: #e6f3fa;
+    --bcare-primary-alpha-10: rgba(0, 102, 161, 0.1);
+    --bcare-primary-alpha-20: rgba(0, 102, 161, 0.2);
+    --bcare-primary-alpha-50: rgba(0, 102, 161, 0.5);
+
+    /* اللون البرتقالي/الذهبي للعناصر البارزة */
+    --bcare-orange: #f59e0b;
+    --bcare-orange-dark: #d97706;
+    --bcare-orange-darker: #b45309;
+    --bcare-orange-light: #fbbf24;
+    --bcare-orange-lighter: #fef3c7;
+
+    /* التدرجات الأساسية */
+    --bcare-gradient-primary: linear-gradient(135deg, #0066a1 0%, #004d7a 100%);
+    --bcare-gradient-orange: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --bcare-gradient-light: linear-gradient(135deg, #e6f3fa 0%, #cce7f5 100%);
+    --bcare-gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   2️⃣ SECONDARY COLORS - الألوان الثانوية
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+    /* الألوان المحايدة */
+    --bcare-white: #ffffff;
+    --bcare-black: #000000;
+    --bcare-gray-50: #f9fafb;
+    --bcare-gray-100: #f3f4f6;
+    --bcare-gray-200: #e5e7eb;
+    --bcare-gray-300: #d1d5db;
+    --bcare-gray-400: #9ca3af;
+    --bcare-gray-500: #6b7280;
+    --bcare-gray-600: #4b5563;
+    --bcare-gray-700: #374151;
+    --bcare-gray-800: #1f2937;
+    --bcare-gray-900: #111827;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   3️⃣ SEMANTIC COLORS - الألوان الدلالية
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+    /* نجاح */
+    --bcare-success: #10b981;
+    --bcare-success-dark: #059669;
+    --bcare-success-light: #d1fae5;
+
+    /* تحذير */
+    --bcare-warning: #f59e0b;
+    --bcare-warning-dark: #d97706;
+    --bcare-warning-light: #fef3c7;
+
+    /* خطأ */
+    --bcare-error: #dc2626;
+    --bcare-error-dark: #b91c1c;
+    --bcare-error-light: #fee2e2;
+
+    /* معلومات */
+    --bcare-info: #3b82f6;
+    --bcare-info-dark: #2563eb;
+    --bcare-info-light: #dbeafe;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   4️⃣ BACKGROUNDS - خلفيات
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+    --bcare-bg-primary: #ffffff;
+    --bcare-bg-secondary: #f9fafb;
+    --bcare-bg-tertiary: #f3f4f6;
+    --bcare-bg-dark: #1f2937;
+    --bcare-bg-gradient-hero: linear-gradient(135deg, #0066a1 0%, #004d7a 100%);
+    --bcare-bg-gradient-card: linear-gradient(135deg, #e6f3fa 0%, #cce7f5 100%);
+    --bcare-bg-light-blue: #f7f9fc;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   5️⃣ TEXT COLORS - ألوان النصوص
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+    --bcare-text-primary: #1f2937;
+    --bcare-text-secondary: #4b5563;
+    --bcare-text-tertiary: #6b7280;
+    --bcare-text-muted: #9ca3af;
+    --bcare-text-white: #ffffff;
+    --bcare-text-link: #0066a1;
+    --bcare-text-link-hover: #004d7a;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   6️⃣ BORDERS & SHADOWS - حدود وظلال
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+    --bcare-border-light: #e5e7eb;
+    --bcare-border-medium: #d1d5db;
+    --bcare-border-dark: #9ca3af;
+    --bcare-border-primary: #0066a1;
+    --bcare-border-orange: #f59e0b;
+
+    /* Shadows */
+    --bcare-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --bcare-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --bcare-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --bcare-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+    --bcare-shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+    --bcare-shadow-primary: 0 4px 12px rgba(0, 102, 161, 0.3);
+    --bcare-shadow-orange: 0 4px 15px rgba(245, 158, 11, 0.3);
+    --bcare-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --bcare-shadow-card-hover: 0 12px 40px rgba(0, 102, 161, 0.2);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   7️⃣ BUTTON COLORS - ألوان الأزرار
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+    /* Primary Button */
+    --bcare-btn-primary-bg: linear-gradient(135deg, #0066a1 0%, #004d7a 100%);
+    --bcare-btn-primary-hover: linear-gradient(135deg, #004d7a 0%, #003355 100%);
+    --bcare-btn-primary-text: #ffffff;
+
+    /* Orange Button */
+    --bcare-btn-orange-bg: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --bcare-btn-orange-hover: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    --bcare-btn-orange-text: #ffffff;
+
+    /* Secondary Button */
+    --bcare-btn-secondary-bg: #e5e7eb;
+    --bcare-btn-secondary-hover: #d1d5db;
+    --bcare-btn-secondary-text: #4b5563;
+
+    /* Outline Button */
+    --bcare-btn-outline-border: #0066a1;
+    --bcare-btn-outline-text: #0066a1;
+    --bcare-btn-outline-hover-bg: #e6f3fa;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   8️⃣ COMPONENT SPECIFIC COLORS - ألوان خاصة بالمكونات
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+    /* Forms */
+    --bcare-input-bg: #ffffff;
+    --bcare-input-border: #d1d5db;
+    --bcare-input-border-focus: #0066a1;
+    --bcare-input-text: #1f2937;
+    --bcare-input-placeholder: #9ca3af;
+
+    /* Cards */
+    --bcare-card-bg: #ffffff;
+    --bcare-card-border: #e5e7eb;
+    --bcare-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --bcare-card-hover-shadow: 0 10px 20px rgba(0, 102, 161, 0.15);
+
+    /* Badges */
+    --bcare-badge-primary-bg: #0066a1;
+    --bcare-badge-primary-text: #ffffff;
+    --bcare-badge-orange-bg: #f59e0b;
+    --bcare-badge-orange-text: #ffffff;
+    --bcare-badge-success-bg: #10b981;
+    --bcare-badge-success-text: #ffffff;
+
+    /* Tabs */
+    --bcare-tab-active-bg: #0066a1;
+    --bcare-tab-active-text: #ffffff;
+    --bcare-tab-inactive-bg: #e5e7eb;
+    --bcare-tab-inactive-text: #6b7280;
+    --bcare-tab-border-active: #f59e0b;
+
+    /* Info Box */
+    --bcare-info-box-bg: #eff6ff;
+    --bcare-info-box-border: #bfdbfe;
+    --bcare-info-box-text: #1e40af;
+    --bcare-info-box-icon: #3b82f6;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   9️⃣ HOVER & ACTIVE STATES - حالات التفاعل
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+    --bcare-hover-primary: #004d7a;
+    --bcare-hover-orange: #d97706;
+    --bcare-hover-gray: #f3f4f6;
+    --bcare-active-primary: #003355;
+    --bcare-active-orange: #b45309;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   🔟 UTILITY CLASSES - أصناف مساعدة
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Background Colors */
+.bg-primary { background: var(--bcare-primary); }
+.bg-primary-gradient { background: var(--bcare-gradient-primary); }
+.bg-orange-gradient { background: var(--bcare-gradient-orange); }
+.bg-white { background: var(--bcare-white); }
+.bg-gray-50 { background: var(--bcare-gray-50); }
+.bg-gray-100 { background: var(--bcare-gray-100); }
+
+/* Text Colors */
+.text-primary { color: var(--bcare-primary); }
+.text-white { color: var(--bcare-white); }
+.text-gray-600 { color: var(--bcare-gray-600); }
+.text-gray-700 { color: var(--bcare-gray-700); }
+.text-gray-800 { color: var(--bcare-gray-800); }
+
+/* Border Colors */
+.border-primary { border-color: var(--bcare-primary); }
+.border-orange { border-color: var(--bcare-orange); }
+.border-light { border-color: var(--bcare-border-light); }
+.border-medium { border-color: var(--bcare-border-medium); }
+
+/* Shadow Utilities */
+.shadow-sm { box-shadow: var(--bcare-shadow-sm); }
+.shadow-md { box-shadow: var(--bcare-shadow-md); }
+.shadow-lg { box-shadow: var(--bcare-shadow-lg); }
+.shadow-xl { box-shadow: var(--bcare-shadow-xl); }
+.shadow-primary { box-shadow: var(--bcare-shadow-primary); }
+.shadow-orange { box-shadow: var(--bcare-shadow-orange); }
+
+/* ═══════════════════════════════════════════════════════
+   ✨ EXAMPLE COMPONENT STYLING
+   ═══════════════════════════════════════════════════════ */
+
+/* Primary Button */
+.btn-bcare-primary {
+    background: var(--bcare-btn-primary-bg);
+    color: var(--bcare-btn-primary-text);
+    box-shadow: var(--bcare-shadow-primary);
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-bcare-primary:hover {
+    background: var(--bcare-btn-primary-hover);
+    transform: translateY(-2px);
+}
+
+/* Orange CTA Button */
+.btn-bcare-cta {
+    background: var(--bcare-btn-orange-bg);
+    color: var(--bcare-btn-orange-text);
+    box-shadow: var(--bcare-shadow-orange);
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-bcare-cta:hover {
+    background: var(--bcare-btn-orange-hover);
+    transform: translateY(-2px);
+}
+
+/* Card */
+.card-bcare {
+    background: var(--bcare-card-bg);
+    border: 1px solid var(--bcare-card-border);
+    box-shadow: var(--bcare-card-shadow);
+    border-radius: 1.25rem;
+    padding: 1.875rem;
+    transition: all 0.3s ease;
+}
+
+.card-bcare:hover {
+    box-shadow: var(--bcare-card-hover-shadow);
+    transform: translateY(-4px);
+}
+
+/* Hero Section */
+.hero-bcare {
+    background: var(--bcare-bg-gradient-hero);
+    color: var(--bcare-text-white);
+    padding: 5rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Badge */
+.badge-bcare {
+    background: var(--bcare-badge-primary-bg);
+    color: var(--bcare-badge-primary-text);
+    padding: 0.5rem 1rem;
+    border-radius: 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+/* Tab Active */
+.tab-bcare.active {
+    background: var(--bcare-tab-active-bg);
+    color: var(--bcare-tab-active-text);
+    border-bottom: 3px solid var(--bcare-tab-border-active);
+}
+
+/* Info Box */
+.info-box-bcare {
+    background: var(--bcare-info-box-bg);
+    border: 1px solid var(--bcare-info-box-border);
+    color: var(--bcare-info-box-text);
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+}
+
+/* Link */
+a.link-bcare {
+    color: var(--bcare-text-link);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a.link-bcare:hover {
+    color: var(--bcare-text-link-hover);
+}

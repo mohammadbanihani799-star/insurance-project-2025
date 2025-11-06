@@ -1,0 +1,446 @@
+/* ========================================= */
+/* Angular Material Design - Becare Theme */
+/* تصميم مخصص لبي كير للتأمين - السعودية */
+/* Becare Insurance Visual Identity */
+/* ========================================= */
+
+/* Becare Brand Colors */
+:root {
+    /* Primary Becare Colors */
+    --becare-primary: #146394;        /* الأزرق الرئيسي لبي كير */
+    --becare-primary-light: #1F9ED5;  /* أزرق فاتح */
+    --becare-primary-dark: #0f4a6d;   /* أزرق داكن */
+
+    /* Secondary Becare Colors */
+    --becare-yellow: #F9A825;         /* الأصفر المميز */
+    --becare-yellow-light: #FAA62E;   /* أصفر فاتح */
+    --becare-yellow-dark: #F59E0B;    /* أصفر داكن */
+
+    /* Accent Colors */
+    --becare-green: #0f4a6d;          /* الأخضر للنجاح */
+    --becare-red: #EB5648;            /* الأحمر للتنبيهات */
+    --becare-orange: #FAA62E;         /* البرتقالي */
+
+    /* Neutral Colors */
+    --becare-gray: #707070;           /* رمادي متوسط */
+    --becare-gray-light: #F6F7F8;     /* رمادي فاتح جداً */
+    --becare-gray-medium: #EBEBEB;    /* رمادي فاتح */
+    --becare-gray-dark: #3E515E;      /* رمادي داكن */
+
+    /* Background Colors */
+    --becare-bg-primary: #FFFFFF;     /* خلفية بيضاء */
+    --becare-bg-light: #F8FDFF;       /* خلفية زرقاء فاتحة جداً */
+    --becare-bg-blue: #DCF4FD;        /* خلفية زرقاء فاتحة */
+    --becare-bg-cream: #FEEFD8;       /* خلفية كريمية */
+}
+
+html {
+    /* Material Select - Becare Theme */
+    --mat-select-panel-background-color: var(--becare-bg-primary);
+    --mat-select-enabled-trigger-text-color: var(--becare-primary);
+    --mat-select-disabled-trigger-text-color: rgba(112, 112, 112, .5);
+    --mat-select-placeholder-text-color: var(--becare-gray);
+    --mat-select-enabled-arrow-color: var(--becare-yellow);
+    --mat-select-disabled-arrow-color: rgba(112, 112, 112, .3);
+    --mat-select-focused-arrow-color: var(--becare-primary);
+    --mat-select-invalid-arrow-color: var(--becare-red);
+
+    /* Autocomplete - Becare Theme */
+    --mat-autocomplete-background-color: var(--becare-bg-primary);
+
+    /* Menu - Becare Theme */
+    --mat-menu-item-label-text-color: var(--becare-primary);
+    --mat-menu-item-icon-color: var(--becare-yellow);
+    --mat-menu-item-hover-state-layer-color: var(--becare-bg-blue);
+    --mat-menu-item-focus-state-layer-color: var(--becare-bg-blue);
+    --mat-menu-container-color: var(--becare-bg-primary);
+}
+
+html .mat-mdc-form-field.mat-accent {
+    --mat-select-panel-background-color: var(--becare-bg-light);
+    --mat-select-enabled-trigger-text-color: var(--becare-yellow);
+    --mat-select-disabled-trigger-text-color: rgba(112, 112, 112, .5);
+    --mat-select-placeholder-text-color: var(--becare-gray);
+    --mat-select-enabled-arrow-color: var(--becare-yellow);
+    --mat-select-disabled-arrow-color: rgba(112, 112, 112, .3);
+    --mat-select-focused-arrow-color: var(--becare-yellow-dark);
+    --mat-select-invalid-arrow-color: var(--becare-red)
+}
+
+html .mat-mdc-form-field.mat-warn {
+    --mat-select-panel-background-color: var(--becare-bg-light);
+    --mat-select-enabled-trigger-text-color: var(--becare-red);
+    --mat-select-disabled-trigger-text-color: rgba(112, 112, 112, .5);
+    --mat-select-placeholder-text-color: var(--becare-gray);
+    --mat-select-enabled-arrow-color: var(--becare-red);
+    --mat-select-disabled-arrow-color: rgba(112, 112, 112, .3);
+    --mat-select-focused-arrow-color: var(--becare-red);
+    --mat-select-invalid-arrow-color: var(--becare-red)
+}
+
+.mat-mdc-dialog-container {
+    --mdc-dialog-container-color: var(--becare-bg-primary);
+    --mdc-dialog-subhead-color: var(--becare-primary-dark);
+    --mdc-dialog-supporting-text-color: var(--becare-primary);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(20, 99, 148, .15);
+}
+
+.mat-mdc-standard-chip {
+    --mdc-chip-disabled-label-text-color: var(--becare-gray);
+    --mdc-chip-elevated-container-color: var(--becare-gray-medium);
+    --mdc-chip-elevated-disabled-container-color: var(--becare-gray-light);
+    --mdc-chip-focus-state-layer-color: var(--becare-primary);
+    --mdc-chip-focus-state-layer-opacity: .12;
+    --mdc-chip-label-text-color: var(--becare-primary);
+    --mdc-chip-with-icon-icon-color: var(--becare-yellow);
+    --mdc-chip-with-icon-disabled-icon-color: var(--becare-gray);
+    --mdc-chip-with-icon-selected-icon-color: white;
+    --mdc-chip-with-trailing-icon-disabled-trailing-icon-color: var(--becare-gray);
+    --mdc-chip-with-trailing-icon-trailing-icon-color: var(--becare-primary)
+}
+
+.mat-mdc-standard-chip.mat-mdc-chip-selected.mat-primary,
+.mat-mdc-standard-chip.mat-mdc-chip-highlighted.mat-primary {
+    --mdc-chip-disabled-label-text-color: white;
+    --mdc-chip-elevated-container-color: var(--becare-primary);
+    --mdc-chip-elevated-disabled-container-color: var(--becare-primary-light);
+    --mdc-chip-focus-state-layer-color: var(--becare-primary-dark);
+    --mdc-chip-focus-state-layer-opacity: .12;
+    --mdc-chip-label-text-color: white;
+    --mdc-chip-with-icon-icon-color: white;
+    --mdc-chip-with-icon-disabled-icon-color: white;
+    --mdc-chip-with-icon-selected-icon-color: white;
+    --mdc-chip-with-trailing-icon-disabled-trailing-icon-color: white;
+    --mdc-chip-with-trailing-icon-trailing-icon-color: white
+}
+
+.mat-mdc-standard-chip.mat-mdc-chip-selected.mat-accent,
+.mat-mdc-standard-chip.mat-mdc-chip-highlighted.mat-accent {
+    --mdc-chip-disabled-label-text-color: white;
+    --mdc-chip-elevated-container-color: var(--becare-yellow);
+    --mdc-chip-elevated-disabled-container-color: var(--becare-yellow-light);
+    --mdc-chip-focus-state-layer-color: var(--becare-yellow-dark);
+    --mdc-chip-focus-state-layer-opacity: .12;
+    --mdc-chip-label-text-color: white;
+    --mdc-chip-with-icon-icon-color: white;
+    --mdc-chip-with-icon-disabled-icon-color: white;
+    --mdc-chip-with-icon-selected-icon-color: white;
+    --mdc-chip-with-trailing-icon-disabled-trailing-icon-color: white;
+    --mdc-chip-with-trailing-icon-trailing-icon-color: white
+}
+
+.mat-mdc-standard-chip.mat-mdc-chip-selected.mat-warn,
+.mat-mdc-standard-chip.mat-mdc-chip-highlighted.mat-warn {
+    --mdc-chip-disabled-label-text-color: white;
+    --mdc-chip-elevated-container-color: var(--becare-red);
+    --mdc-chip-elevated-disabled-container-color: #FF8A80;
+    --mdc-chip-focus-state-layer-color: #D32F2F;
+    --mdc-chip-focus-state-layer-opacity: .12;
+    --mdc-chip-label-text-color: white;
+    --mdc-chip-with-icon-icon-color: white;
+    --mdc-chip-with-icon-disabled-icon-color: white;
+    --mdc-chip-with-icon-selected-icon-color: white;
+    --mdc-chip-with-trailing-icon-disabled-trailing-icon-color: white;
+    --mdc-chip-with-trailing-icon-trailing-icon-color: white
+}
+
+.mat-mdc-chip.mat-mdc-standard-chip {
+    --mdc-chip-container-height: 32px
+}
+
+.mat-mdc-slide-toggle {
+    --mdc-switch-disabled-selected-handle-color: var(--becare-gray);
+    --mdc-switch-disabled-unselected-handle-color: var(--becare-gray);
+    --mdc-switch-disabled-selected-track-color: var(--becare-gray-light);
+    --mdc-switch-disabled-unselected-track-color: var(--becare-gray-light);
+    --mdc-switch-unselected-focus-state-layer-color: var(--becare-gray-dark);
+    --mdc-switch-unselected-pressed-state-layer-color: var(--becare-gray-dark);
+    --mdc-switch-unselected-hover-state-layer-color: var(--becare-gray-dark);
+    --mdc-switch-unselected-focus-track-color: var(--becare-gray-medium);
+    --mdc-switch-unselected-hover-track-color: var(--becare-gray-medium);
+    --mdc-switch-unselected-pressed-track-color: var(--becare-gray-medium);
+    --mdc-switch-unselected-track-color: var(--becare-gray-medium);
+    --mdc-switch-unselected-focus-handle-color: var(--becare-gray-dark);
+    --mdc-switch-unselected-hover-handle-color: var(--becare-gray-dark);
+    --mdc-switch-unselected-pressed-handle-color: var(--becare-gray-dark);
+    --mdc-switch-handle-surface-color: var(--becare-bg-primary);
+    --mdc-switch-unselected-handle-color: var(--becare-gray);
+    --mdc-switch-selected-icon-color: white;
+    --mdc-switch-disabled-selected-icon-color: white;
+    --mdc-switch-disabled-unselected-icon-color: white;
+    --mdc-switch-unselected-icon-color: white;
+    --mdc-switch-state-layer-size: 48px
+}
+
+.mat-mdc-slide-toggle .mdc-form-field {
+    color: var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, .87))
+}
+
+.mat-mdc-slide-toggle .mdc-switch--disabled+label {
+    color: #00000061
+}
+
+.mat-mdc-slide-toggle.mat-primary {
+    --mdc-switch-selected-focus-state-layer-color: var(--becare-primary);
+    --mdc-switch-selected-handle-color: var(--becare-primary);
+    --mdc-switch-selected-hover-state-layer-color: var(--becare-primary);
+    --mdc-switch-selected-pressed-state-layer-color: var(--becare-primary);
+    --mdc-switch-selected-focus-handle-color: var(--becare-primary-dark);
+    --mdc-switch-selected-hover-handle-color: var(--becare-primary-dark);
+    --mdc-switch-selected-pressed-handle-color: var(--becare-primary-dark);
+    --mdc-switch-selected-focus-track-color: var(--becare-primary-light);
+    --mdc-switch-selected-hover-track-color: var(--becare-primary-light);
+    --mdc-switch-selected-pressed-track-color: var(--becare-primary-light);
+    --mdc-switch-selected-track-color: var(--becare-primary-light)
+}
+
+.mat-mdc-slide-toggle.mat-accent {
+    --mdc-switch-selected-focus-state-layer-color: var(--becare-yellow);
+    --mdc-switch-selected-handle-color: var(--becare-yellow);
+    --mdc-switch-selected-hover-state-layer-color: var(--becare-yellow);
+    --mdc-switch-selected-pressed-state-layer-color: var(--becare-yellow);
+    --mdc-switch-selected-focus-handle-color: var(--becare-yellow-dark);
+    --mdc-switch-selected-hover-handle-color: var(--becare-yellow-dark);
+    --mdc-switch-selected-pressed-handle-color: var(--becare-yellow-dark);
+    --mdc-switch-selected-focus-track-color: var(--becare-yellow-light);
+    --mdc-switch-selected-hover-track-color: var(--becare-yellow-light);
+    --mdc-switch-selected-pressed-track-color: var(--becare-yellow-light);
+    --mdc-switch-selected-track-color: var(--becare-yellow-light)
+}
+
+.mat-mdc-slide-toggle.mat-warn {
+    --mdc-switch-selected-focus-state-layer-color: var(--becare-red);
+    --mdc-switch-selected-handle-color: var(--becare-red);
+    --mdc-switch-selected-hover-state-layer-color: var(--becare-red);
+    --mdc-switch-selected-pressed-state-layer-color: var(--becare-red);
+    --mdc-switch-selected-focus-handle-color: #D32F2F;
+    --mdc-switch-selected-hover-handle-color: #D32F2F;
+    --mdc-switch-selected-pressed-handle-color: #D32F2F;
+    --mdc-switch-selected-focus-track-color: #FF8A80;
+    --mdc-switch-selected-hover-track-color: #FF8A80;
+    --mdc-switch-selected-pressed-track-color: #FF8A80;
+    --mdc-switch-selected-track-color: #FF8A80
+}
+
+.mat-mdc-radio-button .mdc-form-field {
+    color: var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, .87))
+}
+
+.mat-mdc-radio-button.mat-primary {
+    --mdc-radio-disabled-selected-icon-color: var(--becare-gray);
+    --mdc-radio-disabled-unselected-icon-color: var(--becare-gray);
+    --mdc-radio-unselected-hover-icon-color: var(--becare-primary);
+    --mdc-radio-unselected-icon-color: var(--becare-gray);
+    --mdc-radio-unselected-pressed-icon-color: var(--becare-gray-dark);
+    --mdc-radio-selected-focus-icon-color: var(--becare-primary);
+    --mdc-radio-selected-hover-icon-color: var(--becare-primary);
+    --mdc-radio-selected-icon-color: var(--becare-primary);
+    --mdc-radio-selected-pressed-icon-color: var(--becare-primary-dark);
+    --mat-radio-ripple-color: var(--becare-primary);
+    --mat-radio-checked-ripple-color: var(--becare-primary);
+    --mat-radio-disabled-label-color: var(--becare-gray);
+    --mdc-radio-state-layer-size: 40px
+}
+
+.mat-mdc-radio-button.mat-accent {
+    --mdc-radio-disabled-selected-icon-color: var(--becare-gray);
+    --mdc-radio-disabled-unselected-icon-color: var(--becare-gray);
+    --mdc-radio-unselected-hover-icon-color: var(--becare-yellow);
+    --mdc-radio-unselected-icon-color: var(--becare-gray);
+    --mdc-radio-unselected-pressed-icon-color: var(--becare-gray-dark);
+    --mdc-radio-selected-focus-icon-color: var(--becare-yellow);
+    --mdc-radio-selected-hover-icon-color: var(--becare-yellow);
+    --mdc-radio-selected-icon-color: var(--becare-yellow);
+    --mdc-radio-selected-pressed-icon-color: var(--becare-yellow-dark);
+    --mat-radio-ripple-color: var(--becare-yellow);
+    --mat-radio-checked-ripple-color: var(--becare-yellow);
+    --mat-radio-disabled-label-color: var(--becare-gray)
+}
+
+.mat-mdc-radio-button.mat-warn {
+    --mdc-radio-disabled-selected-icon-color: var(--becare-gray);
+    --mdc-radio-disabled-unselected-icon-color: var(--becare-gray);
+    --mdc-radio-unselected-hover-icon-color: var(--becare-red);
+    --mdc-radio-unselected-icon-color: var(--becare-gray);
+    --mdc-radio-unselected-pressed-icon-color: var(--becare-gray-dark);
+    --mdc-radio-selected-focus-icon-color: var(--becare-red);
+    --mdc-radio-selected-hover-icon-color: var(--becare-red);
+    --mdc-radio-selected-icon-color: var(--becare-red);
+    --mdc-radio-selected-pressed-icon-color: #D32F2F;
+    --mat-radio-ripple-color: var(--becare-red);
+    --mat-radio-checked-ripple-color: var(--becare-red);
+    --mat-radio-disabled-label-color: var(--becare-gray)
+}
+
+/* ========================================= */
+/* Becare Custom Material Enhancements */
+/* تحسينات مخصصة لبي كير */
+/* ========================================= */
+
+/* Buttons - أزرار بنمط بي كير */
+.mat-mdc-button.mat-primary,
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary {
+    background-color: var(--becare-primary) !important;
+    color: white !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.mat-mdc-button.mat-primary:hover,
+.mat-mdc-raised-button.mat-primary:hover,
+.mat-mdc-unelevated-button.mat-primary:hover {
+    background-color: var(--becare-primary-dark) !important;
+    box-shadow: 0 4px 12px rgba(20, 99, 148, .3);
+}
+
+.mat-mdc-button.mat-accent,
+.mat-mdc-raised-button.mat-accent,
+.mat-mdc-unelevated-button.mat-accent {
+    background-color: var(--becare-yellow) !important;
+    color: white !important;
+    border-radius: 8px;
+}
+
+.mat-mdc-button.mat-accent:hover,
+.mat-mdc-raised-button.mat-accent:hover,
+.mat-mdc-unelevated-button.mat-accent:hover {
+    background-color: var(--becare-yellow-dark) !important;
+    box-shadow: 0 4px 12px rgba(249, 168, 37, .3);
+}
+
+/* Form Fields - حقول النماذج */
+.mat-mdc-form-field {
+    font-family: 'Tajawal', 'Arial', sans-serif !important;
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-focus-overlay {
+    background-color: var(--becare-bg-blue);
+}
+
+.mat-mdc-text-field-wrapper {
+    border-radius: 8px;
+}
+
+/* Cards - بطاقات بنمط بي كير */
+.mat-mdc-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(20, 99, 148, .08);
+    border: 1px solid var(--becare-gray-medium);
+    transition: all 0.3s ease;
+}
+
+.mat-mdc-card:hover {
+    box-shadow: 0 6px 20px rgba(20, 99, 148, .15);
+    border-color: var(--becare-primary-light);
+}
+
+/* Progress Bar - شريط التقدم */
+.mat-mdc-progress-bar.mat-primary .mdc-linear-progress__bar-inner {
+    border-color: var(--becare-primary) !important;
+}
+
+.mat-mdc-progress-bar.mat-accent .mdc-linear-progress__bar-inner {
+    border-color: var(--becare-yellow) !important;
+}
+
+/* Snackbar - إشعارات */
+.mat-mdc-snack-bar-container {
+    background-color: var(--becare-primary) !important;
+    color: white !important;
+    border-radius: 8px;
+}
+
+.mat-mdc-snack-bar-container.success {
+    background-color: var(--becare-green) !important;
+}
+
+.mat-mdc-snack-bar-container.error {
+    background-color: var(--becare-red) !important;
+}
+
+/* Tabs - التبويبات */
+.mat-mdc-tab-group.mat-primary .mat-mdc-tab .mdc-tab-indicator__content--underline {
+    border-color: var(--becare-yellow) !important;
+    border-width: 3px;
+}
+
+.mat-mdc-tab-group.mat-primary .mat-mdc-tab.mdc-tab--active {
+    color: var(--becare-primary) !important;
+}
+
+/* Menu - القوائم المنسدلة */
+.mat-mdc-menu-panel {
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(20, 99, 148, .15);
+}
+
+.mat-mdc-menu-item:hover {
+    background-color: var(--becare-bg-blue) !important;
+}
+
+/* Tooltips - التلميحات */
+.mat-mdc-tooltip {
+    background-color: var(--becare-primary-dark) !important;
+    font-size: 13px;
+    border-radius: 6px;
+}
+
+/* Lists - القوائم */
+.mat-mdc-list-item:hover {
+    background-color: var(--becare-bg-light) !important;
+}
+
+.mat-mdc-list-item.mat-mdc-list-item-selected {
+    background-color: var(--becare-bg-blue) !important;
+    border-right: 4px solid var(--becare-yellow);
+}
+
+/* Expansion Panels - الأكورديون */
+.mat-expansion-panel {
+    border-radius: 8px !important;
+    box-shadow: 0 2px 6px rgba(20, 99, 148, .08);
+    margin-bottom: 12px;
+}
+
+.mat-expansion-panel-header:hover {
+    background-color: var(--becare-bg-light) !important;
+}
+
+.mat-expansion-panel-header-title {
+    color: var(--becare-primary) !important;
+    font-weight: 600;
+}
+
+/* Steppers - خطوات التقدم */
+.mat-step-header .mat-step-icon-selected {
+    background-color: var(--becare-primary) !important;
+}
+
+.mat-step-header .mat-step-icon-state-done {
+    background-color: var(--becare-green) !important;
+}
+
+.mat-step-header .mat-step-label-selected {
+    color: var(--becare-primary) !important;
+}
+
+/* ========================================= */
+/* Becare RTL Support */
+/* دعم اللغة العربية */
+/* ========================================= */
+
+[dir="rtl"] .mat-mdc-list-item.mat-mdc-list-item-selected {
+    border-right: none;
+    border-left: 4px solid var(--becare-yellow);
+}
+
+[dir="rtl"] .mat-mdc-form-field {
+    text-align: right;
+}
+
+/* ========================================= */
+/* تم تخصيص التصميم بنجاح لبي كير */
+/* Becare Theme Successfully Applied */
+/* ========================================= */

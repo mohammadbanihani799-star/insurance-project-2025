@@ -15,7 +15,7 @@ class AdminLoginController extends Controller
         if (Auth::guard('super_admin')->check()) {
             return redirect()->intended(route('super_admin.dashboard'));
         } elseif (Auth::guard('user')->check()) {
-            return redirect()->intended(route('super_admin.dashboard'));
+            return redirect()->intended(route('super_admin.dashboard')); // نفس الوجهة حسب كودك
         }
 
         return view('admin.auth.login');
@@ -24,34 +24,48 @@ class AdminLoginController extends Controller
 
     public function loginFormSubmit(Request $request)
     {
-        // return $request;
-        $this->validate($request, [
-            'email' => 'required',
-            'password' => 'required|min:6'
+        // 1) التحقق من المدخلات (يزيل تحذير Intelephense)
+        $validated = $request->validate([
+            'email'    => ['required', 'email'],
+            'password' => ['required', 'string', 'min:6'],
+            'remember' => ['nullable'],
         ]);
 
-        // Attempt to log the user in
-        if (Auth::guard('super_admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->intended(route('super_admin.dashboard'));
-        } elseif (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->intended(route('super_admin.dashboard'));
+        // 2) تجهيز الـ credentials و خيار التذكّر
+        $credentials = [
+            'email'    => $validated['email'],
+            'password' => $validated['password'],
+        ];
+        $remember = $request->boolean('remember');
+
+        // 3) محاولة الدخول عبر الحراس بالترتيب
+        foreach (['super_admin', 'user'] as $guard) {
+            if (Auth::guard($guard)->attempt($credentials, $remember)) {
+                // تأمين الجلسة
+                $request->session()->regenerate();
+                // ملاحظة: حسب كودك الوجهة نفسها
+                return redirect()->intended(route('super_admin.dashboard'));
+            }
         }
 
-        // if unsuccessful
-        $errors = [
-            'email' => 'Email or password is incorrect',
-        ];
-        return redirect()->back()->withInput($request->only('email', 'remember'))->withErrors($errors);
+        // 4) فشل تسجيل الدخول
+        return back()
+            ->withErrors(['email' => __('auth.invalid_credentials')])
+            ->onlyInput('email');
     }
 
 
     public function logout()
     {
         if (Auth::guard('super_admin')->check()) {
-            auth()->guard('super_admin')->logout();
+            Auth::guard('super_admin')->logout();
         } elseif (Auth::guard('user')->check()) {
-            auth()->guard('user')->logout();
+            Auth::guard('user')->logout();
         }
+
+        // إنهاء الجلسة الحالية وحمايتها
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
 
         return redirect('/');
     }

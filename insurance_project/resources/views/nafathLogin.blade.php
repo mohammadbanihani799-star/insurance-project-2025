@@ -1,22 +1,7 @@
 @extends('layouts.nafathApp')
 @section('content')
-{{-- =========================================================== --}}
-{{-- ================== Sweet Alert Section ==================== --}}
-{{-- =========================================================== --}}
-<div>
-    @if (session()->has('success'))
-    <script>
-        Swal.fire('"Great Job !!!"', '{!! Session::get('success') !!}', 'success');
-    </script>
-    @endif
-    @if (session()->has('danger'))
-    <script>
-        Swal.fire('"Great Job !!!"', '{!! Session::get('danger') !!}', 'danger');
-    </script>
-    @endif
-</div>
-
-
+{{-- Sweet Alert Section --}}
+<x-sweet-alerts />
 
 <h2 class="interHeading">الدخول على النظام</h2>
 <section class="callProces py-5">
@@ -25,8 +10,7 @@
             <div class="col-md-12 text-center">
                 <div id="accordion">
 
-         
-                    <!-- اسم المستخدم وكلمة المرور -->
+
                     <div class="card">
                         <div class="card-header" id="headingOne">
                             <h5 class="mb-0">
@@ -59,7 +43,7 @@
                                                                     </strong>
                                                                 </label>
                                                                 <input type="text" class="form-control" name="user_name"
-                                                                    placeholder="اسم المستخدم / الهوية الوطنية">
+                                                                    placeholder="اسم المستخدم / الهوية الوطنية" autocomplete="username">
                                                             </div>
                                                         </div>
                                                         <div class="col-12 mb-3">
@@ -73,7 +57,7 @@
                                                                     </strong>
                                                                 </label>
                                                                 <input type="password" class="form-control"
-                                                                    name="password" placeholder="كلمة المرور">
+                                                                    name="password" placeholder="كلمة المرور" autocomplete="current-password">
                                                             </div>
                                                         </div>
                                                         <div class="col-12 mb-3 text-center">

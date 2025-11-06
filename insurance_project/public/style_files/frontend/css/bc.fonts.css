@@ -1,0 +1,35 @@
+/* ============================================================
+   BCare Fonts - Google Fonts CDN (Fixed OTS parsing errors)
+   ============================================================ */
+
+/* Import Noto Kufi Arabic from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600&display=swap');
+
+/* Backup: Fallback @font-face for offline mode (commented out - files missing)
+@font-face {
+  font-family: "Noto Kufi Arabic";
+  src: url("/style_files/frontend/fonts/NotoKufiArabic-Regular.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Noto Kufi Arabic";
+  src: url("/style_files/frontend/fonts/NotoKufiArabic-SemiBold.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 600;
+  font-style: normal;
+}
+*/
+
+/* Font Stack Definition */
+:root {
+  --bc-font-stack: "Becare Arabic", "Noto Kufi Arabic", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* Apply to bc-skin scope */
+.bc-skin,
+.bc-skin * {
+  font-family: var(--bc-font-stack) !important;
+}

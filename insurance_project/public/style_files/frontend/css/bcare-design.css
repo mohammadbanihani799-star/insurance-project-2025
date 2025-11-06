@@ -1,0 +1,500 @@
+.bcare-header {
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.bcare-header .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bcare-header .language-section {
+    flex: 0 0 60px;
+}
+
+.bcare-header .language-button {
+    background: #275C86;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bcare-header .language-button:hover {
+    background: #1e4a6b;
+}
+
+/* الشعار (وسط) */
+.bcare-header .logo-section {
+    flex: 1;
+    text-align: center;
+}
+
+.bcare-header .logo {
+    height: 40px;
+    width: auto;
+}
+
+/* أيقونة المستخدم (يمين) */
+.bcare-header .user-section {
+    flex: 0 0 60px;
+    text-align: left;
+}
+
+.bcare-header .user-icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #275C86;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bcare-header .user-icon-circle:hover {
+    background: #1e4a6b;
+    transform: scale(1.05);
+}
+
+
+.bcare-banner {
+    background: linear-gradient(135deg, #006699 0%, #004d73 100%);
+    padding: 60px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.bcare-banner-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.bcare-banner h1 {
+    color: white;
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0 0 20px;
+}
+
+.bcare-banner p {
+    color: white;
+    font-size: 18px;
+    margin: 0;
+}
+
+/* السيارات المتقابلة */
+.bcare-banner-cars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin: 30px 0;
+}
+
+.bcare-banner-cars img {
+    max-width: 300px;
+    height: auto;
+}
+
+
+.bcare-main-tabs {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 64px; /* بعد الـ header */
+    z-index: 999;
+}
+
+.bcare-main-tabs-list {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.bcare-main-tabs-list li {
+    flex: 1;
+    max-width: 200px;
+}
+
+.bcare-main-tab-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 15px;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.bcare-main-tab-link i {
+    font-size: 32px;
+    color: #006699;
+}
+
+.bcare-main-tab-link:hover {
+    background: #f8f9fa;
+    color: #006699;
+}
+
+.bcare-main-tab-link.active {
+    color: #006699;
+    border-bottom-color: #F9A825; /* برتقالي bcare */
+}
+
+
+.bcare-form-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Sub Tabs - تأمين جديد / نقل ملكية */
+.bcare-sub-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 6px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.bcare-sub-tab {
+    flex: 1;
+    padding: 14px 28px;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    text-align: center;
+}
+
+.bcare-sub-tab:hover {
+    background: rgba(0, 166, 81, 0.1);
+    color: #00a651;
+}
+
+.bcare-sub-tab.active {
+    background: linear-gradient(135deg, #00a651 0%, #008a43 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 166, 81, 0.25);
+}
+
+/* Radio Options - استمارة / بطاقة جمركية */
+.bcare-radio-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.bcare-radio-option {
+    flex: 1;
+    position: relative;
+}
+
+.bcare-radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.bcare-radio-label {
+    display: block;
+    padding: 16px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.bcare-radio-option input[type="radio"]:checked + .bcare-radio-label {
+    background: #00a651;
+    border-color: #00a651;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 166, 81, 0.2);
+}
+
+.bcare-radio-label:hover {
+    border-color: #00a651;
+}
+
+/* Form Fields */
+.bcare-form-group {
+    margin-bottom: 24px;
+}
+
+.bcare-form-label {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.bcare-form-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.3s;
+    background: white;
+}
+
+.bcare-form-input:focus {
+    outline: none;
+    border-color: #00a651;
+    box-shadow: 0 0 0 3px rgba(0, 166, 81, 0.1);
+}
+
+.bcare-form-input::placeholder {
+    color: #adb5bd;
+}
+
+/* CAPTCHA */
+.bcare-captcha {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 24px;
+}
+
+.bcare-captcha-text {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 8px;
+    color: #006699;
+    font-style: italic;
+    user-select: none;
+}
+
+.bcare-captcha-refresh {
+    background: transparent;
+    border: none;
+    color: #006699;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+    transition: transform 0.3s;
+}
+
+.bcare-captcha-refresh:hover {
+    transform: rotate(180deg);
+}
+.bcare-error-message {
+    background: #fee;
+    border: 1px solid #fcc;
+    border-radius: 8px;
+    padding: 12px;
+    color: #c00;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.bcare-submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #F9A825 0%, #f57c00 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(249, 168, 37, 0.3);
+}
+
+.bcare-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(249, 168, 37, 0.4);
+}
+
+.bcare-submit-btn:active {
+    transform: translateY(0);
+}
+
+.bcare-checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.bcare-checkbox-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.bcare-checkbox-group label {
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}
+
+.bcare-partners-section {
+    background: #f8f9fa;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.bcare-partners-section h2 {
+    color: #006699;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.bcare-partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.bcare-partner-card {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+}
+
+.bcare-partner-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.bcare-partner-card img {
+    max-width: 100%;
+    max-height: 60px;
+    filter: grayscale(100%);
+    transition: filter 0.3s;
+}
+
+.bcare-partner-card:hover img {
+    filter: grayscale(0%);
+}
+
+
+
+@media (max-width: 768px) {
+    .bcare-banner h1 {
+        font-size: 28px;
+    }
+
+    .bcare-banner p {
+        font-size: 16px;
+    }
+
+    .bcare-banner-cars {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .bcare-banner-cars img {
+        max-width: 200px;
+    }
+
+    .bcare-main-tabs-list {
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+
+    .bcare-main-tabs-list li {
+        flex: 0 0 auto;
+    }
+
+    .bcare-main-tab-link {
+        padding: 15px 20px;
+        font-size: 14px;
+    }
+
+    .bcare-main-tab-link i {
+        font-size: 28px;
+    }
+
+    .bcare-sub-tabs {
+        flex-direction: column;
+    }
+
+    .bcare-radio-group {
+        flex-direction: column;
+    }
+
+    .bcare-partners-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .bcare-header .language-button {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .bcare-header .user-icon-circle {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+
+    .bcare-banner {
+        padding: 40px 15px;
+    }
+
+    .bcare-form-container {
+        padding: 0 15px;
+    }
+
+    .bcare-submit-btn {
+        font-size: 16px;
+        padding: 14px;
+    }
+}

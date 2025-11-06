@@ -1,0 +1,541 @@
+/*
+ * BCare Core Design System
+ * الهوية البصرية الأساسية لبي كير
+ * Version: 1.0
+ * Date: 2025-11-04
+ */
+
+/* ========================================
+   1. CSS Variables & Design Tokens
+   ======================================== */
+:root {
+  /* BCare Primary Colors */
+  --bcare-blue-primary: #146394;
+  --bcare-blue-dark: #0F2040;
+  --bcare-blue-light: #1a7fb8;
+  --bcare-blue-lighter: #e6f2f8;
+
+  /* BCare Gold Accent */
+  --bcare-gold-primary: #FAA62E;
+  --bcare-gold-dark: #F9A825;
+  --bcare-gold-light: #ffc966;
+  --bcare-gold-lighter: #fff4e6;
+
+  /* Semantic Colors */
+  --bcare-success: #22c55e;
+  --bcare-warning: #f59e0b;
+  --bcare-error: #ef4444;
+  --bcare-info: #3b82f6;
+
+  /* Neutral Colors */
+  --bcare-white: #ffffff;
+  --bcare-gray-50: #f9fafb;
+  --bcare-gray-100: #f3f4f6;
+  --bcare-gray-200: #e5e7eb;
+  --bcare-gray-300: #d1d5db;
+  --bcare-gray-400: #9ca3af;
+  --bcare-gray-500: #6b7280;
+  --bcare-gray-600: #4b5563;
+  --bcare-gray-700: #374151;
+  --bcare-gray-800: #1f2937;
+  --bcare-gray-900: #111827;
+
+  /* Typography */
+  --bcare-font-family: 'GE Dinar One', 'Cairo', sans-serif;
+  --bcare-font-size-xs: 0.75rem;
+  --bcare-font-size-sm: 0.875rem;
+  --bcare-font-size-base: 1rem;
+  --bcare-font-size-lg: 1.125rem;
+  --bcare-font-size-xl: 1.25rem;
+  --bcare-font-size-2xl: 1.5rem;
+  --bcare-font-size-3xl: 1.875rem;
+  --bcare-font-size-4xl: 2.25rem;
+
+  /* Spacing */
+  --bcare-spacing-xs: 0.25rem;
+  --bcare-spacing-sm: 0.5rem;
+  --bcare-spacing-md: 1rem;
+  --bcare-spacing-lg: 1.5rem;
+  --bcare-spacing-xl: 2rem;
+  --bcare-spacing-2xl: 3rem;
+
+  /* Border Radius */
+  --bcare-radius-sm: 0.25rem;
+  --bcare-radius-md: 0.5rem;
+  --bcare-radius-lg: 0.75rem;
+  --bcare-radius-xl: 1rem;
+  --bcare-radius-full: 9999px;
+
+  /* Shadows */
+  --bcare-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --bcare-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --bcare-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --bcare-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+
+  /* Transitions */
+  --bcare-transition-fast: 150ms ease;
+  --bcare-transition-base: 300ms ease;
+  --bcare-transition-slow: 500ms ease;
+
+  /* Z-index layers */
+  --bcare-z-dropdown: 1000;
+  --bcare-z-sticky: 1020;
+  --bcare-z-fixed: 1030;
+  --bcare-z-modal-backdrop: 1040;
+  --bcare-z-modal: 1050;
+  --bcare-z-popover: 1060;
+  --bcare-z-tooltip: 1070;
+}
+
+/* ========================================
+   2. Reset & Base Styles
+   ======================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ========================================
+   3. Typography
+   ======================================== */
+.bcare-text-xs { font-size: var(--bcare-font-size-xs); }
+.bcare-text-sm { font-size: var(--bcare-font-size-sm); }
+.bcare-text-base { font-size: var(--bcare-font-size-base); }
+.bcare-text-lg { font-size: var(--bcare-font-size-lg); }
+.bcare-text-xl { font-size: var(--bcare-font-size-xl); }
+.bcare-text-2xl { font-size: var(--bcare-font-size-2xl); }
+.bcare-text-3xl { font-size: var(--bcare-font-size-3xl); }
+
+.bcare-font-normal { font-weight: 400; }
+.bcare-font-medium { font-weight: 500; }
+.bcare-font-semibold { font-weight: 600; }
+.bcare-font-bold { font-weight: 700; }
+
+/* ========================================
+   4. Buttons
+   ======================================== */
+.bcare-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  font-size: var(--bcare-font-size-base);
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: var(--bcare-radius-md);
+  cursor: pointer;
+  transition: all var(--bcare-transition-base);
+  white-space: nowrap;
+}
+
+.bcare-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bcare-btn-primary {
+  background: linear-gradient(135deg, var(--bcare-blue-primary) 0%, var(--bcare-blue-dark) 100%);
+  color: var(--bcare-white);
+  border-color: var(--bcare-blue-primary);
+}
+
+.bcare-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--bcare-blue-dark) 0%, var(--bcare-blue-primary) 100%);
+  box-shadow: var(--bcare-shadow-lg);
+  transform: translateY(-2px);
+}
+
+.bcare-btn-gold {
+  background: linear-gradient(135deg, var(--bcare-gold-primary) 0%, var(--bcare-gold-dark) 100%);
+  color: var(--bcare-white);
+  border-color: var(--bcare-gold-primary);
+}
+
+.bcare-btn-gold:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--bcare-gold-dark) 0%, var(--bcare-gold-primary) 100%);
+  box-shadow: var(--bcare-shadow-lg);
+  transform: translateY(-2px);
+}
+
+.bcare-btn-outline {
+  background: transparent;
+  color: var(--bcare-blue-primary);
+  border-color: var(--bcare-blue-primary);
+}
+
+.bcare-btn-outline:hover:not(:disabled) {
+  background: var(--bcare-blue-primary);
+  color: var(--bcare-white);
+}
+
+.bcare-btn-sm {
+  padding: 0.375rem 1rem;
+  font-size: var(--bcare-font-size-sm);
+}
+
+.bcare-btn-lg {
+  padding: 0.875rem 2rem;
+  font-size: var(--bcare-font-size-lg);
+}
+
+/* ========================================
+   5. Cards
+   ======================================== */
+.bcare-card {
+  background: var(--bcare-white);
+  border-radius: var(--bcare-radius-lg);
+  box-shadow: var(--bcare-shadow-md);
+  padding: var(--bcare-spacing-lg);
+  transition: all var(--bcare-transition-base);
+}
+
+.bcare-card:hover {
+  box-shadow: var(--bcare-shadow-xl);
+  transform: translateY(-4px);
+}
+
+.bcare-card-header {
+  padding-bottom: var(--bcare-spacing-md);
+  border-bottom: 1px solid var(--bcare-gray-200);
+  margin-bottom: var(--bcare-spacing-md);
+}
+
+.bcare-card-body {
+  padding: var(--bcare-spacing-md) 0;
+}
+
+.bcare-card-footer {
+  padding-top: var(--bcare-spacing-md);
+  border-top: 1px solid var(--bcare-gray-200);
+  margin-top: var(--bcare-spacing-md);
+}
+
+/* ========================================
+   6. Forms
+   ======================================== */
+.bcare-form-group {
+  margin-bottom: var(--bcare-spacing-lg);
+}
+
+.bcare-label {
+  display: block;
+  margin-bottom: var(--bcare-spacing-sm);
+  font-size: var(--bcare-font-size-sm);
+  font-weight: 500;
+  color: var(--bcare-gray-700);
+}
+
+.bcare-input,
+.bcare-select,
+.bcare-textarea {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  font-size: var(--bcare-font-size-base);
+  line-height: 1.5;
+  color: var(--bcare-gray-900);
+  background-color: var(--bcare-white);
+  border: 1px solid var(--bcare-gray-300);
+  border-radius: var(--bcare-radius-md);
+  transition: all var(--bcare-transition-base);
+}
+
+.bcare-input:focus,
+.bcare-select:focus,
+.bcare-textarea:focus {
+  outline: none;
+  border-color: var(--bcare-blue-primary);
+  box-shadow: 0 0 0 3px rgba(20, 99, 148, 0.1);
+}
+
+.bcare-input:disabled,
+.bcare-select:disabled,
+.bcare-textarea:disabled {
+  background-color: var(--bcare-gray-100);
+  cursor: not-allowed;
+}
+
+.bcare-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.bcare-checkbox,
+.bcare-radio {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-inline-end: var(--bcare-spacing-sm);
+  accent-color: var(--bcare-blue-primary);
+  cursor: pointer;
+}
+
+/* ========================================
+   7. Tables
+   ======================================== */
+.bcare-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bcare-white);
+  border-radius: var(--bcare-radius-lg);
+  overflow: hidden;
+}
+
+.bcare-table thead {
+  background: linear-gradient(135deg, var(--bcare-blue-primary) 0%, var(--bcare-blue-dark) 100%);
+  color: var(--bcare-white);
+}
+
+.bcare-table th {
+  padding: 1rem;
+  text-align: start;
+  font-weight: 600;
+  font-size: var(--bcare-font-size-sm);
+}
+
+.bcare-table td {
+  padding: 0.875rem 1rem;
+  border-top: 1px solid var(--bcare-gray-200);
+}
+
+.bcare-table tbody tr:hover {
+  background: var(--bcare-gray-50);
+}
+
+/* ========================================
+   8. Alerts
+   ======================================== */
+.bcare-alert {
+  padding: var(--bcare-spacing-md);
+  border-radius: var(--bcare-radius-md);
+  border: 1px solid transparent;
+  margin-bottom: var(--bcare-spacing-md);
+}
+
+.bcare-alert-success {
+  background: #d1fae5;
+  border-color: var(--bcare-success);
+  color: #065f46;
+}
+
+.bcare-alert-warning {
+  background: #fef3c7;
+  border-color: var(--bcare-warning);
+  color: #92400e;
+}
+
+.bcare-alert-error {
+  background: #fee2e2;
+  border-color: var(--bcare-error);
+  color: #991b1b;
+}
+
+.bcare-alert-info {
+  background: var(--bcare-blue-lighter);
+  border-color: var(--bcare-blue-primary);
+  color: var(--bcare-blue-dark);
+}
+
+/* ========================================
+   9. Badges
+   ======================================== */
+.bcare-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: var(--bcare-font-size-xs);
+  font-weight: 600;
+  border-radius: var(--bcare-radius-full);
+}
+
+.bcare-badge-primary {
+  background: var(--bcare-blue-lighter);
+  color: var(--bcare-blue-primary);
+}
+
+.bcare-badge-gold {
+  background: var(--bcare-gold-lighter);
+  color: var(--bcare-gold-dark);
+}
+
+.bcare-badge-success {
+  background: #d1fae5;
+  color: var(--bcare-success);
+}
+
+/* ========================================
+   10. Utilities
+   ======================================== */
+
+/* Spacing */
+.bcare-m-0 { margin: 0; }
+.bcare-mt-sm { margin-top: var(--bcare-spacing-sm); }
+.bcare-mt-md { margin-top: var(--bcare-spacing-md); }
+.bcare-mt-lg { margin-top: var(--bcare-spacing-lg); }
+.bcare-mb-sm { margin-bottom: var(--bcare-spacing-sm); }
+.bcare-mb-md { margin-bottom: var(--bcare-spacing-md); }
+.bcare-mb-lg { margin-bottom: var(--bcare-spacing-lg); }
+.bcare-p-sm { padding: var(--bcare-spacing-sm); }
+.bcare-p-md { padding: var(--bcare-spacing-md); }
+.bcare-p-lg { padding: var(--bcare-spacing-lg); }
+
+/* Colors */
+.bcare-text-primary { color: var(--bcare-blue-primary); }
+.bcare-text-gold { color: var(--bcare-gold-primary); }
+.bcare-text-white { color: var(--bcare-white); }
+.bcare-text-gray { color: var(--bcare-gray-600); }
+
+.bcare-bg-primary { background-color: var(--bcare-blue-primary); }
+.bcare-bg-gold { background-color: var(--bcare-gold-primary); }
+.bcare-bg-white { background-color: var(--bcare-white); }
+.bcare-bg-gray { background-color: var(--bcare-gray-100); }
+
+/* Flexbox */
+.bcare-flex { display: flex; }
+.bcare-flex-col { flex-direction: column; }
+.bcare-flex-wrap { flex-wrap: wrap; }
+.bcare-items-center { align-items: center; }
+.bcare-justify-center { justify-content: center; }
+.bcare-justify-between { justify-content: space-between; }
+.bcare-gap-sm { gap: var(--bcare-spacing-sm); }
+.bcare-gap-md { gap: var(--bcare-spacing-md); }
+.bcare-gap-lg { gap: var(--bcare-spacing-lg); }
+
+/* Display */
+.bcare-hidden { display: none; }
+.bcare-block { display: block; }
+.bcare-inline-block { display: inline-block; }
+
+/* Text Alignment */
+.bcare-text-start { text-align: start; }
+.bcare-text-center { text-align: center; }
+.bcare-text-end { text-align: end; }
+
+/* Border Radius */
+.bcare-rounded-sm { border-radius: var(--bcare-radius-sm); }
+.bcare-rounded-md { border-radius: var(--bcare-radius-md); }
+.bcare-rounded-lg { border-radius: var(--bcare-radius-lg); }
+.bcare-rounded-full { border-radius: var(--bcare-radius-full); }
+
+/* Shadow */
+.bcare-shadow-sm { box-shadow: var(--bcare-shadow-sm); }
+.bcare-shadow-md { box-shadow: var(--bcare-shadow-md); }
+.bcare-shadow-lg { box-shadow: var(--bcare-shadow-lg); }
+
+/* ========================================
+   11. Responsive Design
+   ======================================== */
+
+/* Mobile First - Base styles above apply to mobile */
+
+/* Tablet and above (768px+) */
+@media (min-width: 768px) {
+  :root {
+    --bcare-font-size-base: 1rem;
+    --bcare-font-size-lg: 1.125rem;
+    --bcare-font-size-xl: 1.25rem;
+  }
+
+  .bcare-md-flex { display: flex; }
+  .bcare-md-hidden { display: none; }
+  .bcare-md-block { display: block; }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+  :root {
+    --bcare-font-size-base: 1rem;
+    --bcare-font-size-lg: 1.25rem;
+    --bcare-font-size-xl: 1.5rem;
+  }
+
+  .bcare-lg-flex { display: flex; }
+  .bcare-lg-hidden { display: none; }
+  .bcare-lg-block { display: block; }
+}
+
+/* Large Desktop (1440px+) */
+@media (min-width: 1440px) {
+  :root {
+    --bcare-spacing-md: 1.25rem;
+    --bcare-spacing-lg: 2rem;
+    --bcare-spacing-xl: 2.5rem;
+  }
+}
+
+/* ========================================
+   12. RTL/LTR Support
+   ======================================== */
+[dir="rtl"] .bcare-input,
+[dir="rtl"] .bcare-select,
+[dir="rtl"] .bcare-textarea {
+  text-align: right;
+}
+
+[dir="ltr"] .bcare-input,
+[dir="ltr"] .bcare-select,
+[dir="ltr"] .bcare-textarea {
+  text-align: left;
+}
+
+/* ========================================
+   13. Accessibility
+   ======================================== */
+.bcare-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.bcare-focus-visible:focus-visible {
+  outline: 2px solid var(--bcare-blue-primary);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   14. Loading States
+   ======================================== */
+.bcare-spinner {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid var(--bcare-gray-200);
+  border-top-color: var(--bcare-blue-primary);
+  border-radius: 50%;
+  animation: bcare-spin 0.8s linear infinite;
+}
+
+@keyframes bcare-spin {
+  to { transform: rotate(360deg); }
+}
+
+.bcare-pulse {
+  animation: bcare-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes bcare-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ========================================
+   15. Print Styles
+   ======================================== */
+@media print {
+  .bcare-no-print {
+    display: none !important;
+  }
+
+  .bcare-card {
+    box-shadow: none;
+    border: 1px solid var(--bcare-gray-300);
+  }
+}

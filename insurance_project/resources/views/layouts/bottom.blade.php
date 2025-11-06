@@ -1,59 +1,61 @@
-{{-- ========== تحميل الأصول عبر Vite أولاً (jQuery، Slick، AOS، Fancybox) ========== --}}
-@vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- ⚡ Load scripts in optimal order --}}
+    @vite(['resources/js/app.js'])
 
-{{-- ========== مكتبات إضافية تحتاج jQuery (بعد Vite) ========== --}}
-<script>
-// انتظار تحميل Vite قبل تحميل المكتبات التي تحتاج jQuery
-document.addEventListener('DOMContentLoaded', function() {
-    // تحميل Bootstrap Datepicker بعد jQuery
-    if (window.jQuery) {
-        const datepickerScript = document.createElement('script');
-        datepickerScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js';
-        datepickerScript.onload = function() {
-            // تهيئة Datepicker بعد التحميل
-            window.jQuery('.date-own').datepicker({ 
-                minViewMode: 2, 
-                format: 'yyyy' 
-            });
-            console.log('✅ Bootstrap Datepicker loaded and initialized');
-        };
-        document.head.appendChild(datepickerScript);
-        
-        // تحميل main.js بعد jQuery
-        const mainScript = document.createElement('script');
-        mainScript.src = '{{ asset("style_files/frontend/js/main.js") }}';
-        mainScript.onload = function() {
-            console.log('✅ Main.js loaded successfully');
-        };
-        document.head.appendChild(mainScript);
-    } else {
-        console.error('❌ jQuery not available for additional scripts');
-    }
-});
-</script>
+    {{-- 📦 Defer heavy libraries to improve FCP/LCP --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js" defer></script>
 
-{{-- ========== مكتبات لا تحتاج jQuery ========== --}}
-<!-- Font Awesome -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+    {{-- 🎯 Main.js after Vite bundle --}}
+    <script src="{{ asset('style_files/frontend/js/main.js') }}" defer></script>
 
-<!-- Three.js (لا يحتاج jQuery) -->
-<script src="{{ asset('style_files/frontend/js/three.min.js') }}"></script>
+    {{-- 📱 Mobile Layout Fixer - High Priority --}}
+    <script src="{{ asset('js/mobile-layout-fixer.js') }}"></script>
 
-{{-- ========== تهيئة إضافية بعد تحميل Vite ========== --}}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Vite loaded with jQuery:', window.jQuery ? window.jQuery.fn.jquery : 'غير موجود');
-    
-    // تهيئة Datepicker (لأنه ليس في Vite)
-    if (window.jQuery && window.jQuery.fn.datepicker) {
-        window.jQuery('.date-own').datepicker({ 
-            minViewMode: 2, 
-            format: 'yyyy' 
+    {{-- three.min.js (558 KB) removed - not used in the application --}}
+
+    @stack('page-vendors-js')
+
+    <script>
+    // ⚠️ DISABLE SERVICE WORKER - Clear all caches and unregister
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                registration.unregister();
+                console.log('✅ Service Worker unregistered:', registration.scope);
+            }
         });
-        console.log('✅ Bootstrap Datepicker جاهز');
     }
     
-    // أي سكربتات إضافية خاصة بالصفحة
-    console.log('🎉 جميع المكتبات محملة عبر Vite + CDN!');
-});
-</script>
+    if ('caches' in window) {
+        caches.keys().then(keys => {
+            keys.forEach(key => {
+                caches.delete(key);
+                console.log('✅ Cache cleared:', key);
+            });
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.jQuery) {
+            const datepickerScript = document.createElement('script');
+            datepickerScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js';
+            datepickerScript.onload = function() {
+                window.jQuery('.date-own').datepicker({
+                    minViewMode: 2,
+                    format: 'yyyy'
+                });
+                console.log('✅ Bootstrap Datepicker initialized');
+            };
+            document.head.appendChild(datepickerScript);
+        }
+
+        console.log('jQuery:', window.jQuery ? window.jQuery.fn.jquery : '❌ Not loaded');
+        console.log('Bootstrap:', typeof window.bootstrap !== 'undefined' ? '✅ Loaded' : '❌ Not loaded');
+        console.log('Slick:', window.jQuery && window.jQuery.fn.slick ? '✅ Loaded' : '❌ Not loaded');
+    });
+    </script>
+
+    @include('partials.overflow-detector')
+
+</body>
+</html>

@@ -59,7 +59,7 @@
                                     </label>
                                     <div class="alert alert-info alert-dismissible bg-info text-white border-0 fade show"
                                         role="alert">
-                                        <strong>1- Valid extensions : jpeg, jpg, png, gif, tiff, tif or webp.</strong>
+                                        <strong>1- Valid extensions : jpeg, jpg, png, gif, tiff, tif, webp or svg.</strong>
                                     </div>
                                     <div class="alert alert-info alert-dismissible bg-info text-white border-0 fade show"
                                         role="alert">

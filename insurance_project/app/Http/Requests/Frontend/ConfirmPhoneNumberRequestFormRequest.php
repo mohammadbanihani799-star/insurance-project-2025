@@ -5,6 +5,10 @@ namespace App\Http\Requests\Frontend;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property int $mobile_network_operator
+ * @property string $mobile_number
+ */
 class ConfirmPhoneNumberRequestFormRequest extends FormRequest
 {
     /**

@@ -4,6 +4,9 @@ namespace App\Http\Requests\Backend\Insurances;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property string $benefit_title
+ */
 class StoreInsuranceBenefitsFormRequest extends FormRequest
 {
     /**

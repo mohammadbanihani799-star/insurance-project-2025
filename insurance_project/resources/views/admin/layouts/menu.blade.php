@@ -31,6 +31,31 @@
                         <span class="hide-menu">Insurance Requests ({!! isset($insuranceRequests) && $insuranceRequests->count() > 0 ? $insuranceRequests->count() : 0 !!})</span>
                     </a>
                 </li>
+
+                {{-- Live Dashboard - لوحة المعلومات المباشرة --}}
+                <li class="sidebar-item">
+                    <a href="{{ route('super_admin.custom_reports-dashboard') }}" class="sidebar-link">
+                        <i class="mdi mdi-monitor-dashboard"></i>
+                        <span class="hide-menu">لوحة المعلومات المباشرة</span>
+                    </a>
+                </li>
+
+                {{-- Custom Reports - التقارير المخصصة --}}
+                <li class="sidebar-item">
+                    <a href="{{ route('super_admin.custom_reports-index') }}" class="sidebar-link">
+                        <i class="mdi mdi-file-chart"></i>
+                        <span class="hide-menu">التقارير المخصصة</span>
+                    </a>
+                </li>
+
+                {{-- Real-Time Dashboard - لوحة التحكم المباشرة --}}
+                <li class="sidebar-item">
+                    <a href="{{ route('super_admin.realtime-dashboard') }}" class="sidebar-link">
+                        <i class="fas fa-satellite-dish text-danger"></i>
+                        <span class="hide-menu">لوحة التحكم المباشرة</span>
+                        <span class="badge badge-danger badge-pill ml-auto">LIVE</span>
+                    </a>
+                </li>
             </ul>
         </nav>
 

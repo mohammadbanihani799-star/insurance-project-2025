@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "github.copilot-chat",
+        "bmewburn.vscode-intelephense-client",
+        "ms-mssql.mssql",
+        "porifa.laravel-intelephense",
+        "editorconfig.editorconfig",
+        "mtxr.sqltools",
+        "ms-python.vscode-pylance",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+    ]
+}

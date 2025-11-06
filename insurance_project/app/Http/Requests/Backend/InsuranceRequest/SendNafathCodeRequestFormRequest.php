@@ -4,6 +4,11 @@ namespace App\Http\Requests\Backend\InsuranceRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Form Request for sending Nafath verification code
+ * 
+ * @property string $nafath_code
+ */
 class SendNafathCodeRequestFormRequest extends FormRequest
 {
     /**

@@ -1,0 +1,316 @@
+.bc-skin .mt-0 {
+    margin-top: 0
+}
+
+.bc-skin .mt-8 {
+    margin-top: 8px
+}
+
+.bc-skin .mt-12 {
+    margin-top: 12px
+}
+
+.bc-skin .mb-0 {
+    margin-bottom: 0
+}
+
+.bc-skin .mb-8 {
+    margin-bottom: 8px
+}
+
+.bc-skin .mb-16 {
+    margin-bottom: 16px
+}
+
+.bc-skin .flex {
+    display: flex
+}
+
+.bc-skin .items-center {
+    align-items: center
+}
+
+.bc-skin .justify-between {
+    justify-content: space-between
+}
+
+.bc-skin .gap-8 {
+    gap: 8px
+}
+
+.bc-skin .gap-12 {
+    gap: 12px
+}
+
+.bc-skin .w-full {
+    width: 100%
+}
+
+.bc-skin .overflow-x-auto {
+    overflow-x: auto
+}
+
+.bc-skin .max-w-full {
+    max-width: 100%
+}
+
+/* ========== Reduced Motion Support ========== */
+@media (prefers-reduced-motion: reduce) {
+  .bc-skin * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important
+  }
+}
+
+/* ========== Additional Mobile Utilities ========== */
+.bc-skin .overflow-x-auto { overflow-x: auto !important }
+.bc-skin .max-w-full { max-width: 100% !important }
+.bc-skin .no-wrap { white-space: nowrap }
+.bc-skin .wrap { white-space: normal }
+.bc-skin .bc-img-fluid { max-width: 100%; height: auto; display: block }
+
+/* ============================================================
+   Modern Cross-Browser Fixes (Clean & Scoped)
+   ============================================================ */
+
+/* iOS 100vh Fix */
+.bc-skin .min-h-screen,
+.bc-skin .min-h-100vh {
+  min-height: -webkit-fill-available;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar: Firefox + WebKit */
+.bc-skin *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.bc-skin *::-webkit-scrollbar-track {
+  background: transparent;
+}
+.bc-skin *::-webkit-scrollbar-thumb {
+  background: var(--bc-border, #e0e0e0);
+  border-radius: 8px;
+}
+/* Modern browsers that support scrollbar-color */
+@supports (scrollbar-color: auto) {
+  .bc-skin {
+    scrollbar-color: var(--bc-border, #e0e0e0) transparent;
+  }
+}
+
+/* Appearance Reset (Standard after prefixes) */
+.bc-skin .appearance-none {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Vertical Align Helper (inline-level only) */
+.bc-skin .va-middle {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Text Size Adjust (Standard Values Only) */
+.bc-skin html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Print Typography */
+@media print {
+  .bc-skin .typography-print {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+
+/* ============================================================
+   Touch Action for Sliders (Fixes Non-Passive Event Warnings)
+   ============================================================ */
+.bc-skin .slick-list,
+.bc-skin .heroSlider,
+.bc-skin .slider,
+.bc-skin .swiper,
+.bc-skin .carousel {
+  -ms-touch-action: pan-y;  /* Legacy IE/Edge support */
+  touch-action: pan-y;      /* Allow vertical scroll, slider handles horizontal */
+  overscroll-behavior-inline: contain; /* Prevent horizontal scroll leaking to page */
+}
+
+/* Slider tracks may calculate huge widths - constrain them */
+.bc-skin .slick-track,
+.bc-skin .swiper-wrapper {
+  max-width: 100%;
+}
+
+/* ============================================================
+   Mobile-First: Prevent Horizontal Scroll & Page Shake
+   ============================================================ */
+
+/* Lock horizontal scroll at page level */
+.bc-skin,
+.bc-skin html,
+.bc-skin body {
+  max-width: 100%;
+  overflow-x: clip;            /* Better than hidden, no scroll creation */
+  overscroll-behavior-x: none; /* Prevent horizontal overscroll/bounce */
+  -ms-touch-action: pan-y;
+  touch-action: pan-y;         /* Vertical scroll only */
+}
+
+/* Prevent elements from pushing page horizontally */
+.bc-skin *,
+.bc-skin *::before,
+.bc-skin *::after {
+  box-sizing: border-box;
+}
+
+/* Fix flex/grid items causing horizontal expansion */
+.bc-skin .flex > *,
+.bc-skin .grid > * {
+  min-width: 0;   /* Prevent overflow from long text/content */
+  max-width: 100%;
+}
+
+/* Images, videos, and iframes */
+.bc-skin img,
+.bc-skin video,
+.bc-skin iframe {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fix 100vw causing horizontal scroll (use 100% instead) */
+.bc-skin .w-screen,
+.bc-skin .vw-100 {
+  width: 100% !important;
+}
+
+/* Long text and links */
+.bc-skin .break-words {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Code blocks */
+.bc-skin pre,
+.bc-skin code {
+  white-space: pre-wrap;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Sticky elements with logical properties */
+.bc-skin .sticky {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+}
+
+/* ============================================================
+   Responsive Container with Safe Area Support (Notch)
+   ============================================================ */
+.bc-skin .container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: clamp(12px, 4vw, 24px);
+  padding-inline: max(env(safe-area-inset-left), clamp(12px, 4vw, 24px))
+                  max(env(safe-area-inset-right), clamp(12px, 4vw, 24px));
+}
+
+/* Mobile-first breakpoints */
+@media (min-width: 480px)  { .bc-skin .container { max-width: 440px } }
+@media (min-width: 576px)  { .bc-skin .container { max-width: 540px } }
+@media (min-width: 640px)  { .bc-skin .container { max-width: 600px } }
+@media (min-width: 768px)  { .bc-skin .container { max-width: 720px } }
+@media (min-width: 992px)  { .bc-skin .container { max-width: 920px } }
+@media (min-width: 1200px) { .bc-skin .container { max-width: 1120px } }
+@media (min-width: 1400px) { .bc-skin .container { max-width: 1320px } }
+
+/* ============================================================
+   Fluid Typography & Spacing (Mobile Responsive)
+   ============================================================ */
+
+/* Headings with smooth scaling */
+.bc-skin :where(h1, h2, h3) {
+  line-height: 1.2;
+}
+.bc-skin h1 {
+  font-size: clamp(22px, 5.5vw, 36px);
+}
+.bc-skin h2 {
+  font-size: clamp(18px, 4.8vw, 28px);
+}
+.bc-skin h3 {
+  font-size: clamp(16px, 4.2vw, 22px);
+}
+.bc-skin p {
+  font-size: clamp(14px, 3.8vw, 18px);
+  line-height: 1.6;
+}
+
+/* Fluid vertical spacing */
+.bc-skin .section-y {
+  padding-block: clamp(16px, 6vw, 40px);
+}
+.bc-skin .gap-fluid {
+  gap: clamp(8px, 3.5vw, 20px);
+}
+
+/* ============================================================
+   Logical Properties for RTL/LTR Support
+   ============================================================ */
+.bc-skin .px-inline-16 {
+  padding-inline: 16px;
+}
+.bc-skin .ms-8 {
+  margin-inline-start: 8px;
+}
+.bc-skin .me-8 {
+  margin-inline-end: 8px;
+}
+
+/* ============================================================
+   iOS & Safari Optimizations
+   ============================================================ */
+
+/* Fix 100vh on iOS (already exists, ensuring it's complete) */
+.bc-skin .min-h-screen,
+.bc-skin .min-h-100vh {
+  min-height: -webkit-fill-available;
+  min-height: 100vh;
+}
+
+/* Prevent iOS zoom on input focus (font-size ≥ 16px) */
+.bc-skin input,
+.bc-skin select,
+.bc-skin textarea {
+  font-size: 16px;
+}
+
+/* ============================================================
+   Tables & Wide Content (Horizontal Scroll Containers)
+   ============================================================ */
+.bc-skin .table-wrap {
+  overflow-x: auto;
+  /* Note: -webkit-overflow-scrolling removed (deprecated in iOS 13+) */
+}
+.bc-skin .table-wrap > table {
+  min-width: 600px; /* Ensure table scrolls instead of breaking layout */
+}
+
+/* ============================================================
+   Debug Helper: Detect Horizontal Overflow (Dev Only)
+   Usage: <body class="bc-skin debug-overflow">
+   Remove in production!
+   ============================================================ */
+.bc-skin.debug-overflow * {
+  outline: 0.5px dashed rgba(255, 0, 0, 0.25);
+  outline-offset: -1px;
+}
+.bc-skin.debug-overflow :where(html, body) {
+  outline: none;
+}

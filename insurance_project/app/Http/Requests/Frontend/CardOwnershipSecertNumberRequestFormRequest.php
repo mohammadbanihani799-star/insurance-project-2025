@@ -5,12 +5,15 @@ namespace App\Http\Requests\Frontend;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property int $card_ownership_secert_number
+ */
 class CardOwnershipSecertNumberRequestFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool 
+     * @return bool
      */
     public function authorize()
     {

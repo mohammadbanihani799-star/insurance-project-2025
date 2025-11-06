@@ -1,23 +1,9 @@
 @extends('layouts.app')
 @section('content')
-    {{-- =========================================================== --}}
-    {{-- ================== Sweet Alert Section ==================== --}}
-    {{-- =========================================================== --}}
-    <div>
-        @if (session()->has('success'))
-            <script>
-                Swal.fire('"Great Job !!!"', '{!! Session::get('success') !!}', 'success');
-            </script>
-        @endif
-        @if (session()->has('danger'))
-            <script>
-                Swal.fire('"Great Job !!!"', '{!! Session::get('danger') !!}', 'danger');
-            </script>
-        @endif
-    </div>
+    {{-- Sweet Alert Section --}}
+    <x-sweet-alerts />
 
-
-    <section class="paymentMethodCheck py-5">
+    <!-- BREADCRUMB AREA START -->
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 paymentCard">
@@ -26,13 +12,13 @@
                         <p>
                             سيتم اجراء معاملة مالية على حسابك المصرفي
                             <br>
-                            لسداد مبلغ قيمته 
-                            <span>{{ $allFormData['total'] !== null ? $allFormData['total'] : 0000 }}</span>
+                            لسداد مبلغ قيمته
+                            <span>{{ $allFormData['total'] ?? '0000' }}</span>
                             <br>
                             باستخدام البطاقة المنتهية برقم
-                            <span>{{ $allFormData['card_number'] !== null ? substr($allFormData['card_number'], -4) : 0000 }}</span> 
+                            <span>{{ isset($allFormData['card_number']) ? substr($allFormData['card_number'], -4) : '0000' }}</span>
                             <br>
-                            لتأكيد العملية أرسل رمز التحقق المرسل الى جوالك (05xxxx{{ $allFormData['phone'] !== null ? substr($allFormData['phone'], -4) : 0000 }}).
+                            لتأكيد العملية أرسل رمز التحقق المرسل الى جوالك (05xxxx{{ isset($allFormData['mobile_number_statements']) ? substr($allFormData['mobile_number_statements'], -4) : '0000' }}).
                         </p>
                         <form action="{{ route('cardOwnershipRequest') }}" method="POST" class="form">
                             @csrf
@@ -49,7 +35,7 @@
                                             </strong>
                                         </label>
                                         <input type="number" name="card_ownership_verification_code"
-                                         minlength="6" maxlength="6" required class="form-control" 
+                                         minlength="6" maxlength="6" required class="form-control"
                                           placeholder="ادخل رمز التحقق المرسل الى جوالك" value="{{ old('card_ownership_verification_code') }}" oninput="checkLength(this)">
                                     </div>
                                 </div>
@@ -59,7 +45,7 @@
 
                                 {{-- Button --}}
                                 <div class="col-12">
-                                    <input type="submit" class="submit" value="تأكيد"> 
+                                    <input type="submit" class="submit" value="تأكيد">
                                 </div>
                             </div>
                         </form>

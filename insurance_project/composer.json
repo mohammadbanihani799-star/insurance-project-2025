@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-snappy": "^1.0",
+        "doctrine/dbal": "^3.10",
         "dymantic/laravel-instagram-feed": "^3.3",
         "giggsey/libphonenumber-for-php": "^8.13",
         "guzzlehttp/guzzle": "^7.8",
@@ -14,6 +15,7 @@
         "h4cc/wkhtmltoimage-i386": "0.12.x",
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "h4cc/wkhtmltopdf-i386": "0.12.x",
+        "jenssegers/agent": "^2.6",
         "laravel/framework": "^10.0.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",

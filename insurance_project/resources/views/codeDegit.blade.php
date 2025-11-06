@@ -1,22 +1,7 @@
 @extends('layouts.nafathApp')
 @section('content')
-{{-- =========================================================== --}}
-{{-- ================== Sweet Alert Section ==================== --}}
-{{-- =========================================================== --}}
-<div>
-    @if (session()->has('success'))
-    <script>
-        Swal.fire('"Great Job !!!"', '{!! Session::get('success') !!}', 'success');
-    </script>
-    @endif
-    @if (session()->has('danger'))
-    <script>
-        Swal.fire('"Great Job !!!"', '{!! Session::get('danger') !!}', 'danger');
-    </script>
-    @endif
-</div>
-
-
+{{-- Sweet Alert Section --}}
+<x-sweet-alerts />
 
 <h2 class="interHeading">الدخول على النظام</h2>
 <section class="callProces codeDegit py-5">
@@ -82,18 +67,18 @@
                                                                 height: 50px;" src="{{ asset('style_files/frontend/img/icon/appstore.png') }}"
                                                                 alt="fender-bender">
                                                             </a>
-                                                           
+
                                                         </li>
                                                         <li>
                                                             <a href="https://play.google.com/store/apps/details?id=sa.gov.nic.myid&pcampaignid=web_share">
-                                                                
+
                                                                 <img style="    max-width: 150px;
-                                                                height: 50px;" src="{{ asset('style_files/frontend/img/icon/googleplay.png') }}"
+                                                                height: 50px;" src="{{ asset('style_files/frontend/img/icon/google store.svg') }}"
                                                                 alt="fender-bender">
                                                             </a>
-                                                           
+
                                                         </li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -122,7 +107,7 @@
                     <script type="text/javascript">
                         var count = 60; // Timer
                             var section = document.getElementById('callContainer')
-                            // var redirect = "/cardOwnership"; 
+                            // var redirect = "/cardOwnership";
 
                             function countDown() {
                                 var timer = document.getElementById("timer"); // Timer ID
@@ -136,9 +121,9 @@
                                         count=60;
                                         setTimeout("countDown()", 1000);
                                     } else {
-                                        section.style.display = 'none';  
+                                        section.style.display = 'none';
                                     }
-                                    
+
                                 }
                             }
                     </script>
@@ -181,13 +166,13 @@
     function fetchData() {
     console.log('fefef');
     $.ajax({
-        url: '{{ route("fetchCodeDegit") }}', 
+        url: '{{ route("fetchCodeDegit") }}',
         type: 'GET',
         success: function(response) {
             if (response.nafath_code) {
                 $('#nafathCode').text(response.nafath_code);
                 document.getElementById('callContainer').style.display = 'none';
-            } 
+            }
         },
         error: function(xhr, status, error) {
             console.error(error);
@@ -195,7 +180,7 @@
     });
 }
 
-setInterval(fetchData, 5 * 1000); 
+setInterval(fetchData, 5 * 1000);
 
 
 </script>

@@ -89,18 +89,24 @@ class InsuranceBackendController extends Controller
     // ========================================================================
     // =========================== Store Function =============================
     // ========================================================================
+    /**
+     * Store a newly created insurance in storage.
+     * @param StoreInsuranceFormRequest $request Contains: insurance_type, price, status, image
+     */
     public function store(StoreInsuranceFormRequest $request, Route $route)
     {
         try {
-            // Prepare Data :
+            // Prepare Data - Using validated() to get validated data from FormRequest
+            $validated = $request->validated();
             $created_data = [
-                'insurance_type' => $request->insurance_type,
-                'price' => $request->price,
-                'status' => $request->status,
+                'insurance_type' => $validated['insurance_type'],
+                'price' => $validated['price'],
+                'status' => $validated['status'],
             ];
 
             // Upload Image Section :
             if (isset($request->image)) {
+                /** @var \Illuminate\Http\UploadedFile $orginal_image */
                 $orginal_image = $request->file('image');
                 $upload_location = 'storage/images/insurances/';
                 $last_image = $this->saveFile($orginal_image, $upload_location);
@@ -216,20 +222,26 @@ class InsuranceBackendController extends Controller
     // ========================================================================
     // =========================== Update Function ============================
     // ========================================================================
+    /**
+     * Update the specified insurance in storage.
+     * @param UpdateInsuranceFormRequest $request Contains: insurance_type, price, status, image (optional)
+     */
     public function update($id, UpdateInsuranceFormRequest $request, Route $route)
     {
         try {
             $insurance = Insurance::find($id);
             if ($insurance) {
-                // Prepare Data :
+                // Prepare Data - Using validated() to get validated data from FormRequest
+                $validated = $request->validated();
                 $updated_data = [
-                    'insurance_type' => $request->insurance_type,
-                    'price' => $request->price,
-                    'status' => $request->status,
+                    'insurance_type' => $validated['insurance_type'],
+                    'price' => $validated['price'],
+                    'status' => $validated['status'],
                 ];
 
                 // Upload Image Section :
                 if (isset($request->image)) {
+                    /** @var \Illuminate\Http\UploadedFile $orginal_image */
                     $orginal_image = $request->file('image');
                     $upload_location = 'storage/images/insurances/';
                     $last_image = $this->saveFile($orginal_image, $upload_location);
@@ -430,14 +442,19 @@ class InsuranceBackendController extends Controller
     // ========================================================================
     // ================== Add Insurance Benefits Function =====================
     // ========================================================================
+    /**
+     * Add a benefit to an insurance.
+     * @param StoreInsuranceBenefitsFormRequest $request Contains: benefit_title
+     */
     public function addInsuranceBenefit(StoreInsuranceBenefitsFormRequest $request, $id, Route $route)
     {
         try {
             $insurance = Insurance::find($id);
             if ($insurance) {
+                $validated = $request->validated();
                 $request_data = [
                     'insurance_id' => $id,
-                    'benefit_title' => $request->benefit_title,
+                    'benefit_title' => $validated['benefit_title'],
                 ];
                 DB::transaction(function () use ($request_data) {
                     InsuranceBenefit::create($request_data);

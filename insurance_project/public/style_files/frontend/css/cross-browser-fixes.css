@@ -1,0 +1,686 @@
+/**
+ * Cross-Browser Compatibility Fixes
+ * Supports: Chrome, Firefox, Safari, Edge, Opera
+ * Mobile: iOS Safari, Chrome Mobile, Samsung Internet
+ * Screen sizes: 320px - 4K (2560px+)
+ */
+
+/* =================================================================
+   1. CSS Reset & Normalization
+   ================================================================= */
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+*::before,
+*::after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+body {
+    min-height: -webkit-fill-available;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+
+.flex,
+.bc-card__footer,
+.bc-card__head {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.flex-column {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.flex-wrap {
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.align-center {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.justify-center {
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.justify-between {
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+
+/* =================================================================
+   3. Grid Fixes (IE11 support)
+   ================================================================= */
+
+@supports not (display: grid) {
+    .bc-grid {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+
+    .bc-col-12 {
+        width: 100%;
+    }
+
+    .bc-col-md-6 {
+        width: 50%;
+    }
+
+    .bc-col-md-4 {
+        width: 33.333%;
+    }
+}
+
+/* =================================================================
+   4. Transform & Transition Prefixes
+   ================================================================= */
+
+.transform-fix {
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.transition-fix {
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+/* =================================================================
+   5. Border-Radius Fixes (old Android, iOS)
+   ================================================================= */
+
+.bc-btn,
+.bc-card,
+.bc-input,
+button,
+input[type="button"],
+input[type="submit"] {
+    -webkit-border-radius: inherit;
+    -moz-border-radius: inherit;
+    border-radius: inherit;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+}
+
+/* =================================================================
+   6. Appearance Reset (form elements)
+   ================================================================= */
+
+input,
+button,
+select,
+textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+}
+
+select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left 10px center;
+    background-size: 16px;
+    padding-left: 35px;
+}
+
+/* =================================================================
+   7. Sticky Position Fallback
+   ================================================================= */
+
+@supports not (position: sticky) {
+    .bc-sticky-cta {
+        position: fixed;
+        bottom: 0;
+    }
+}
+
+/* =================================================================
+   8. Object-Fit Polyfill (IE11)
+   ================================================================= */
+
+@supports not (object-fit: cover) {
+    .bc-logo img,
+    .bc-pay img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        width: auto;
+        height: 100%;
+    }
+}
+
+/* =================================================================
+   9. Safe Area Insets (Notch support)
+   ================================================================= */
+
+@supports (padding: max(0px)) {
+    body {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* Old iOS support */
+@supports (padding: constant(safe-area-inset-left)) {
+    body {
+        padding-left: constant(safe-area-inset-left);
+        padding-right: constant(safe-area-inset-right);
+        padding-bottom: constant(safe-area-inset-bottom);
+    }
+}
+
+/* =================================================================
+   10. Backdrop Filter Fallback
+   ================================================================= */
+
+@supports not (backdrop-filter: blur(10px)) {
+    .bc-sticky-cta {
+        background: rgba(255, 255, 255, 0.98) !important;
+    }
+}
+
+/* =================================================================
+   11. CSS Variables Fallback (IE11)
+   ================================================================= */
+
+@supports not (color: var(--primary)) {
+    .bc-skin {
+        color: #333;
+    }
+
+    .bc-btn--primary {
+        background-color: #006599;
+        color: #fff;
+    }
+
+    .bc-btn--orange {
+        background-color: #F9A825;
+        color: #fff;
+    }
+}
+
+/* =================================================================
+   12. User-Select Fix
+   ================================================================= */
+
+.no-select,
+.bc-btn,
+button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* =================================================================
+   13. Scrollbar Styling (WebKit & Firefox)
+   ================================================================= */
+
+/* WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Firefox - Remove unsupported properties for better cross-browser compatibility */
+@supports (-moz-appearance: none) {
+    /* Firefox-specific styles can be added here if needed */
+}
+
+
+button,
+a,
+.bc-btn,
+.bc-card {
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
+
+
+.scrollable,
+.scrollable,
+.bc-table-container,
+.overflow-x-auto {
+    /* Smooth scrolling is now default in modern browsers */
+    overscroll-behavior: contain;
+}
+/* =================================================================
+   16. Print Styles
+   ================================================================= */
+
+@media print {
+    *,
+    *::before,
+    *::after {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]::after {
+        content: " (" attr(href) ")";
+    }
+
+    img {
+        page-break-inside: avoid;
+        max-width: 100% !important;
+    }
+
+    p,
+    h2,
+    h3 {
+        page-break-inside: avoid; /* Firefox fallback */
+    }
+
+    /* Firefox-specific print styles */
+    @supports (-moz-appearance: none) {
+        p,
+        h2,
+        h3 {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+
+    .no-print,
+    .bc-header,
+    .bc-footer,
+    .bc-sticky-cta {
+        display: none !important;
+    }
+}
+
+/* =================================================================
+   17. High Contrast Mode (Windows)
+   ================================================================= */
+
+@media (prefers-contrast: high) {
+    .bc-btn {
+        border: 2px solid currentColor;
+    }
+
+    .bc-card {
+        border: 2px solid currentColor;
+    }
+}
+
+/* =================================================================
+   18. Dark Mode Support
+   ================================================================= */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+    }
+
+    body:not([data-theme]) {
+        color: #e0e0e0;
+    }
+}
+
+/* =================================================================
+   19. Responsive Breakpoints (All Devices)
+   ================================================================= */
+
+/* Small phones (320px - 374px) */
+@media (max-width: 374px) {
+    html {
+        font-size: 14px;
+    }
+
+    .bc-container {
+        padding-inline: 12px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+
+/* Phones (375px - 767px) */
+@media (min-width: 375px) and (max-width: 767px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+/* Tablets (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    html {
+        font-size: 16px;
+    }
+
+    .bc-container {
+        max-width: 720px;
+    }
+}
+
+/* Laptops (1025px - 1440px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+    .bc-container {
+        max-width: 960px;
+    }
+}
+
+/* Desktops (1441px - 1920px) */
+@media (min-width: 1441px) and (max-width: 1920px) {
+    .bc-container {
+        max-width: 1160px;
+    }
+}
+
+/* 4K & Ultra-wide (1921px+) */
+@media (min-width: 1921px) {
+    .bc-container {
+        max-width: 1400px;
+    }
+
+    html {
+        font-size: 18px;
+    }
+}
+
+/* =================================================================
+   20. Landscape Orientation Fixes
+   ================================================================= */
+
+@media (orientation: landscape) and (max-height: 500px) {
+    .bc-sticky-cta {
+        position: relative;
+        bottom: auto;
+    }
+
+    .bc-header {
+        padding: 8px 0;
+    }
+}
+
+/* =================================================================
+   21. Samsung Internet Fixes
+   ================================================================= */
+
+@supports (-webkit-appearance: none) {
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        opacity: 1;
+    }
+}
+
+/* =================================================================
+   22. IE11 Specific Fixes
+   ================================================================= */
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    /* IE11 only */
+    .bc-grid {
+        display: -ms-flexbox;
+    }
+
+    .bc-card {
+        display: -ms-flexbox;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+/* =================================================================
+   23. RTL Support Enhancement
+   ================================================================= */
+
+[dir="rtl"] select {
+    background-position: right 10px center;
+    padding-right: 35px;
+    padding-left: 10px;
+}
+
+[dir="rtl"] .bc-header__lang {
+    text-align: right;
+}
+
+[dir="rtl"] .bc-header__user {
+    text-align: left;
+}
+
+/* =================================================================
+   24. Focus Visible Polyfill
+   ================================================================= */
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid #0E73E4;
+    outline-offset: 2px;
+}
+
+/* =================================================================
+   25. Reduced Motion Support
+   ================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* =================================================================
+   26. Android Chrome Address Bar Fix
+   ================================================================= */
+
+@supports (-webkit-touch-callout: none) {
+    /* iOS Safari */
+    html {
+        height: -webkit-fill-available;
+    }
+
+    body {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* =================================================================
+   27. Cursor & Pointer Enhancement
+   ================================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+    /* Desktop with mouse */
+    .bc-btn:hover,
+    .bc-card:hover,
+    a:hover {
+        cursor: pointer;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    /* Touch devices */
+    .bc-btn,
+    .bc-card,
+    a {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* =================================================================
+   28. Image Loading & Performance
+   ================================================================= */
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    -ms-interpolation-mode: bicubic; /* IE */
+}
+
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+    opacity: 1;
+}
+
+/* =================================================================
+   29. Form Validation Styling (Cross-browser)
+   ================================================================= */
+
+input:invalid,
+select:invalid {
+    box-shadow: none;
+}
+
+input:focus:invalid,
+select:focus:invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* =================================================================
+   30. Prevent Text Inflation (Mobile)
+   ================================================================= */
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* =================================================================
+   31. Clickable Elements Accessibility
+   ================================================================= */
+
+a,
+button,
+input[type="submit"],
+input[type="button"],
+.bc-btn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =================================================================
+   32. Z-Index Management
+   ================================================================= */
+
+.bc-header {
+    z-index: 1000;
+    position: relative;
+}
+
+.bc-sticky-cta {
+    z-index: 999;
+}
+
+.bc-modal {
+    z-index: 9999;
+}
+
+/* =================================================================
+   33. Will-Change Performance Hint
+   ================================================================= */
+
+.bc-btn,
+.bc-card,
+.transform-fix {
+    will-change: transform;
+}
+
+.bc-btn:hover,
+.bc-card:hover {
+    will-change: auto;
+}

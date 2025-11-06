@@ -5,6 +5,9 @@ namespace App\Http\Requests\Frontend;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property string $check_mobile_number_verification_code
+ */
 class CheckPhoneNumberRequestFormRequest extends FormRequest
 {
     /**
@@ -24,7 +27,7 @@ class CheckPhoneNumberRequestFormRequest extends FormRequest
      */
     public function rules()
     {
-        
+
 
         $mobile_network_operator = session('allFormData')['mobile_network_operator'];
         if ($mobile_network_operator == 3) {
@@ -36,10 +39,10 @@ class CheckPhoneNumberRequestFormRequest extends FormRequest
                 'check_mobile_number_verification_code' => 'required|digits:6',
             ];
         }
-        
-        
-        
-        
+
+
+
+
 
         return $rules;
     }

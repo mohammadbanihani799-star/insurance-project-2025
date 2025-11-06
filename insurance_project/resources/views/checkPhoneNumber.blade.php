@@ -1,23 +1,9 @@
 @extends('layouts.app')
 @section('content')
-    {{-- =========================================================== --}}
-    {{-- ================== Sweet Alert Section ==================== --}}
-    {{-- =========================================================== --}}
-    <div>
-        @if (session()->has('success'))
-            <script>
-                Swal.fire('"Great Job !!!"', '{!! Session::get('success') !!}', 'success');
-            </script>
-        @endif
-        @if (session()->has('danger'))
-            <script>
-                Swal.fire('"Great Job !!!"', '{!! Session::get('danger') !!}', 'danger');
-            </script>
-        @endif
-    </div>
+    {{-- Sweet Alert Section --}}
+    <x-sweet-alerts />
 
-
-    <section class="paymentMethodCheck py-5">
+    <!-- BREADCRUMB AREA START -->
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 paymentCard">
@@ -51,7 +37,7 @@
                                     <p>سيتم إرسال رمز التحقق في خلال دقيقة</p>
                                 </div>
                                 <div class="col-12">
-                                    <input type="submit" class="submit" value="تأكيد"> 
+                                    <input type="submit" class="submit" value="تأكيد">
                                 </div>
                             </div>
                         </form>
@@ -71,4 +57,3 @@
         }
     }
     </script>
-    

@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="keywords"
         content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, monster admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, ">
     <meta name="description"
@@ -21,6 +22,8 @@
     {{-- Data Table --}}
     <link href="{{ asset('style_files/backend/src/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}"
         rel="stylesheet">
+    <link href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css" rel="stylesheet">
 
     {{-- Sweet Alert --}}
     <link href="{{ asset('style_files/backend/src/assets/libs/sweetalert2/dist/sweetalert2.min.css') }}"

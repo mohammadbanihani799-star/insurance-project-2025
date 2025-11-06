@@ -29,7 +29,7 @@ class Insurance extends Model
     {
         return $this->hasMany(InsuranceBenefit::class, 'insurance_id');
     }
-    
+
     public function insuranceRequests()
     {
         return $this->hasMany(InsuranceRequest::class, 'insurance_id');
@@ -38,26 +38,28 @@ class Insurance extends Model
     // ===================================================================================================================
     // ============================================= Accessors Section ===================================================
     // ===================================================================================================================
-    
 
-    // status
-    public function getStatusAttribute($value)
+
+    // status_label - للعرض فقط
+    public function getStatusLabelAttribute()
     {
-        if ($value == 1) {
+        if ($this->attributes['status'] == 1) {
             return 'Active';
-        } elseif ($value == 2) {
+        } elseif ($this->attributes['status'] == 2) {
             return 'Inactive';
         }
+        return 'Unknown';
     }
 
-    // insurance_type
-    public function getInsuranceTypeAttribute($value)
+    // insurance_type_label - للعرض فقط
+    public function getInsuranceTypeLabelAttribute()
     {
-        if ($value == 1) {
+        if ($this->attributes['insurance_type'] == 1) {
             return 'ضد الغير';
-        } elseif ($value == 2) {
+        } elseif ($this->attributes['insurance_type'] == 2) {
             return 'شامل';
         }
+        return 'Unknown';
     }
 
     // ===================================================================================================================

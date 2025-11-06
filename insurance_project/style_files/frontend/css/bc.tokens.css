@@ -1,0 +1,40 @@
+:root {
+    /* BCare Primary Colors - من الصور */
+    --bc-primary-900: #006599;      /* اللون الأزرق الرئيسي للرأس والعناوين */
+    --bc-primary-700: #0077B3;      /* أزرق متوسط */
+    --bc-primary-600: #1A3C6E;      /* أزرق داكن للحدود */
+    --bc-primary-100: #E8F4F8;      /* أزرق فاتح جداً للخلفيات */
+    
+    /* BCare Action Colors */
+    --bc-orange: #F9A825;           /* البرتقالي الذهبي للأزرار الرئيسية */
+    --bc-orange-hover: #FB8C00;     /* برتقالي داكن عند التحويم */
+    --bc-accent: #F9A825;           /* نفس البرتقالي */
+    
+    /* Status Colors */
+    --bc-success: #F9A825;          /* البرتقالي للنجاح */
+    --bc-success-bg: rgba(249, 168, 37, .12);
+    --bc-warning: #FFA726;
+    --bc-danger: #E24D4D;
+    
+    /* Text & UI */
+    --bc-text: #1B1D21;
+    --bc-text-light: #5E6673;
+    --bc-muted: #707070;
+    --bc-border: #E0E0E0;
+    --bc-bg: #F5F5F5;
+    --bc-bg-light: #FAFAFA;
+    --bc-white: #FFFFFF;
+    
+    /* Border Radius - مسطح أكثر */
+    --bc-radius-sm: 4px;
+    --bc-radius-md: 8px;
+    --bc-radius-lg: 12px;
+    
+    /* Shadows - خفيفة جداً */
+    --bc-shadow-1: 0 1px 3px rgba(0, 0, 0, .08);
+    --bc-shadow-2: 0 2px 8px rgba(0, 0, 0, .1);
+    --bc-shadow-3: 0 4px 16px rgba(0, 0, 0, .12);
+    
+    /* Typography */
+    --bc-font: "Noto Sans Arabic", "Cairo", system-ui, -apple-system, Segoe UI, Roboto, Arial
+}

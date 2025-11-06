@@ -105,7 +105,7 @@
         margin-bottom: 0px !important;
     }
     .itemList .item img {
-        max-width: 75px;
+        max-width: 55px;
     }
     .itemList .item {
         min-height: 195px;
@@ -145,7 +145,7 @@
         background-size: 25px;
     }
     .partners .slick-slide img {
-        max-width: 90px;
+        max-width: 70px;
     }
     .insuranceType.formTabs .tabs .tab-links a{
         width: 100%;
@@ -195,7 +195,7 @@
         font-size: 16px;
     }
     #overlay .spinnerContainer img{
-        max-width: 90px;
+        max-width: 65px;
     }
     section.formTabs.insuranceType .col-md-6.mb-3{
         max-width: 100% !important;

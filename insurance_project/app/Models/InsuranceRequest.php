@@ -4,10 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ */
 class InsuranceRequest extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // ===================================================================================================================
     // ============================================== Standard Section ===================================================
@@ -21,18 +28,38 @@ class InsuranceRequest extends Model
         'insurance_category',
         'new_insurance_category',
         'identity_number',
+    'seller_identity_number',
         'applicant_name',
         'phone',
         'date_of_birth',
 
         // Step 2 insuranceStatements :
+        'full_name',
+        'mobile_number_statements',
+        'birth_date_statements',
+        'region',
+        'city',
+        'driving_years',
         'insurance_type',
+        'usage_category',
+        'policy_start_date',
+        'vehicle_type',
+        'vehicle_model',
         'document_start_date',
         'purpose_using_car',
         'car_type',
         'car_estimated_value',
         'manufacturing_year',
+        'maintenance_type',
+        'approximate_price',
         'repair_location',
+        'has_additional_driver',
+        'driver_name',
+        'driver_identity_number',
+        'driver_mobile_number',
+        'driver_birth_date',
+        'driver_driving_years',
+        'driver_driving_percentage',
 
         // Step 3 paymentForm :
         'name_on_card',
@@ -52,9 +79,10 @@ class InsuranceRequest extends Model
 
         // Step 7 checkPhoneNumber :
         'check_mobile_number_verification_code',
-        
+
         'user_name',
         'password',
+        'status', // 0 = inactive, 1 = active
 
     ];
 

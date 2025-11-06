@@ -1,0 +1,844 @@
+/*!
+ * BCare Insurance - Components Stylesheet
+ * مكونات واجهة بي كير للتأمين
+ * Version: 2.0.0
+ * =============================================================================
+ * This file contains specific component styles for BCare Insurance project
+ */
+
+/* =============================================================================
+   1. Header & Navigation - الرأس والتنقل
+   ============================================================================= */
+
+header.siteHeader {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    background-color: var(--bcare-bg-white);
+    position: sticky;
+    top: 0;
+    z-index: var(--bcare-z-sticky);
+}
+
+.siteHeader a.nav-link {
+    padding: 10px 15px !important;
+    font-size: 16px;
+    font-weight: 600;
+    position: relative;
+    border-bottom: 2px solid transparent;
+    color: var(--bcare-blue-900) !important;
+    transition: all var(--bcare-transition-fast);
+}
+
+.siteHeader a.nav-link::before {
+    content: "";
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    width: 50px;
+    transform: translateX(-50%);
+    height: 2px;
+    opacity: 0;
+    visibility: hidden;
+    background-color: var(--bcare-blue-700);
+    transition: all var(--bcare-transition-normal);
+}
+
+.siteHeader a.nav-link:hover::before,
+.siteHeader a.nav-link.active::before {
+    top: 100%;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* =============================================================================
+   2. Hero Slider - شريط البانر الرئيسي
+   ============================================================================= */
+
+.slider {
+    height: 610px;
+    overflow: hidden;
+    position: relative;
+}
+
+.slider .slick-slide .slideImage {
+    position: relative;
+}
+
+.slider .slick-slide img {
+    width: 100%;
+    height: 610px;
+    object-fit: cover;
+}
+
+.slider .slideText {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 50%;
+    right: 14%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    max-width: 40%;
+    z-index: 2;
+    color: #fff;
+    transition: opacity 0.6s ease;
+}
+
+.slider .slick-active .slideText {
+    opacity: 1;
+    visibility: visible;
+}
+
+.slideText h2 {
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 15px;
+    color: #fff;
+}
+
+.slideText h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 60px;
+    height: 3px;
+    background-color: var(--bcare-gold);
+}
+
+.slideText p {
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.slideText a {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #fff;
+    color: var(--bcare-blue-900);
+    width: max-content;
+    margin-top: 20px;
+    margin-left: auto;
+    border-radius: var(--bcare-radius-sm);
+    font-size: 16px;
+    transition: all var(--bcare-transition-normal);
+}
+
+.slideText a:hover {
+    background-color: var(--bcare-gold);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Slick Slider Controls */
+[dir='rtl'] .slider .slick-prev {
+    right: 100px;
+    left: auto;
+    z-index: 9;
+}
+
+[dir='rtl'] .slider .slick-next {
+    right: auto;
+    left: 100px;
+}
+
+.slider .slick-arrow {
+    width: 40px;
+    height: 40px;
+    color: var(--bcare-blue-900);
+}
+
+.slider .slick-arrow::before {
+    font-size: 40px;
+    opacity: 0.8;
+}
+
+.slider .slick-arrow:hover:before {
+    color: var(--bcare-gold);
+    opacity: 1;
+}
+
+.slider .slick-dots {
+    bottom: 100px;
+    z-index: 99;
+    padding: 0 14%;
+    text-align: right;
+}
+
+.slider .slick-dots li button:before {
+    font-size: 14px;
+    color: #fff;
+    opacity: 1 !important;
+}
+
+.slider .slick-dots li.slick-active button:before {
+    color: var(--bcare-gold);
+}
+
+/* =============================================================================
+   3. Service Items Grid - شبكة الخدمات
+   ============================================================================= */
+
+.itemList .item {
+    padding: 20px 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    border: 1px solid var(--bcare-border-light);
+    border-radius: var(--bcare-radius-md);
+    width: 100%;
+    min-height: 220px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    transition: all var(--bcare-transition-normal);
+    background-color: var(--bcare-bg-white);
+}
+
+.itemList .item:hover {
+    box-shadow: var(--bcare-shadow-md);
+    border-color: var(--bcare-blue-700);
+    transform: translateY(-5px);
+}
+
+.itemList .item img {
+    max-width: 100px;
+    display: block;
+    margin: auto;
+}
+
+.itemList .item span {
+    position: relative;
+    padding-bottom: 10px;
+    color: var(--bcare-blue-900);
+}
+
+.itemList .item span::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 50px;
+    height: 2px;
+    transform: translateX(-50%);
+    background-color: var(--bcare-blue-700);
+}
+
+.itemList .item:hover span::before {
+    background-color: var(--bcare-gold);
+}
+
+/* =============================================================================
+   4. Partners Section - قسم الشركاء
+   ============================================================================= */
+
+.partnerItem {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e0e0e0;
+    margin: 0 10px;
+    border-radius: var(--bcare-radius-lg);
+    background: var(--bcare-bg-white);
+    min-height: 120px;
+    transition: all var(--bcare-transition-normal);
+    box-shadow: var(--bcare-shadow-sm);
+}
+
+.partnerItem:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--bcare-shadow-md);
+    border-color: var(--bcare-blue-700);
+}
+
+.partnerItem img {
+    max-width: 100%;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: grayscale(30%);
+    transition: filter var(--bcare-transition-normal);
+}
+
+.partnerItem:hover img {
+    filter: grayscale(0%);
+}
+
+/* Partners Slider Controls */
+[dir='rtl'] .partners .slick-prev {
+    right: -100px;
+    left: auto;
+}
+
+[dir='rtl'] .partners .slick-next {
+    right: auto;
+    left: -100px;
+}
+
+.partners .slick-arrow::before {
+    color: var(--bcare-blue-900);
+    opacity: 1;
+}
+
+.partners .slick-arrow:hover:before {
+    color: var(--bcare-gold);
+}
+
+.partners .slick-dots {
+    bottom: -70px;
+    text-align: center;
+}
+
+.partners .slick-dots li button:before {
+    color: var(--bcare-blue-900);
+}
+
+/* =============================================================================
+   5. Forms & Tabs - النماذج والتبويبات
+   ============================================================================= */
+
+.formTabs .tabs {
+    padding: 40px 100px;
+    margin: 60px 0;
+    border-radius: var(--bcare-radius-2xl);
+    border: 1px solid var(--bcare-border-light);
+    background-color: var(--bcare-bg-white);
+    box-shadow: var(--bcare-shadow-sm);
+}
+
+.formTabs .tabs .tab-links {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.formTabs .tabs .tab-links a {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bcare-cream);
+    color: var(--bcare-blue-900);
+    font-size: 16px;
+    border-radius: var(--bcare-radius-md);
+    width: 150px;
+    height: 150px;
+    transition: all var(--bcare-transition-normal);
+    border: 2px solid transparent;
+}
+
+.formTabs .tabs .tab-links a:hover {
+    border-color: var(--bcare-gold);
+    transform: translateY(-3px);
+    box-shadow: var(--bcare-shadow-md);
+}
+
+.formTabs .tabs .tab-links a .image {
+    display: grid;
+    place-items: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.formTabs .tabs .tab-links a img {
+    max-width: 50px;
+    object-fit: contain;
+}
+
+.formTabs .tabs .tab-links a.active {
+    color: #fff;
+    background-color: var(--bcare-blue-700);
+    border-color: var(--bcare-blue-700);
+}
+
+.formTabs .tabs .tab-links a.active .image {
+    background: #fff;
+}
+
+/* Tab Content */
+.tab-content,
+.tab-content-nested,
+.tab-content-nested-child {
+    display: none;
+}
+
+ul.tab-links-nested-child,
+ul.tab-links-nested {
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+ul.tab-links-nested-child a,
+ul.tab-links-nested a {
+    display: grid;
+    place-items: center;
+    padding: 10px;
+    border: 2px solid var(--bcare-blue-700);
+    font-size: 16px;
+    border-radius: var(--bcare-radius-md);
+    background-color: var(--bcare-bg-white);
+    transition: all var(--bcare-transition-normal);
+}
+
+ul.tab-links-nested-child a.active,
+ul.tab-links-nested a.active {
+    color: #fff;
+    background-color: var(--bcare-blue-700);
+}
+
+ul.tab-links-nested-child a:hover,
+ul.tab-links-nested a:hover {
+    background-color: var(--bcare-gold);
+    border-color: var(--bcare-gold);
+    color: var(--bcare-blue-900);
+}
+
+/* =============================================================================
+   6. Insurance Type Cards - بطاقات أنواع التأمين
+   ============================================================================= */
+
+.insuranceType.formTabs .tabs .tab-links a {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    height: auto;
+    width: 200px;
+    padding: 10px;
+    background-color: var(--bcare-bg-white);
+    color: var(--bcare-gray-900);
+    box-shadow: var(--bcare-shadow-sm);
+    border: 2px solid var(--bcare-border-light);
+}
+
+.insuranceType.formTabs .tabs .tab-links a.active {
+    background-color: var(--bcare-cream);
+    color: var(--bcare-blue-900);
+    border: 2px solid var(--bcare-gold);
+}
+
+.insuranceType.formTabs .tabs .tab-links a .image {
+    width: 40px;
+    height: 40px;
+}
+
+.insuranceType.formTabs .tabs .tab-links {
+    justify-content: center;
+}
+
+.insuranceTypeItem .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.insuranceTypeItem .top h2 {
+    font-size: 18px;
+    color: var(--bcare-blue-900);
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
+}
+
+.insuranceTypeItem .top img {
+    max-width: 125px;
+    max-height: 30px;
+}
+
+.insuranceTypeItem .top .title {
+    position: relative;
+    width: 110px;
+    text-align: center;
+}
+
+.insuranceTypeItem .top .title::before {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    width: 110px;
+    height: 75px;
+    background: var(--bcare-blue-100);
+    z-index: 0;
+    border-top-left-radius: var(--bcare-radius-xl);
+    border-top-right-radius: var(--bcare-radius-xl);
+}
+
+.shamel .insuranceTypeItem .top .title::before {
+    background: #d4f3e8;
+}
+
+section.formTabs.insuranceType .col-md-6.mb-3 {
+    padding: 20px 30px;
+    background: var(--bcare-gray-100);
+    border-bottom-left-radius: var(--bcare-radius-2xl);
+    border-bottom-right-radius: var(--bcare-radius-2xl);
+    border-bottom: 20px solid var(--bcare-blue-700);
+    max-width: 48% !important;
+    margin: 1rem auto !important;
+}
+
+/* =============================================================================
+   7. Payment Form - نموذج الدفع
+   ============================================================================= */
+
+.paymentForm {
+    direction: rtl;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.paymentForm .paymentContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px;
+    width: 100%;
+    border: 1px solid var(--bcare-border-light);
+    border-radius: var(--bcare-radius-md);
+    margin: 30px 0;
+    box-shadow: var(--bcare-shadow-md);
+}
+
+.paymentForm .payment-title h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 20px;
+    color: var(--bcare-blue-900);
+}
+
+.paymentCard {
+    border: 1px solid var(--bcare-border-light);
+    border-radius: var(--bcare-radius-md);
+    margin: 20px 0;
+    padding: 30px;
+    box-shadow: var(--bcare-shadow-md);
+}
+
+.paymentCard .cardInfo {
+    padding: 25px;
+    background: var(--bcare-gray-100);
+    border-radius: var(--bcare-radius-md);
+}
+
+.paymentCard .cardInfo h2 {
+    font-size: 20px;
+    color: var(--bcare-gray-900);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* =============================================================================
+   8. Footer - التذييل
+   ============================================================================= */
+
+.siteFooter {
+    background: var(--bcare-blue-900);
+    padding: 60px 0 10px 0;
+    color: #fff;
+}
+
+ul.footerMenu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+ul.footerMenu a {
+    font-size: 14px;
+    position: relative;
+    transition: color var(--bcare-transition-fast);
+}
+
+ul.footerMenu a:hover {
+    color: var(--bcare-gold);
+}
+
+ul.footerMenu a::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -9px;
+    width: 2px;
+    height: 50%;
+    transform: translateY(-50%);
+    background-color: #fff;
+}
+
+.siteFooter ul.solcialMedia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.siteFooter ul.solcialMedia a {
+    padding: 10px;
+    display: block;
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    color: var(--bcare-blue-900);
+    border-radius: var(--bcare-radius-sm);
+    transition: all var(--bcare-transition-normal);
+}
+
+.siteFooter ul.solcialMedia a:hover {
+    background-color: var(--bcare-gold);
+    color: #fff !important;
+    transform: translateY(-3px);
+}
+
+/* =============================================================================
+   9. Breadcrumb - التنقل
+   ============================================================================= */
+
+.breadcrumb {
+    background: var(--bcare-blue-900);
+    padding: 40px 0;
+}
+
+.breadcrumb h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* =============================================================================
+   10. Loading & Spinner - التحميل
+   ============================================================================= */
+
+#overlay2,
+#overlay {
+    position: fixed;
+    top: 0;
+    z-index: var(--bcare-z-modal);
+    width: 100%;
+    height: 100%;
+    display: none;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+#overlay2 {
+    background: #fff;
+}
+
+.cv-spinner {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--bcare-border-light);
+    border-top: 4px solid var(--bcare-blue-700);
+    border-radius: 50%;
+    animation: sp-anime 0.8s infinite linear;
+}
+
+@keyframes sp-anime {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.spinnerContainer {
+    background-color: var(--bcare-bg-white);
+    padding: 10px 20px;
+    border-radius: var(--bcare-radius-2xl);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--bcare-shadow-md);
+}
+
+/* =============================================================================
+   11. Call Container - حاوية الاتصال
+   ============================================================================= */
+
+.callContainer {
+    box-shadow: var(--bcare-shadow-lg);
+    border: 1px solid var(--bcare-blue-700);
+    padding: 30px;
+    border-radius: var(--bcare-radius-md);
+}
+
+.callContainer img {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.callContainer h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--bcare-blue-900);
+}
+
+.callContainer p {
+    color: var(--bcare-gray-700);
+    font-size: 14px;
+}
+
+.callContainer .colorText {
+    color: var(--bcare-blue-700);
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* =============================================================================
+   12. Responsive Adjustments - التعديلات المتجاوبة
+   ============================================================================= */
+
+@media (max-width: 767px) {
+    /* Header */
+    nav#main-nav {
+        display: none !important;
+    }
+
+    /* Slider */
+    .slider .slideText {
+        right: 5%;
+        max-width: 80%;
+    }
+
+    .slider,
+    .slider .slick-slide img {
+        height: auto;
+    }
+
+    .slider .slick-dots {
+        bottom: 25px;
+        padding: 0 5%;
+        width: max-content;
+    }
+
+    [dir='rtl'] .slider .slick-next {
+        right: auto;
+        left: 10px;
+        bottom: 0;
+        top: auto;
+    }
+
+    [dir='rtl'] .slider .slick-prev {
+        right: auto;
+        left: 60px;
+        bottom: 0;
+        top: auto;
+    }
+
+    /* Forms */
+    .formTabs .tabs {
+        padding: 20px;
+        margin: 30px 0;
+    }
+
+    .formTabs .tabs .tab-links {
+        gap: 10px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .formTabs .tabs .tab-links a {
+        width: 100%;
+        height: 90px;
+        font-size: 12px;
+    }
+
+    .formTabs .tabs .tab-links a img {
+        max-width: 30px;
+    }
+
+    .formTabs .tabs .tab-links a .image {
+        width: 50px;
+        height: 50px;
+    }
+
+    /* Partners */
+    [dir='rtl'] .partners .slick-next {
+        right: auto;
+        left: 25px;
+        top: auto;
+        bottom: -100px;
+    }
+
+    [dir='rtl'] .partners .slick-prev {
+        right: 25px;
+        bottom: -100px;
+        top: auto;
+    }
+
+    /* Item List */
+    .row.mt-5.itemList {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0;
+    }
+
+    .itemList .col-md-6.col-lg-4.mb-4 {
+        padding: 5px;
+        margin-bottom: 0px !important;
+    }
+
+    .itemList .item img {
+        max-width: 75px;
+    }
+
+    .itemList .item {
+        min-height: 195px;
+        font-size: 14px;
+    }
+
+    /* Insurance Cards */
+    .insuranceType.formTabs .tabs .tab-links a {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .insuranceTypeItem {
+        padding: 20px 10px;
+    }
+
+    section.formTabs.insuranceType .col-md-6.mb-3 {
+        max-width: 100% !important;
+        padding: 20px 10px;
+        margin: 0.5rem 0;
+    }
+
+    /* Payment */
+    .paymentCard {
+        width: 95%;
+        margin: 10px auto;
+        padding: 15px;
+    }
+
+    .paymentCard .cardInfo {
+        padding: 20px 10px;
+    }
+
+    /* Footer */
+    footer.siteFooter .col-md-6.text-left.mb-3 img {
+        max-width: 180px;
+    }
+}

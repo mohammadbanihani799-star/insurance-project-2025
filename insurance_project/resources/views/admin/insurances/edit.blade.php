@@ -73,7 +73,7 @@
                                         </label>
                                         <div class="alert alert-info alert-dismissible bg-info text-white border-0 fade show"
                                             role="alert">
-                                            <strong>1- Valid extensions : jpeg, jpg, png, gif, tiff, tif or webp.</strong>
+                                            <strong>1- Valid extensions : jpeg, jpg, png, gif, tiff, tif, webp or svg.</strong>
                                         </div>
                                         <div class="alert alert-info alert-dismissible bg-info text-white border-0 fade show"
                                             role="alert">
@@ -142,7 +142,7 @@
                                         </div>
                                     </div>
                                 </div>
-              
+
                                 {{-- Price --}}
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
@@ -190,7 +190,7 @@
                                         </div>
                                     </div>
                                 </div>
-                             
+
                                 {{-- Button --}}
                                 <div class="col-12">
                                     <div class="d-md-flex align-items-center mt-3">
@@ -205,7 +205,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </form>
                     </div>

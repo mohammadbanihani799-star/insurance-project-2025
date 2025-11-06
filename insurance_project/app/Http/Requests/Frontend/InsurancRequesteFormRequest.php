@@ -5,6 +5,14 @@ namespace App\Http\Requests\Frontend;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property int $insurance_category
+ * @property int $new_insurance_category
+ * @property int $identity_number
+ * @property string $applicant_name
+ * @property string $phone
+ * @property string $date_of_birth
+ */
 class InsurancRequesteFormRequest extends FormRequest
 {
     /**
@@ -45,19 +53,19 @@ class InsurancRequesteFormRequest extends FormRequest
             'insurance_category.required' => 'Insurance Category is required !!',
             'insurance_category.integer' => 'Insurance Category must be an integer !!',
             'insurance_category.in' => 'Insurance Category ID is not valid !!',
-            
+
             'new_insurance_category.required' => 'New Insurance Category is required !!',
             'new_insurance_category.integer' => 'New Insurance Category must be an integer !!',
             'new_insurance_category.in' => 'New Insurance Category ID is not valid !!',
-            
+
             'identity_number.required' => 'Identity Number is required !!',
             'identity_number.integer' => 'Identity Number must be a number !!',
             'identity_number.min' => 'Identity Number must be at least :min numbers.',
             'identity_number.max' => 'Identity Number may not be greater than :max numbers.',
 
-            
+
             'applicant_name.required' => 'Applicant Name is required !!',
-            
+
             'phone.required' => 'Phone is required !!',
             'phone.min' => 'Identity Number must be at least :min numbers.',
             'phone.max' => 'Identity Number may not be greater than :max numbers.',

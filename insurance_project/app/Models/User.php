@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -18,6 +19,7 @@ class User extends Authenticatable
     // ============================================== Standard Section ===================================================
     // ===================================================================================================================
     protected $table = 'users';
+    
     protected $fillable = [
         'name',
         'email',
@@ -42,13 +44,25 @@ class User extends Authenticatable
         'work_phone',
         'work_country_phone_id'
     ];
+    
     protected $hidden = [
         'password',
         'remember_token',
     ];
+    
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'date_of_birth'     => 'date',
+        'date_of_hiring'    => 'date',
+        'date_termination'  => 'date',
+        'salary'            => 'decimal:2',
+        'status'            => 'integer',
+        'gender'            => 'integer',
+        'marital_status'    => 'integer',
     ];
+
+    // لو عندك Guards متعددة (اختياري):
+    // protected $guard_name = 'web';
 
     // ===================================================================================================================
     // =========================================== Relationship Section ==================================================
@@ -71,7 +85,7 @@ class User extends Authenticatable
     // m=>m
     public function projects()
     {
-        return $this->belongsToMany(Project::class, 'project_employees');
+        return $this->belongsToMany(Project::class, 'project_employees')->withTimestamps();
     }
 
     public function projectSalesman()
@@ -116,42 +130,65 @@ class User extends Authenticatable
     }
 
     // ===================================================================================================================
+    // ============================================== Mutators Section ===================================================
+    // ===================================================================================================================
+    
+    /**
+     * تجزئة كلمة المرور تلقائياً عند الحفظ
+     * يمنع تخزين كلمات المرور بدون تشفير
+     */
+    public function setPasswordAttribute($value): void
+    {
+        // إذا كانت القيمة موجودة وليست مجزّأة بالفعل
+        if ($value && Hash::needsRehash($value)) {
+            $this->attributes['password'] = Hash::make($value);
+        } else {
+            // في حال كانت القيمة مجزّأة مسبقاً (من Seeder مثلاً)
+            $this->attributes['password'] = $value;
+        }
+    }
+
+    // ===================================================================================================================
     // ============================================= Accessors Section ===================================================
     // ===================================================================================================================
     
-
-    // status
-    public function getStatusAttribute($value)
+    /**
+     * احصل على تسمية الحالة (Status Label)
+     * يحافظ على القيمة الأصلية في DB ويوفر label منفصل
+     */
+    public function getStatusLabelAttribute(): ?string
     {
-        if ($value == 1) {
-            return 'Active';
-        } elseif ($value == 2) {
-            return 'Inactive';
-        }
+        return match ((int) $this->attributes['status'] ?? 0) {
+            1 => 'Active',
+            2 => 'Inactive',
+            default => null,
+        };
     }
 
-    // gender
-    public function getGenderAttribute($value)
+    /**
+     * احصل على تسمية الجنس (Gender Label)
+     */
+    public function getGenderLabelAttribute(): ?string
     {
-        if ($value == 1) {
-            return 'Male';
-        } elseif ($value == 2) {
-            return 'Female';
-        }
+        return match ((int) $this->attributes['gender'] ?? 0) {
+            1 => 'Male',
+            2 => 'Female',
+            default => null,
+        };
     }
 
-    // marital_status
-    public function getMaritalStatusAttribute($value)
+    /**
+     * احصل على تسمية الحالة الاجتماعية (Marital Status Label)
+     */
+    public function getMaritalStatusLabelAttribute(): ?string
     {
-        if ($value == 1) {
-            return 'Single';
-        } elseif ($value == 2) {
-            return 'Married';
-        } elseif ($value == 3) {
-            return 'Divorced';
-        } elseif ($value == 4) {
-            return 'Widow/Widower';
-        }
+        return match ((int) $this->attributes['marital_status'] ?? 0) {
+            1 => 'Single',
+            2 => 'Married',
+            3 => 'Divorced',
+            4 => 'Widow/Widower',
+            default => null,
+        };
     }
 
     // ===================================================================================================================

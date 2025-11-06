@@ -5,6 +5,14 @@ namespace App\Http\Requests\Backend\Insurances;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property int $insurance_type
+ * @property string $image
+ * @property float $price
+ * @property int $status
+ * 
+ * @method \Illuminate\Http\UploadedFile|null file(string $key = null, $default = null)
+ */
 class StoreInsuranceFormRequest extends FormRequest
 {
     /**
@@ -29,7 +37,7 @@ class StoreInsuranceFormRequest extends FormRequest
 
         $rules =  [
             'insurance_type' => ['required', 'integer', Rule::in($insuranceTypeArray)],
-            'image' => 'required|mimes:jpeg,jpg,png,gif,tiff,tif,webp',
+            'image' => 'required|mimes:jpeg,jpg,png,gif,tiff,tif,webp,svg',
             'price' => 'required|numeric',
             'status' => ['required', 'integer', Rule::in($statusArray)],
         ];
@@ -43,10 +51,10 @@ class StoreInsuranceFormRequest extends FormRequest
             'insurance_type.required' => 'Insurance Type is required !!',
             'insurance_type.integer' => 'Insurance Type must be an integer !!',
             'insurance_type.in' => 'Insurance Type ID is not valid !!',
-            
+
             'image.required' => 'Image is required !!',
-            'image.mimes' => 'Image type must be jpeg,jpg,png,gif,tiff,tif or webp !!',
-            
+            'image.mimes' => 'Image type must be jpeg,jpg,png,gif,tiff,tif,webp or svg !!',
+
             'price.required' => 'Price is required !!',
             'price.numeric' => 'Price must be a number !!',
 

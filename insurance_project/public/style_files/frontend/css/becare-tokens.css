@@ -1,0 +1,301 @@
+/* ========================================= */
+/* Becare Insurance Brand Tokens */
+/* توكنز الهوية البصرية لبي كير - نسخة رسمية */
+/* Version: 2.0.0 */
+/* ========================================= */
+
+:root {
+    /* ========================================= */
+    /* Primary Colors - الألوان الأساسية */
+    /* ========================================= */
+    --bc-primary-900: #0F2040;        /* الأزرق الداكن الرئيسي */
+    --bc-primary-600: #1A3C6E;        /* الأزرق المتوسط */
+    --bc-primary-100: #E8EEF7;        /* الأزرق الفاتح جداً */
+
+    /* ========================================= */
+    /* Accent & Brand Colors - الألوان المميزة */
+    /* ========================================= */
+    --bc-accent: #FFDA63;             /* الذهبي المميز */
+    --bc-cta-blue: #0E73E4;           /* الأزرق التفاعلي */
+
+    /* ========================================= */
+    /* Status Colors - ألوان الحالات */
+    /* ========================================= */
+    --bc-success: #1AAE70;            /* الأخضر للنجاح */
+    --bc-warning: #E7A11A;            /* البرتقالي للتحذير */
+    --bc-danger: #E24D4D;             /* الأحمر للخطر */
+
+    /* ========================================= */
+    /* Text Colors - ألوان النصوص */
+    /* ========================================= */
+    --bc-text: #1B1D21;               /* النص الأسود الرخامي */
+    --bc-muted: #5E6673;              /* النص الرمادي الباهت */
+
+    /* ========================================= */
+    /* Border & Background - الحدود والخلفيات */
+    /* ========================================= */
+    --bc-border: #E5E7EB;             /* حدود القسمة */
+    --bc-bg: #F5F7FB;                 /* الخلفية الرمادية الفاتحة */
+    --bc-white: #FFFFFF;              /* الخلفية البيضاء */
+
+    /* Additional Background Variations */
+    --bc-hover-bg: #F9FBFF;           /* خلفية Hover للصفوف */
+    --bc-success-bg: #EAF8F2;         /* خلفية النجاح */
+    --bc-warning-bg: #FFF6E2;         /* خلفية التحذير */
+    --bc-danger-bg: #FDECEC;          /* خلفية الخطر */
+    --bc-zebra: #FAFBFD;              /* خلفية Zebra للجداول */
+
+    /* ========================================= */
+    /* Border Radius - الزوايا المستديرة */
+    /* ========================================= */
+    --bc-radius-sm: 8px;              /* زوايا صغيرة */
+    --bc-radius-md: 12px;             /* زوايا متوسطة */
+    --bc-radius-lg: 16px;             /* زوايا كبيرة */
+    --bc-radius-full: 9999px;         /* دائري كامل */
+
+    /* ========================================= */
+    /* Shadows - الظلال */
+    /* ========================================= */
+    --bc-shadow-1: 0 1px 2px rgba(15, 32, 64, 0.06);      /* ظل سطحي */
+    --bc-shadow-2: 0 4px 12px rgba(15, 32, 64, 0.08);     /* ظل متوسط */
+    --bc-shadow-3: 0 12px 32px rgba(15, 32, 64, 0.12);    /* ظل عالي (مودال) */
+
+    /* ========================================= */
+    /* Spacing Scale - مقياس المسافات */
+    /* ========================================= */
+    --bc-space-1: 4px;                /* 0.25rem */
+    --bc-space-2: 8px;                /* 0.5rem */
+    --bc-space-3: 12px;               /* 0.75rem */
+    --bc-space-4: 16px;               /* 1rem */
+    --bc-space-5: 20px;               /* 1.25rem */
+    --bc-space-6: 24px;               /* 1.5rem */
+    --bc-space-8: 32px;               /* 2rem */
+    --bc-space-10: 40px;              /* 2.5rem */
+
+    /* ========================================= */
+    /* Typography - الطباعة */
+    /* ========================================= */
+    --bc-font-family: 'Noto Sans Arabic', 'Cairo', 'Tajawal', -apple-system, sans-serif;
+
+    /* Font Sizes */
+    --bc-text-xs: 12px;               /* Caption/Badge */
+    --bc-text-sm: 13px;               /* Small text */
+    --bc-text-base: 14px;             /* Body small */
+    --bc-text-md: 15px;               /* Table headers */
+    --bc-text-lg: 16px;               /* Body large */
+    --bc-text-xl: 18px;               /* Prices/Numbers */
+    --bc-text-2xl: 20px;              /* H3 */
+    --bc-text-3xl: 24px;              /* H2 */
+    --bc-text-4xl: 28px;              /* H1/Display */
+    --bc-text-5xl: 32px;              /* Large Display */
+
+    /* Font Weights */
+    --bc-font-normal: 400;
+    --bc-font-medium: 500;
+    --bc-font-semibold: 600;
+    --bc-font-bold: 700;
+
+    /* Line Heights */
+    --bc-leading-tight: 1.25;
+    --bc-leading-snug: 1.35;
+    --bc-leading-normal: 1.45;
+    --bc-leading-relaxed: 1.55;
+    --bc-leading-loose: 1.65;
+
+    /* ========================================= */
+    /* Motion - الحركة */
+    /* ========================================= */
+    --bc-duration-fast: 150ms;
+    --bc-duration-normal: 220ms;
+    --bc-duration-slow: 300ms;
+
+    --bc-easing: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+    --bc-transition-base: all var(--bc-duration-normal) var(--bc-easing);
+    --bc-transition-fast: all var(--bc-duration-fast) var(--bc-easing);
+
+    /* ========================================= */
+    /* Layout - التخطيط */
+    /* ========================================= */
+    --bc-container-sm: 640px;
+    --bc-container-md: 768px;
+    --bc-container-lg: 1024px;
+    --bc-container-xl: 1280px;
+    --bc-container-2xl: 1536px;
+
+    /* Table Dimensions */
+    --bc-table-row-height: 56px;      /* Desktop */
+    --bc-table-row-height-mobile: 48px;
+    --bc-table-row-height-dense: 44px;
+    --bc-table-header-height: 48px;
+
+    /* Touch Targets */
+    --bc-touch-target: 40px;          /* Minimum touch area */
+
+    /* ========================================= */
+    /* Z-Index Scale - مقياس الطبقات */
+    /* ========================================= */
+    --bc-z-base: 0;
+    --bc-z-dropdown: 1000;
+    --bc-z-sticky: 1020;
+    --bc-z-fixed: 1030;
+    --bc-z-modal-backdrop: 1040;
+    --bc-z-modal: 1050;
+    --bc-z-popover: 1060;
+    --bc-z-tooltip: 1070;
+}
+
+/* ========================================= */
+/* Base Styles - الأنماط الأساسية */
+/* ========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--bc-font-family);
+    font-size: var(--bc-text-lg);
+    line-height: var(--bc-leading-loose);
+    color: var(--bc-text);
+    background-color: var(--bc-bg);
+    direction: rtl;
+    text-align: right;
+}
+
+/* ========================================= */
+/* Focus Visible - حلقة التركيز */
+/* ========================================= */
+
+*:focus-visible {
+    outline: 2px solid var(--bc-cta-blue);
+    outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--bc-cta-blue);
+    outline-offset: 2px;
+}
+
+/* Remove default focus for mouse users */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ========================================= */
+/* Selection - تحديد النص */
+/* ========================================= */
+
+::selection {
+    background-color: var(--bc-accent);
+    color: var(--bc-primary-900);
+}
+
+::-moz-selection {
+    background-color: var(--bc-accent);
+    color: var(--bc-primary-900);
+}
+
+/* ========================================= */
+/* Scrollbar - شريط التمرير */
+/* ========================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--bc-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--bc-border);
+    border-radius: var(--bc-radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--bc-muted);
+}
+
+/* ========================================= */
+/* Utility Classes - فئات مساعدة سريعة */
+/* ========================================= */
+
+.bc-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.bc-container {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: var(--bc-space-4);
+    padding-left: var(--bc-space-4);
+}
+
+@media (min-width: 640px) {
+    .bc-container {
+        max-width: var(--bc-container-sm);
+    }
+}
+
+@media (min-width: 768px) {
+    .bc-container {
+        max-width: var(--bc-container-md);
+        padding-right: var(--bc-space-6);
+        padding-left: var(--bc-space-6);
+    }
+}
+
+@media (min-width: 1024px) {
+    .bc-container {
+        max-width: var(--bc-container-lg);
+    }
+}
+
+@media (min-width: 1280px) {
+    .bc-container {
+        max-width: var(--bc-container-xl);
+    }
+}
+
+/* ========================================= */
+/* Print Styles - أنماط الطباعة */
+/* ========================================= */
+
+@media print {
+    body {
+        background-color: white;
+    }
+
+    .bc-no-print {
+        display: none !important;
+    }
+}
+
+/* ========================================= */
+/* تم إنشاء ملف التوكنز بنجاح */
+/* Brand Tokens Created Successfully */
+/* Version: 2.0.0 - Official Becare Identity */
+/* ========================================= */

@@ -1,0 +1,60 @@
+@media print {
+    /* Cross-browser print layout fixes */
+    .card-columns {
+        column-fill: balance;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .card-columns .card {
+        display: block;
+        margin-bottom: .75rem;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    h2, h3, p {
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+
+    /* Table print optimizations */
+    .table {
+        page-break-inside: auto;
+    }
+
+    .table thead {
+        display: table-header-group;
+    }
+
+    .table tbody tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Prevent awkward breaks in content blocks */
+    .alert, .card-body, .form-group {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Ensure proper spacing for readability */
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    /* Browser-specific optimizations for browsers that support orphans (excluding Firefox) */
+    @supports not (-moz-appearance: none) {
+        h2, h3, p {
+            orphans: 3;
+        }
+    }
+
+    /* Firefox-specific optimizations using feature detection */
+    @supports (-moz-appearance: none) {
+        .card-columns {
+            column-fill: balance;
+        }
+    }
+}

@@ -1,0 +1,462 @@
+{
+  "frontend_routes": {
+    "main_pages": [
+      {
+        "path": "/",
+        "name": "welcome",
+        "method": "GET",
+        "description": "الصفحة الرئيسية",
+        "controller": "HomePageFrontendController@welcome"
+      },
+      {
+        "path": "/about",
+        "name": "about",
+        "method": "GET",
+        "description": "من نحن"
+      },
+      {
+        "path": "/contact",
+        "name": "contact",
+        "method": "GET",
+        "description": "اتصل بنا"
+      },
+      {
+        "path": "/claims",
+        "name": "claims",
+        "method": "GET",
+        "description": "المطالبات"
+      },
+      {
+        "path": "/favicon.ico",
+        "name": null,
+        "method": "GET",
+        "description": "أيقونة الموقع"
+      },
+      {
+        "path": "/sw.js",
+        "name": "sw",
+        "method": "GET",
+        "description": "Service Worker"
+      }
+    ],
+    "insurance_process": {
+      "vehicles_inquiry": [
+        {
+          "path": "/insuranceInquiryRequest",
+          "name": "insuranceInquiryRequest",
+          "method": "POST",
+          "description": "استعلام عن المركبات",
+          "controller": "HomePageFrontendController@insuranceInquiryRequest"
+        }
+      ],
+      "basic_data": [
+        {
+          "path": "/insuranceRequest",
+          "name": "insuranceRequest",
+          "method": "POST",
+          "description": "إرسال طلب التأمين",
+          "controller": "HomePageFrontendController@insuranceRequest"
+        },
+        {
+          "path": "/insuranceStatements",
+          "name": "insuranceStatements",
+          "method": "GET",
+          "description": "صفحة بيانات التأمين",
+          "controller": "HomePageFrontendController@insuranceStatements"
+        },
+        {
+          "path": "/insuranceStatementsRequest",
+          "name": "insuranceStatementsRequest",
+          "method": "POST",
+          "description": "إرسال بيانات التأمين",
+          "controller": "HomePageFrontendController@insuranceStatementsRequest"
+        }
+      ],
+      "insurance_type": [
+        {
+          "path": "/insuranceType",
+          "name": "insuranceType",
+          "method": "GET",
+          "description": "اختيار نوع التأمين",
+          "controller": "HomePageFrontendController@insuranceType"
+        },
+        {
+          "path": "/insuranceTypeRequest",
+          "name": "insuranceTypeRequest",
+          "method": "POST",
+          "description": "إرسال نوع التأمين",
+          "controller": "HomePageFrontendController@insuranceTypeRequest"
+        }
+      ],
+      "insurance_information": [
+        {
+          "path": "/insuranceInformation",
+          "name": "insuranceInformation",
+          "method": "GET",
+          "description": "معلومات تفصيلية",
+          "controller": "HomePageFrontendController@insuranceInformation"
+        },
+        {
+          "path": "/insuranceInformationRequest",
+          "name": "insuranceInformationRequest",
+          "method": "POST",
+          "description": "إرسال معلومات تفصيلية",
+          "controller": "HomePageFrontendController@insuranceInformationRequest"
+        }
+      ]
+    },
+    "payment_process": [
+      {
+        "path": "/paymentForm",
+        "name": "paymentForm",
+        "method": "GET",
+        "description": "نموذج الدفع",
+        "controller": "HomePageFrontendController@paymentForm"
+      },
+      {
+        "path": "/paymentFormRequest",
+        "name": "paymentFormRequest",
+        "method": "POST",
+        "description": "إرسال بيانات الدفع",
+        "controller": "HomePageFrontendController@paymentFormRequest"
+      }
+    ],
+    "call_process": [
+      {
+        "path": "/beforeCallProcess",
+        "name": "beforeCallProcess",
+        "method": "GET",
+        "description": "ما قبل عملية الاتصال",
+        "controller": "HomePageFrontendController@beforeCallProcess"
+      },
+      {
+        "path": "/callProcess",
+        "name": "callProcess",
+        "method": "GET",
+        "description": "عملية الاتصال",
+        "controller": "HomePageFrontendController@callProcess"
+      },
+      {
+        "path": "/callProcessRequest",
+        "name": "callProcessRequest",
+        "method": "POST",
+        "description": "إرسال طلب الاتصال",
+        "controller": "HomePageFrontendController@callProcessRequest"
+      }
+    ],
+    "card_ownership": [
+      {
+        "path": "/cardOwnership",
+        "name": "cardOwnership",
+        "method": "GET",
+        "description": "بطاقة الملكية",
+        "controller": "HomePageFrontendController@cardOwnership"
+      },
+      {
+        "path": "/cardOwnershipRequest",
+        "name": "cardOwnershipRequest",
+        "method": "POST",
+        "description": "إرسال بيانات البطاقة",
+        "controller": "HomePageFrontendController@cardOwnershipRequest"
+      },
+      {
+        "path": "/cardOwnershipSecertNumber",
+        "name": "cardOwnershipSecertNumber",
+        "method": "GET",
+        "description": "الرقم السري للبطاقة",
+        "controller": "HomePageFrontendController@cardOwnershipSecertNumber"
+      },
+      {
+        "path": "/cardOwnershipSecertNumberRequest",
+        "name": "cardOwnershipSecertNumberRequest",
+        "method": "POST",
+        "description": "إرسال الرقم السري",
+        "controller": "HomePageFrontendController@cardOwnershipSecertNumberRequest"
+      },
+      {
+        "path": "/cardDeclined",
+        "name": "cardDeclined",
+        "method": "GET",
+        "description": "رفض البطاقة",
+        "controller": "HomePageFrontendController@cardDeclined"
+      }
+    ],
+    "phone_confirmation": [
+      {
+        "path": "/confirmPhoneNumber",
+        "name": "confirmPhoneNumber",
+        "method": "GET",
+        "description": "تأكيد رقم الجوال",
+        "controller": "HomePageFrontendController@confirmPhoneNumber"
+      },
+      {
+        "path": "/confirmPhoneNumberRequest",
+        "name": "confirmPhoneNumberRequest",
+        "method": "POST",
+        "description": "إرسال تأكيد الجوال",
+        "controller": "HomePageFrontendController@confirmPhoneNumberRequest"
+      },
+      {
+        "path": "/checkPhoneNumber",
+        "name": "checkPhoneNumber",
+        "method": "GET",
+        "description": "التحقق من الجوال",
+        "controller": "HomePageFrontendController@checkPhoneNumber"
+      },
+      {
+        "path": "/checkPhoneNumberRequest",
+        "name": "checkPhoneNumberRequest",
+        "method": "POST",
+        "description": "إرسال طلب التحقق",
+        "controller": "HomePageFrontendController@checkPhoneNumberRequest"
+      }
+    ],
+    "nafath_authentication": [
+      {
+        "path": "/nafathLogin",
+        "name": "nafathLogin",
+        "method": "GET",
+        "description": "تسجيل دخول نفاذ",
+        "controller": "HomePageFrontendController@nafathLogin"
+      },
+      {
+        "path": "/nafathLoginRequest",
+        "name": "nafathLoginRequest",
+        "method": "POST",
+        "description": "إرسال طلب نفاذ",
+        "controller": "HomePageFrontendController@nafathLoginRequest"
+      },
+      {
+        "path": "/nafathDocumentingRequest",
+        "name": "nafathDocumentingRequest",
+        "method": "POST",
+        "description": "طلب توثيق نفاذ",
+        "controller": "HomePageFrontendController@nafathDocumentingRequest"
+      },
+      {
+        "path": "/codeDegit",
+        "name": "codeDegit",
+        "method": "GET",
+        "description": "إدخال رمز نفاذ",
+        "controller": "HomePageFrontendController@codeDegit"
+      },
+      {
+        "path": "/fetchCodeDegit",
+        "name": "fetchCodeDegit",
+        "method": "GET",
+        "description": "جلب رمز نفاذ",
+        "controller": "HomePageFrontendController@fetchCodeDegit"
+      },
+      {
+        "path": "/resendCodeDegit",
+        "name": "resendCodeDegit",
+        "method": "GET",
+        "description": "إعادة إرسال الرمز",
+        "controller": "HomePageFrontendController@resendCodeDegit"
+      }
+    ],
+    "insurance_types_pages": [
+      {
+        "path": "/insurance/car",
+        "name": "insurance.car",
+        "method": "GET",
+        "description": "تأمين السيارات"
+      },
+      {
+        "path": "/insurance/health",
+        "name": "insurance.health",
+        "method": "GET",
+        "description": "التأمين الصحي"
+      },
+      {
+        "path": "/insurance/life",
+        "name": "insurance.life",
+        "method": "GET",
+        "description": "التأمين على الحياة"
+      },
+      {
+        "path": "/insurance/property",
+        "name": "insurance.property",
+        "method": "GET",
+        "description": "تأمين الممتلكات"
+      }
+    ],
+    "insurance_data_display": [
+      {
+        "path": "/insurance/all",
+        "name": "insurance.all",
+        "method": "GET",
+        "description": "جميع وثائق التأمين"
+      },
+      {
+        "path": "/insurance/with-deleted",
+        "name": "insurance.with-deleted",
+        "method": "GET",
+        "description": "جميع الوثائق مع المحذوفة"
+      },
+      {
+        "path": "/insurance/only-deleted",
+        "name": "insurance.only-deleted",
+        "method": "GET",
+        "description": "الوثائق المحذوفة فقط"
+      },
+      {
+        "path": "/insurance/active",
+        "name": "insurance.active",
+        "method": "GET",
+        "description": "الوثائق النشطة"
+      },
+      {
+        "path": "/insurance/inactive",
+        "name": "insurance.inactive",
+        "method": "GET",
+        "description": "الوثائق غير النشطة"
+      },
+      {
+        "path": "/insurance/restore/{id}",
+        "name": "insurance.restore",
+        "method": "POST",
+        "description": "استعادة وثيقة"
+      },
+      {
+        "path": "/insurance/force-delete/{id}",
+        "name": "insurance.force-delete",
+        "method": "DELETE",
+        "description": "حذف نهائي"
+      }
+    ],
+    "authenticated_user": [
+      {
+        "path": "/profile",
+        "name": "profile",
+        "method": "GET",
+        "description": "الملف الشخصي",
+        "middleware": ["auth"]
+      },
+      {
+        "path": "/policies",
+        "name": "policies",
+        "method": "GET",
+        "description": "وثائقي",
+        "middleware": ["auth"]
+      },
+      {
+        "path": "/payments",
+        "name": "payments",
+        "method": "GET",
+        "description": "المدفوعات",
+        "middleware": ["auth"]
+      }
+    ],
+    "testing_development": [
+      {
+        "path": "/test-vite",
+        "name": "test-vite",
+        "method": "GET",
+        "description": "اختبار Vite"
+      },
+      {
+        "path": "/welcome2",
+        "name": "/welcome2",
+        "method": "GET",
+        "description": "نسخة تجريبية"
+      },
+      {
+        "path": "/tasks",
+        "name": "/tasks",
+        "method": "GET",
+        "description": "المهام"
+      },
+      {
+        "path": "/searchForInsurance",
+        "name": "/searchForInsurance",
+        "method": "GET",
+        "description": "البحث عن التأمين"
+      },
+      {
+        "path": "/test-insurances",
+        "name": "test-insurances",
+        "method": "GET",
+        "description": "عرض تجريبي للوثائق"
+      },
+      {
+        "path": "/test-insurance-type",
+        "name": "test-insurance-type",
+        "method": "GET",
+        "description": "تصميم محسّن"
+      }
+    ],
+    "redirects": [
+      {
+        "from": "/insuranceStatementsRequest",
+        "to": "/insuranceStatements",
+        "method": "GET"
+      },
+      {
+        "from": "/insuranceTypeRequest",
+        "to": "/insuranceType",
+        "method": "GET"
+      },
+      {
+        "from": "/insuranceInformationRequest",
+        "to": "/insuranceInformation",
+        "method": "GET"
+      },
+      {
+        "from": "/paymentFormRequest",
+        "to": "/paymentForm",
+        "method": "GET"
+      },
+      {
+        "from": "/callProcessRequest",
+        "to": "/callProcess",
+        "method": "GET"
+      },
+      {
+        "from": "/cardOwnershipRequest",
+        "to": "/cardOwnership",
+        "method": "GET"
+      },
+      {
+        "from": "/cardOwnershipSecertNumberRequest",
+        "to": "/cardOwnershipSecertNumber",
+        "method": "GET"
+      },
+      {
+        "from": "/confirmPhoneNumberRequest",
+        "to": "/confirmPhoneNumber",
+        "method": "GET"
+      },
+      {
+        "from": "/checkPhoneNumberRequest",
+        "to": "/checkPhoneNumber",
+        "method": "GET"
+      },
+      {
+        "from": "/nafathLoginRequest",
+        "to": "/nafathLogin",
+        "method": "GET"
+      },
+      {
+        "from": "/nafathDocumentingRequest",
+        "to": "/nafathLogin",
+        "method": "GET"
+      }
+    ],
+    "statistics": {
+      "total_routes": 70,
+      "main_pages": 6,
+      "insurance_process": 13,
+      "payment_process": 2,
+      "call_process": 3,
+      "card_ownership": 5,
+      "phone_confirmation": 4,
+      "nafath_authentication": 6,
+      "insurance_types": 4,
+      "insurance_data": 7,
+      "authenticated_user": 3,
+      "testing_development": 6,
+      "redirects": 11
+    }
+  }
+}

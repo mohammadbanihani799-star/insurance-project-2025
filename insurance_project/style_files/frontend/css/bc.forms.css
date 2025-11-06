@@ -1,0 +1,178 @@
+.bc-skin .bc-form {
+    display: grid;
+    gap: 12px
+}
+
+.bc-skin .bc-field {
+    display: grid;
+    gap: 6px
+}
+
+.bc-skin .bc-label {
+    font-size: 13px;
+    color: var(--bc-muted);
+    font-weight: 600
+}
+
+.bc-skin .bc-input,
+.bc-skin .bc-select {
+    height: 48px;
+    min-height: 44px;
+    padding-inline: 14px;
+    border: 1px solid #DDDDDD;
+    border-radius: 6px;
+    background: #fff;
+    color: var(--bc-text);
+    font-size: 16px;
+    transition: all .2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .05)
+}
+
+.bc-skin input, 
+.bc-skin select, 
+.bc-skin textarea {
+    min-height: 44px;
+    font-size: 16px
+}
+
+.bc-skin .bc-input:focus,
+.bc-skin .bc-select:focus {
+    border-color: var(--bc-primary-900);
+    box-shadow: 0 0 0 3px rgba(0, 101, 153, .1);
+    outline: none
+}
+
+.bc-skin .bc-field--error .bc-input {
+    border-color: var(--bc-danger)
+}
+
+.bc-skin .bc-help {
+    font-size: 12px;
+    color: var(--bc-muted)
+}
+
+.bc-skin .bc-error {
+    font-size: 12px;
+    color: var(--bc-danger)
+}
+
+.bc-skin .bc-cardform {
+    background: var(--bc-white);
+    border: 1px solid #EEEEEE;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .06)
+}
+
+.bc-skin .bc-cardform__row {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 1fr
+}
+
+@media (min-width:640px) {
+    .bc-skin .bc-cardform__row {
+        grid-template-columns: 2fr 1fr 1fr
+    }
+}
+
+.bc-skin .bc-secure {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 8px;
+    color: var(--bc-muted);
+    font-size: 12px
+}
+
+.bc-skin .bc-secure img {
+    height: 18px
+}
+
+.bc-skin .bc-summary {
+    background: #F9F9F9;
+    border: 1px solid #EEEEEE;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .06)
+}
+
+.bc-skin .bc-summary__row {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0
+}
+
+.bc-skin .bc-summary__row--total {
+    font-weight: 800;
+    color: var(--bc-primary-900);
+    font-size: 18px
+}
+
+.bc-skin .bc-summary__hint {
+    font-size: 12px;
+    color: var(--bc-muted)
+}
+
+/* Tabs Navigation - مطابق للصور */
+.bc-skin .bc-tabs {
+    display: flex;
+    gap: 8px;
+    background: var(--bc-white);
+    border: 1px solid #EEEEEE;
+    border-radius: 8px;
+    padding: 6px;
+    margin-bottom: 20px
+}
+
+.bc-skin .bc-tab {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    border-radius: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all .2s;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--bc-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px
+}
+
+.bc-skin .bc-tab:hover {
+    background: #F5F5F5
+}
+
+.bc-skin .bc-tab.is-active {
+    background: var(--bc-primary-900);
+    color: var(--bc-white);
+    box-shadow: 0 2px 4px rgba(0, 101, 153, .2)
+}
+
+.bc-skin .bc-tab__icon {
+    font-size: 18px;
+    display: inline-flex
+}
+
+/* Step Icons - للأيقونات في التابات */
+.bc-skin .bc-step-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bc-orange);
+    color: var(--bc-white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px
+}
+
+/* ========== Mobile Enhancements ========== */
+@media (max-width: 480px) {
+  .bc-skin .bc-form .row { display: grid; gap: 12px }
+}

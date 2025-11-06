@@ -1,23 +1,9 @@
 @extends('layouts.app')
 @section('content')
-    {{-- =========================================================== --}}
-    {{-- ================== Sweet Alert Section ==================== --}}
-    {{-- =========================================================== --}}
-    <div>
-        @if (session()->has('success'))
-            <script>
-                Swal.fire('"Great Job !!!"', '{!! Session::get('success') !!}', 'success');
-            </script>
-        @endif
-        @if (session()->has('danger'))
-            <script>
-                Swal.fire('"Great Job !!!"', '{!! Session::get('danger') !!}', 'danger');
-            </script>
-        @endif
-    </div>
+    {{-- Sweet Alert Section --}}
+    <x-sweet-alerts />
 
-
-    <section class="paymentMethodCheck py-5">
+    <!-- BREADCRUMB AREA START -->
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 paymentCard">
@@ -41,7 +27,7 @@
                                                 @enderror
                                             </strong>
                                         </label>
-                                        <input type="tel" name="mobile_number" class="form-control text-right" required placeholder="05********" maxlength="10" value="{{ old('mobile_number') }}">
+                                        <input type="tel" name="mobile_number" class="form-control text-right" required placeholder="05********" maxlength="10" value="{{ old('mobile_number') }}" autocomplete="tel">
                                     </div>
 
                                     {{-- mobile_network_operator --}}
@@ -53,7 +39,7 @@
                                                 @enderror
                                             </strong>
                                         </label>
-                                        <select name="mobile_network_operator" id="carPurpose" required class="form-select">
+                                        <select name="mobile_network_operator" id="carPurpose" required class="form-select" autocomplete="off">
                                             <option selected="">-اختر مشغل شبكة الجوال -</option>
                                             <option value="1" @if (old('mobile_network_operator')==1) selected @endif @if(old('mobile_network_operator')==null) selected @endif>Zain</option>
                                             <option value="2" @if (old('mobile_network_operator')==2) selected @endif>Mobily</option>
@@ -66,7 +52,7 @@
 
                                 {{-- Button --}}
                                 <div class="col-12">
-                                    <input type="submit" class="submit" value="تسجيل"> 
+                                    <input type="submit" class="submit" value="تسجيل">
                                 </div>
                             </div>
                         </form>

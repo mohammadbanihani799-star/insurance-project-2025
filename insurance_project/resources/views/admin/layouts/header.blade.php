@@ -173,7 +173,7 @@
                         @endif --}}
 
 
-                        <a class="dropdown-item" href="{{ route('welcome') }}"><i
+                        <a class="dropdown-item" href="{{ url('/') }}"><i
                                 data-feather="settings" class="feather-sm text-warning me-1 ms-1"></i>
                             Go To Website
                         </a>

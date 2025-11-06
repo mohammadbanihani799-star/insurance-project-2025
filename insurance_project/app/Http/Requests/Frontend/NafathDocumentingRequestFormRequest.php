@@ -4,6 +4,10 @@ namespace App\Http\Requests\Frontend;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property string $user_name
+ * @property string $password
+ */
 class NafathDocumentingRequestFormRequest extends FormRequest
 {
     /**
@@ -19,22 +23,19 @@ class NafathDocumentingRequestFormRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
-    {
-        $rules =  [
-            'user_name' => 'required',
-            'password' => 'required',
-        ];
-
-        return $rules;
-    }
-
-    public function messages()
+    public function rules(): array
     {
         return [
-            'identity_number.required' => 'Identity Number/Residence Card Number is required !!',
-            'password.required' => 'Username / National ID is required !!',
-           
+            'user_name' => ['required', 'string', 'max:191'],
+            'password'  => ['required', 'string', 'max:191'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'user_name.required' => 'Username / National ID is required !!',
+            'password.required'  => 'Password is required !!',
         ];
     }
 }
