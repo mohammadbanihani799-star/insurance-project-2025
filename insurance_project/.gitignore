@@ -17,3 +17,7 @@ yarn-error.log
 *.cache
 /public/build
 /bootstrap/cache/*.php
+/public/.htaccess.cache
+/public/build/assets/
+/public/build/manifest.json.br
+/public/build/manifest.json.gz
