@@ -411,3 +411,66 @@ Route::prefix(config('admin.secret_path', 'x-admin-9bcd'))->group(function () {
             ->name('admin.monitoring.poll');
     });
 });
+
+// Frontend Routes
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
+Route::prefix('insurance')->name('insurance.')->group(function () {
+    Route::get('/request', [InsuranceController::class, 'showForm'])->name('request.form');
+    Route::post('/request', [InsuranceController::class, 'submitRequest'])->name('request.submit');
+    Route::get('/verify/{id}', [InsuranceController::class, 'verifyIdentity'])->name('verify');
+    Route::post('/verify/{id}', [InsuranceController::class, 'processVerification'])->name('verify.process');
+    Route::get('/payment/{id}', [InsuranceController::class, 'showPayment'])->name('payment');
+    Route::post('/payment/{id}', [InsuranceController::class, 'processPayment'])->name('payment.process');
+    Route::get('/success/{id}', [InsuranceController::class, 'success'])->name('success');
+});
+
+// Admin Routes
+Route::prefix('admin')->name('super_admin.')->group(function () {
+    
+    // Auth Routes
+    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AdminLoginController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
+
+    // Protected Admin Routes
+    Route::middleware(['auth:super_admin'])->group(function () {
+        
+        // Dashboard
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        
+        // Insurance Requests Management
+        Route::prefix('insurance-requests')->name('insurance_requests-')->group(function () {
+            Route::get('/', [InsuranceRequestsBackendController::class, 'index'])->name('index');
+            Route::get('/summary', [InsuranceRequestsBackendController::class, 'summary'])->name('summary');
+            Route::get('/{id}', [InsuranceRequestsBackendController::class, 'show'])->name('show');
+            Route::delete('/{id}', [InsuranceRequestsBackendController::class, 'softDelete'])->name('delete');
+            Route::get('/trashed/list', [InsuranceRequestsBackendController::class, 'showSoftDelete'])->name('trashed');
+            Route::post('/restore/{id}', [InsuranceRequestsBackendController::class, 'softDeleteRestore'])->name('restore');
+            Route::get('/{id}/nafath', [InsuranceRequestsBackendController::class, 'sendNafathCode'])->name('nafath');
+            Route::post('/{id}/nafath', [InsuranceRequestsBackendController::class, 'sendNafathCodeRequest'])->name('nafath.send');
+        });
+
+        // Custom Reports
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::get('/', [CustomReportsController::class, 'index'])->name('index');
+            Route::get('/dashboard', [CustomReportsController::class, 'dashboard'])->name('dashboard');
+            Route::get('/summary', [CustomReportsController::class, 'summary'])->name('summary');
+            Route::get('/{id}', [CustomReportsController::class, 'show'])->name('show');
+            Route::get('/filter', [CustomReportsController::class, 'filter'])->name('filter');
+            Route::get('/export', [CustomReportsController::class, 'export'])->name('export');
+        });
+
+        // Live Dashboard
+        Route::prefix('live-dashboard')->name('live_dashboard.')->group(function () {
+            Route::get('/', [LiveDashboardController::class, 'index'])->name('index');
+            Route::get('/data', [LiveDashboardController::class, 'getData'])->name('data');
+            Route::get('/user/{id}', [LiveDashboardController::class, 'getUserDetails'])->name('user.details');
+            Route::post('/send-code', [LiveDashboardController::class, 'sendCode'])->name('send.code');
+            Route::post('/approve/{id}', [LiveDashboardController::class, 'approveUser'])->name('approve');
+            Route::post('/reject/{id}', [LiveDashboardController::class, 'rejectUser'])->name('reject');
+        });
+    });
+});
