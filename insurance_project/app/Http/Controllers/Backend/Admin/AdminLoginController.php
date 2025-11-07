@@ -5,68 +5,74 @@ namespace App\Http\Controllers\Backend\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\SupportTicket;
+use Illuminate\Routing\Route;
 
 class AdminLoginController extends Controller
 {
-
     public function showLoginForm()
     {
-        if (Auth::guard('super_admin')->check()) {
-            return redirect()->intended(route('super_admin.dashboard'));
-        } elseif (Auth::guard('user')->check()) {
-            return redirect()->intended(route('super_admin.dashboard')); // نفس الوجهة حسب كودك
-        }
-
         return view('admin.auth.login');
     }
 
-
-    public function loginFormSubmit(Request $request)
+    public function login(Request $request, Route $route)
     {
-        // 1) التحقق من المدخلات (يزيل تحذير Intelephense)
-        $validated = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required', 'string', 'min:6'],
-            'remember' => ['nullable'],
-        ]);
+        try {
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required|min:6',
+            ]);
 
-        // 2) تجهيز الـ credentials و خيار التذكّر
-        $credentials = [
-            'email'    => $validated['email'],
-            'password' => $validated['password'],
-        ];
-        $remember = $request->boolean('remember');
+            $credentials = [
+                'email' => $request->input('email'),
+                'password' => $request->input('password'),
+            ];
 
-        // 3) محاولة الدخول عبر الحراس بالترتيب
-        foreach (['super_admin', 'user'] as $guard) {
-            if (Auth::guard($guard)->attempt($credentials, $remember)) {
-                // تأمين الجلسة
+            if (Auth::guard('super_admin')->attempt($credentials, $request->boolean('remember'))) {
                 $request->session()->regenerate();
-                // ملاحظة: حسب كودك الوجهة نفسها
                 return redirect()->intended(route('super_admin.dashboard'));
             }
-        }
 
-        // 4) فشل تسجيل الدخول
-        return back()
-            ->withErrors(['email' => __('auth.invalid_credentials')])
-            ->onlyInput('email');
+            return back()->withErrors([
+                'email' => 'بيانات الاعتماد غير صحيحة.',
+            ])->withInput($request->only('email'));
+
+        } catch (\Throwable $th) {
+            return $this->handleException($th, $route);
+        }
     }
 
-
-    public function logout()
+    public function logout(Request $request)
     {
-        if (Auth::guard('super_admin')->check()) {
-            Auth::guard('super_admin')->logout();
-        } elseif (Auth::guard('user')->check()) {
-            Auth::guard('user')->logout();
+        Auth::guard('super_admin')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return redirect()->route('super_admin.login');
+    }
+
+    private function handleException(\Throwable $th, Route $route)
+    {
+        $function_name = $route->getActionName();
+        
+        $check_old_errors = SupportTicket::where([
+            'error_location' => $th->getFile(),
+            'error_description' => $th->getMessage(),
+            'function_name' => $function_name,
+            'error_line' => $th->getLine(),
+        ])->first();
+
+        if (!$check_old_errors) {
+            $end_error_ticket = SupportTicket::create([
+                'error_location' => $th->getFile(),
+                'error_description' => $th->getMessage(),
+                'function_name' => $function_name,
+                'error_line' => $th->getLine(),
+            ]);
+        } else {
+            $end_error_ticket = $check_old_errors;
         }
-
-        // إنهاء الجلسة الحالية وحمايتها
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
-
-        return redirect('/');
+        
+        return view('errors.support_tickets', compact('th', 'function_name', 'end_error_ticket'));
     }
 }
